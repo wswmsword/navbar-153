@@ -1,0 +1,60 @@
+{
+  "type": "module",
+  "name": "navbar-153",
+  "version": "1.0.0",
+  "description": "Super Smooth! Super Fast! Super Accessible!",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "watch": "npm-watch",
+    "build": "rollup -c --bundleConfigAsCjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wswmsword/navbar-s.git"
+  },
+  "keywords": [
+    "navigation-menu",
+    "navigation-bar",
+    "nav-bar",
+    "accessibility"
+  ],
+  "author": "wswmsword",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wswmsword/navbar-153/issues"
+  },
+  "homepage": "https://github.com/wswmsword/navbar-153#readme",
+  "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-react": "^7.24.1",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.8",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "npm-watch": "^0.13.0",
+    "rollup": "^4.18.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "*"
+      ],
+      "extensions": "css, js",
+      "ignore": [
+        "dist",
+        "node_modules"
+      ]
+    }
+  }
+}
