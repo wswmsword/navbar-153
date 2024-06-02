@@ -11,8 +11,5 @@
   position: absolute;
   left: 0;
   top: calc(100% + 1px);
-  height: 0;
-  transition: height .5s;
   box-shadow: 0 3px 3px -3px rgb(180, 180, 180);
-  overflow: hidden;
 }

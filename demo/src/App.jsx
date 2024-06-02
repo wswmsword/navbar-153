@@ -1,6 +1,6 @@
 
-import './App.css'
-import N from 'navbar-s';
+import "./App.css"
+import N from "navbar-153";
 
 const { Trigger, Item, Content } = N;
 
@@ -10,34 +10,31 @@ function App() {
       <Trigger style={{ display: "flex", gap: 8 }}>
         <Item><a href="https://github.com/wswmsword/navbar-153">Repo</a></Item>
         <Item>
-          {props => <button {...props}>focus-fly</button>}
+          {props => <button {...props}>navbar-153</button>}
         </Item>
         <Item>
           {props => <button {...props}>postcss-mobile-forever</button>}
         </Item>
         <Item>
-          {props => <button {...props}>navbar-153</button>}
+          {props => <button {...props}>focus-fly</button>}
         </Item>
       </Trigger>
       <Content className="panelsWrapper">
         <Item>
-          {(props, head, tail) => <div
+          {(props) => <div
             {...props}
-            style={{ ...props.style, width: '100%', flexShrink: 0}}>
-            <ul>
-              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-hot" ref={head}>热身</a></li>
-              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-dialog">对话框</a></li>
-              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-nav">导航栏</a></li>
-              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-tabs">选项卡</a></li>
-              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-player">播放列表</a></li>
-              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-scroll" ref={tail}>滚动加载</a></li>
-            </ul>
+            style={{ ...props.style, width: "100%", flexShrink: 0}}>
+            Super Smooth!
+            <br />
+            Super Fast!
+            <br />
+            Super Accessible!
           </div>}
         </Item>
         <Item>
           {(props, head, tail) => <div
             {...props}
-            style={{ ...props.style, width: '100%', flexShrink: 0}}>
+            style={{ ...props.style, width: "100%", flexShrink: 0}}>
             <ul>
               <li><a href="https://wswmsword.github.io/examples/mobile-forever/vanilla/" ref={head}>演示</a></li>
               <li><a href="https://github.com/wswmsword/postcss-mobile-forever?tab=readme-ov-file#%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%A8%A1%E7%89%88%E5%92%8C%E8%8C%83%E4%BE%8B">移动端模版和范例</a></li>
@@ -56,14 +53,17 @@ function App() {
           </div>}
         </Item>
         <Item>
-          {(props) => <div
+          {(props, head, tail) => <div
             {...props}
-            style={{ ...props.style, width: '100%', flexShrink: 0}}>
-            Super Smooth!
-            <br />
-            Super Fast!
-            <br />
-            Super Accessible!
+            style={{ ...props.style, width: "100%", flexShrink: 0}}>
+            <ul>
+              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-hot" ref={head}>热身</a></li>
+              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-dialog">对话框</a></li>
+              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-nav">导航栏</a></li>
+              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-tabs">选项卡</a></li>
+              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-player">播放列表</a></li>
+              <li><a href="https://wswmsword.github.io/examples/focus-fly/#h-scroll" ref={tail}>滚动加载</a></li>
+            </ul>
           </div>}
         </Item>
       </Content>
