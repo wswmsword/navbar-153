@@ -10,7 +10,7 @@ NavBar.Item = Item;
 NavBar.Content = Content;
 NavBar.Trigger = Trigger;
 
-export default function NavBar({ children, ...navProps }) {
+export default function NavBar({ children, dur, ...navProps }) {
 
   /** 保存 trigger 的 aria-id */
   const triggerAriaIds = useRef([]);
@@ -184,7 +184,8 @@ export default function NavBar({ children, ...navProps }) {
     transitionEnd,
     openedMenuIdx,
     transitionEnded,
-  }), [openedMenuIdx, transitionEnded]);
+    dur,
+  }), [openedMenuIdx, transitionEnded, dur]);
 
   return <Context.Provider value={{
     escapeMenu,
@@ -200,6 +201,7 @@ export default function NavBar({ children, ...navProps }) {
     contentAriaIds,
     headFocusItemInContent,
     tailFocusItemInContent,
+    dur,
   }}>
     <ContextForContent.Provider value={contentContextVal}>
       <nav aria-label="Main" {...navProps}>

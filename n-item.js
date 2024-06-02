@@ -47,7 +47,7 @@ export default function Item({ children, type, orderI }) {
       ref: e => panelsRef.current[orderI] = e,
       style: {
         transform: nextTransformVal,
-        transition: transitionEnded ? null : "transform .5s",
+        transition: transitionEnded ? null : `transform ${nbContext.dur || '.5'}s`,
       },
       id: ariaId,
       "aria-labelledby": controlOrDescribeId,

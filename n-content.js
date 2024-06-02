@@ -9,6 +9,7 @@ export default function Content({ children, inner, style, ...contentWrapperProps
     transitionEnd,
     openedMenuIdx,
     transitionEnded,
+    dur = '.5',
   } = useContext(ContextForContent);
 
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
@@ -21,7 +22,7 @@ export default function Content({ children, inner, style, ...contentWrapperProps
       height: panelsHeightRef.current[openedMenuIdx] || 0,
       visibility: transitionEnded ? "hidden" : "visible",
       overflow: "hidden",
-      transition: "height .5s"
+      transition: `height ${dur}s`
     }}
     onTransitionEnd={transitionEnd}
     {...contentWrapperProps}>
