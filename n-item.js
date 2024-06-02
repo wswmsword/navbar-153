@@ -36,6 +36,8 @@ export default function Item({ children, type, orderI }) {
       nextTransformVal,
       transitionEnded,
       contentAriaIds,
+      headFocusItemInContent,
+      tailFocusItemInContent,
     } = nbContext;
     contentAriaIds.current[orderI] = ariaId;
     return children({
@@ -47,7 +49,10 @@ export default function Item({ children, type, orderI }) {
       },
       id: ariaId,
       "aria-labelledby": controlOrDescribeId,
-    });
+      tabIndex: 0,
+    },
+    e => headFocusItemInContent.current[orderI] = e,
+    e => tailFocusItemInContent.current[orderI] = e);
   }
 
   return children;

@@ -97,10 +97,35 @@ export default function NavBar({ children, ...navProps }) {
 
   /** 按下 Esc 退出菜单 */
   const escapeMenu = idx => e => {
-    if (e.key === "Escape" || e.key === "Escape" || e.keyCode === 27) {
+    if (e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) {
       // 关闭菜单
       setActivePanel(-1);
-      btnsRef.current[idx].focus();
+    }
+
+    const head = headFocusItemInContent.current[idx]
+    const tail = tailFocusItemInContent.current[idx];
+    // 焦点矫正
+    if (e.target === panelsRef.current[idx]) {
+      if (e.key === "Tab" || e.keyCode === 9) {
+        if (e.shiftKey) {
+          tail && tail.focus();
+        } else {
+          head && head.focus();
+        }
+        e.preventDefault();
+      }
+    }
+
+    // 回尾
+    if (e.target === head && (e.key === "Tab" || e.keyCode === 9) && e.shiftKey) {
+      tail && tail.focus();
+      e.preventDefault();
+    }
+
+    // 回头
+    if (e.target === tail && (e.key === "Tab" || e.keyCode === 9) && !e.shiftKey) {
+      head && head.focus();
+      e.preventDefault();
     }
   };
 
@@ -127,6 +152,11 @@ export default function NavBar({ children, ...navProps }) {
   const transitionEnd = useCallback(() => {
     setStartI(openedMenuIdx);
     if (openedMenuIdx < 0) setEnded(true);
+    else {
+      const head = headFocusItemInContent.current[openedMenuIdx];
+      if (head) head.focus();
+      else panelsRef.current[openedMenuIdx].focus();
+    }
   }, [openedMenuIdx]);
 
   const nextTransformVal = transitionEnded
@@ -135,13 +165,26 @@ export default function NavBar({ children, ...navProps }) {
     ? `translate(${getTransformXVal(0, xEndIdx)}, -100%)`
     : `translateX(${getTransformXVal(0, xEndIdx)})`;
 
+  const headFocusItemInContent = useRef([]);
+  const tailFocusItemInContent = useRef([]);
+
+  // 离开的焦点控制
+  useEffect(() => {
+    if (openedMenuIdx < 0) {
+      if (prevMenuIdxRef.current > -1) {
+        btnsRef.current[prevMenuIdxRef.current].focus();
+      }
+    }
+  }, [openedMenuIdx]);
+
   const contentContextVal = useMemo(() => ({
     overMenuPanel,
     leaveMenuPanel,
     panelsHeightRef,
     transitionEnd,
     openedMenuIdx,
-  }), [openedMenuIdx]);
+    transitionEnded,
+  }), [openedMenuIdx, transitionEnded]);
 
   return <Context.Provider value={{
     escapeMenu,
@@ -155,6 +198,8 @@ export default function NavBar({ children, ...navProps }) {
     openedMenuIdx,
     triggerAriaIds,
     contentAriaIds,
+    headFocusItemInContent,
+    tailFocusItemInContent,
   }}>
     <ContextForContent.Provider value={contentContextVal}>
       <nav aria-label="Main" {...navProps}>
