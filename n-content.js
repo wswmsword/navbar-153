@@ -9,7 +9,7 @@ export default function Content({ children, inner, style, ...contentWrapperProps
     transitionEnd,
     openedMenuIdx,
     transitionEnded,
-    dur = '.5',
+    dur = ".5",
   } = useContext(ContextForContent);
 
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));

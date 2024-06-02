@@ -4,7 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import postcss from "rollup-plugin-postcss";
 import terser from "@rollup/plugin-terser";
 
-const pkgJSON = require('./package.json');
+const pkgJSON = require("./package.json");
 
 export default [
   {
