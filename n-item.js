@@ -15,7 +15,7 @@ export default function Item({ children, type, orderI }) {
   }, []);
 
   if (isTrigger) {
-    if (typeof children === 'object') return children;
+    if (typeof children === "object") return children;
     const { btnsRef, clickMenuBtn, overMenu, leaveMenu, triggerAriaIds, openedMenuIdx } = nbContext;
     const openedMenu = openedMenuIdx === orderI;
     triggerAriaIds.current[orderI] = ariaId;
@@ -38,17 +38,20 @@ export default function Item({ children, type, orderI }) {
       contentAriaIds,
       headFocusItemInContent,
       tailFocusItemInContent,
+      openedMenuIdx,
     } = nbContext;
+    const openedMenu = openedMenuIdx === orderI;
     contentAriaIds.current[orderI] = ariaId;
     return children({
       onKeyDown: escapeMenu(orderI),
       ref: e => panelsRef.current[orderI] = e,
       style: {
         transform: nextTransformVal,
-        transition: transitionEnded ? null : 'transform .5s',
+        transition: transitionEnded ? null : "transform .5s",
       },
       id: ariaId,
       "aria-labelledby": controlOrDescribeId,
+      "aria-hidden": !openedMenu,
       tabIndex: 0,
     },
     e => headFocusItemInContent.current[orderI] = e,
