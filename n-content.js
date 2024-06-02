@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, useContext, useEffect } from 'react';
+import React, { Children, cloneElement, useContext } from "react";
 import { ContextForContent } from "./index";
 
 export default function Content({ children, inner, ...contentWrapperProps }) {
@@ -16,7 +16,7 @@ export default function Content({ children, inner, ...contentWrapperProps }) {
   return <div
     onMouseOver={overMenuPanel}
     onMouseLeave={leaveMenuPanel}
-    style={{ height: panelsHeightRef.current[openedMenuIdx] || 0, visibility: transitionEnded ? 'hidden' : 'visible' }}
+    style={{ height: panelsHeightRef.current[openedMenuIdx] || 0, visibility: transitionEnded ? "hidden" : "visible" }}
     onTransitionEnd={transitionEnd}
     {...contentWrapperProps}>
     <div style={{ display: "flex", alignItems: "flex-start" }} {...inner}>
