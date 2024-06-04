@@ -10,7 +10,7 @@ NavBar.Item = Item;
 NavBar.Content = Content;
 NavBar.Trigger = Trigger;
 
-export default function NavBar({ children, dur, ...navProps }) {
+export default function NavBar({ children, dur, gap, ...navProps }) {
 
   /** 保存 trigger 的 aria-id */
   const triggerAriaIds = useRef([]);
@@ -163,6 +163,8 @@ export default function NavBar({ children, dur, ...navProps }) {
     ? `translate(${getTransformXVal(0, xStartIdx)}, -100%)`
     : isCollapse
     ? `translate(${getTransformXVal(0, xEndIdx)}, -100%)`
+    : gap
+    ? `translate(${getTransformXVal(0, xEndIdx)}, ${gap}px)`
     : `translateX(${getTransformXVal(0, xEndIdx)})`;
 
   const headFocusItemInContent = useRef([]);
@@ -180,12 +182,11 @@ export default function NavBar({ children, dur, ...navProps }) {
   const contentContextVal = useMemo(() => ({
     overMenuPanel,
     leaveMenuPanel,
-    panelsHeightRef,
     transitionEnd,
-    openedMenuIdx,
+    height: + gap + panelsHeightRef.current[openedMenuIdx] || 0,
     transitionEnded,
     dur,
-  }), [openedMenuIdx, transitionEnded, dur]);
+  }), [openedMenuIdx, gap, transitionEnded, dur]);
 
   return <Context.Provider value={{
     escapeMenu,

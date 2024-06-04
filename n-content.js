@@ -5,11 +5,10 @@ export default function Content({ children, inner, style, ...contentWrapperProps
   const {
     overMenuPanel,
     leaveMenuPanel,
-    panelsHeightRef,
     transitionEnd,
-    openedMenuIdx,
     transitionEnded,
     dur = ".5",
+    height,
   } = useContext(ContextForContent);
 
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
@@ -19,7 +18,7 @@ export default function Content({ children, inner, style, ...contentWrapperProps
     onMouseLeave={leaveMenuPanel}
     style={{
       ...style,
-      height: panelsHeightRef.current[openedMenuIdx] || 0,
+      height,
       visibility: transitionEnded ? "hidden" : "visible",
       overflow: "hidden",
       transition: `height ${dur}s`
