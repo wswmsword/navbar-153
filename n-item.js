@@ -15,19 +15,21 @@ export default function Item({ children, type, orderI }) {
   }, []);
 
   if (isTrigger) {
-    if (typeof children === "object") return children;
-    const { btnsRef, clickMenuBtn, overMenu, leaveMenu, triggerAriaIds, openedMenuIdx } = nbContext;
-    const openedMenu = openedMenuIdx === orderI;
-    triggerAriaIds.current[orderI] = ariaId;
-    return children({
-      ref: e => btnsRef.current[orderI] = e,
-      onClick: clickMenuBtn,
-      onMouseOver: overMenu,
-      onMouseLeave: leaveMenu,
-      id: ariaId,
-      "aria-expanded": openedMenu,
-      "aria-controls": controlOrDescribeId,
-    });
+    if (typeof children === "function") {
+      const { btnsRef, clickMenuBtn, overMenu, leaveMenu, triggerAriaIds, openedMenuIdx } = nbContext;
+      const openedMenu = openedMenuIdx === orderI;
+      triggerAriaIds.current[orderI] = ariaId;
+      return children({
+        ref: e => btnsRef.current[orderI] = e,
+        onClick: clickMenuBtn,
+        onMouseOver: overMenu,
+        onMouseLeave: leaveMenu,
+        id: ariaId,
+        "aria-expanded": openedMenu,
+        "aria-controls": controlOrDescribeId,
+      });
+    }
+    return children;
   }
   if (isContent) {
     const {
