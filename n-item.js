@@ -35,7 +35,7 @@ export default function Item({ children, type, orderI }) {
     const {
       escapeMenu,
       panelsRef,
-      nextTransformVal,
+      nextContentItemTransformVal,
       transitionEnded,
       contentAriaIds,
       headFocusItemInContent,
@@ -48,8 +48,8 @@ export default function Item({ children, type, orderI }) {
       onKeyDown: escapeMenu(orderI),
       ref: e => panelsRef.current[orderI] = e,
       style: {
-        transform: nextTransformVal,
-        transition: transitionEnded ? null : `transform ${nbContext.dur || ".5"}s`,
+        transform: nextContentItemTransformVal,
+        transition: transitionEnded ? null : `transform ${nbContext.dur}s`,
       },
       id: ariaId,
       "aria-labelledby": controlOrDescribeId,

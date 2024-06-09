@@ -1,16 +1,17 @@
-import React, { createContext, useState, useRef, useEffect, useCallback, useMemo } from "react";
+import React, { createContext, useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from "react";
 import Item from "./n-item";
 import Content from "./n-content";
 import Trigger from "./n-trigger";
 
 export const Context = createContext({});
 export const ContextForContent = createContext({});
+export const ContextForTrigger = createContext();
 
 NavBar.Item = Item;
 NavBar.Content = Content;
 NavBar.Trigger = Trigger;
 
-export default function NavBar({ children, dur, gap, ...navProps }) {
+export default function NavBar({ children, dur = 0.5, gap = 0, ...navProps }) {
 
   /** 保存 trigger 的 aria-id */
   const triggerAriaIds = useRef([]);
@@ -27,6 +28,10 @@ export default function NavBar({ children, dur, gap, ...navProps }) {
   const btnsRef = useRef([]);
   /** 面板的元素们的高度，完成过渡动画  */
   const panelsHeightRef = useRef([]);
+  /** 面板元素们的宽度，完成过渡动画 */
+  const panelsWidthRef = useRef([]);
+  /** 面板们的左边偏移量 */
+  const panelsOffsetLeftRef = useRef([]);
   /** 面板的元素们 */
   const panelsRef = useRef([]);
   /** 如果不想离开，则清空这个 timer */
@@ -74,7 +79,7 @@ export default function NavBar({ children, dur, gap, ...navProps }) {
     leaveTimerRef.current = setTimeout(() => {
       setActivePanel(-1);
       leaveTimerRef.current = null;
-    }, 420);
+    }, 600);
   }, []);
 
   /** 离开菜单面板 */
@@ -129,9 +134,14 @@ export default function NavBar({ children, dur, gap, ...navProps }) {
     }
   };
 
+  const [destroyContent, setDestroy] = useState(false);
+
   // 缓存元素们的高度
-  useEffect(() => {
+  useLayoutEffect(() => {
     panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
+    panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
+    panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
+    setDestroy(true);
   }, []);
 
   const [xStartIdx, setStartI] = useState(-1); // 过渡动画起点按钮编号
@@ -140,8 +150,14 @@ export default function NavBar({ children, dur, gap, ...navProps }) {
   const [transitionEnded, setEnded] = useState(true); // 收起的过渡动画结束了吗
 
   useEffect(() => {
+    if (openedMenuIdx > -1) {
+      setDestroy(false);
+    }
+  }, [openedMenuIdx]);
+
+  useEffect(() => {
     if (openedMenuIdx > -1 && prevMenuIdxRef.current < 0 && transitionEnded) {
-      setStartI(openedMenuIdx)
+      setStartI(openedMenuIdx);
       setTimeout(() => {
         setEnded(false);
       }, 18);
@@ -151,21 +167,24 @@ export default function NavBar({ children, dur, gap, ...navProps }) {
 
   const transitionEnd = useCallback(() => {
     setStartI(openedMenuIdx);
-    if (openedMenuIdx < 0) setEnded(true);
+    if (openedMenuIdx < 0) {
+      setEnded(true);
+      setDestroy(true);
+    }
     else {
       const head = headFocusItemInContent.current[openedMenuIdx];
-      if (head) head.focus();
-      else panelsRef.current[openedMenuIdx].focus();
+      if (head) head.focus({ preventScroll: true });
+      else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
     }
-  }, [openedMenuIdx]);
+  }, [openedMenuIdx, dur]);
 
-  const nextTransformVal = transitionEnded
-    ? `translate(${getTransformXVal(0, xStartIdx)}, -100%)`
-    : isCollapse
-    ? `translate(${getTransformXVal(0, xEndIdx)}, -100%)`
-    : gap
-    ? `translate(${getTransformXVal(0, xEndIdx)}, ${gap}px)`
-    : `translateX(${getTransformXVal(0, xEndIdx)})`;
+  const nextContentInnerTransformVal = (transitionEnded || isCollapse) ?
+    `translateY(-100%)` : // 入场的初始状态（退场结束）
+    `translateY(${gap}px)`; // 入场的结束状态（退场初始）
+
+  const nextContentItemTransformVal = transitionEnded ?
+    `translateX(${getTranslateXVal(xStartIdx, panelsOffsetLeftRef)})` :
+    `translateX(${getTranslateXVal(xEndIdx, panelsOffsetLeftRef)})`;
 
   const headFocusItemInContent = useRef([]);
   const tailFocusItemInContent = useRef([]);
@@ -179,20 +198,29 @@ export default function NavBar({ children, dur, gap, ...navProps }) {
     }
   }, [openedMenuIdx]);
 
+  const triggerWrapperRef = useRef(null);
+
   const contentContextVal = useMemo(() => ({
     overMenuPanel,
     leaveMenuPanel,
     transitionEnd,
-    height: + gap + panelsHeightRef.current[openedMenuIdx] || 0,
+    innerHeight: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
+    gapHeight: + gap + panelsHeightRef.current[openedMenuIdx] || 0,
+    width: openedMenuIdx === -1 ? (panelsWidthRef.current[prevMenuIdxRef.current] || 0) : (panelsWidthRef.current[openedMenuIdx] || 0),
     transitionEnded,
     dur,
-  }), [openedMenuIdx, gap, transitionEnded, dur]);
+    triggerWrapperRef,
+    nextContentInnerTransformVal,
+    destroyContent,
+  }), [openedMenuIdx, gap, transitionEnded, dur, isCollapse, destroyContent]);
+
+  const triggerContextVal = useMemo(() => triggerWrapperRef, []);
 
   return <Context.Provider value={{
     escapeMenu,
     panelsRef,
     btnsRef,
-    nextTransformVal,
+    nextContentItemTransformVal,
     transitionEnded,
     clickMenuBtn,
     overMenu,
@@ -205,14 +233,15 @@ export default function NavBar({ children, dur, gap, ...navProps }) {
     dur,
   }}>
     <ContextForContent.Provider value={contentContextVal}>
-      <nav aria-label="Main" {...navProps}>
-        {children}
-      </nav>
+      <ContextForTrigger.Provider value={triggerContextVal}>
+        <nav aria-label="Main" {...navProps}>
+          {children}
+        </nav>
+      </ContextForTrigger.Provider>
     </ContextForContent.Provider>
   </Context.Provider>;
 }
 
-function getTransformXVal(a, b) {
-  const transformVal = a > b ? a - b : b - a;
-  return transformVal === 0 ? 0 : (a < b ? "-" : "") + `${transformVal}00%`;
+function getTranslateXVal(i, panelsOffsetLeftRef) {
+  return i < 1 ? 0 : `-${panelsOffsetLeftRef.current[i]}px`;
 }
