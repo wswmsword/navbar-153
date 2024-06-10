@@ -11,7 +11,7 @@ NavBar.Item = Item;
 NavBar.Content = Content;
 NavBar.Trigger = Trigger;
 
-export default function NavBar({ children, dur = 0.5, gap = 0, ...navProps }) {
+export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, ...navProps }) {
 
   /** 保存 trigger 的 aria-id */
   const triggerAriaIds = useRef([]);
@@ -206,7 +206,11 @@ export default function NavBar({ children, dur = 0.5, gap = 0, ...navProps }) {
     transitionEnd,
     innerHeight: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
     gapHeight: + gap + panelsHeightRef.current[openedMenuIdx] || 0,
-    width: openedMenuIdx === -1 ? (panelsWidthRef.current[prevMenuIdxRef.current] || 0) : (panelsWidthRef.current[openedMenuIdx] || 0),
+    width: !dynamicWidth ?
+      null :
+      openedMenuIdx === -1 ?
+        (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
+        (panelsWidthRef.current[openedMenuIdx] || 0),
     transitionEnded,
     dur,
     triggerWrapperRef,
