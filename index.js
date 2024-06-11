@@ -38,8 +38,10 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   const leaveTimerRef = useRef();
   /** 是否变高 */
   const isPanelGetHigherRef = useRef(false);
-  // /** 当前操作是键盘操作吗，如果是键盘操作，就进行焦点转移 */
+  /** 当前操作是键盘操作吗，如果是键盘操作，就进行焦点转移 */
   const isKeyActive = useRef(false);
+  /** 动画正在进行吗，正在进行则不允许 tab 聚焦 */
+  const transRunning = useRef(false);
 
   if (panelsHeightRef.current.length > 0) {
     const prevActiveH = panelsHeightRef.current[prevMenuIdxRef.current];
@@ -48,6 +50,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   }
 
   const setActivePanel = useCallback(cur => {
+    transRunning.current = true;
     setIdx(v => {
       prevMenuIdxRef.current = v;
       return cur;
@@ -113,6 +116,12 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
       setActivePanel(-1);
     }
 
+    // 动画进行时期，禁止 tab，避免聚焦引起的样式错位
+    if ((e.key === "Tab" || e.keyCode === 9) && transRunning.current) {
+      e.preventDefault();
+      return false;
+    }
+
     const head = headFocusItemInContent.current[idx]
     const tail = tailFocusItemInContent.current[idx];
     // 焦点矫正
@@ -162,6 +171,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   }, [openedMenuIdx]);
 
   useEffect(() => {
+    // 面板动画开始
     if (openedMenuIdx > -1 && prevMenuIdxRef.current < 0 && transitionEnded) {
       setStartI(openedMenuIdx);
       setTimeout(() => {
@@ -172,17 +182,11 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   }, [openedMenuIdx, transitionEnded]);
 
   const transitionEnd = useCallback(() => {
+    transRunning.current = false;
     setStartI(openedMenuIdx);
     if (openedMenuIdx < 0) {
       setEnded(true);
       setDestroy(true);
-    }
-    else {
-      if ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus) {
-        const head = headFocusItemInContent.current[openedMenuIdx];
-        if (head) head.focus({ preventScroll: true });
-        else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
-      }
     }
   }, [openedMenuIdx, dur, onlyKeyFocus]);
 
@@ -207,7 +211,19 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     }
   }, [openedMenuIdx, onlyKeyFocus]);
 
+  // 进入的焦点控制
+  useEffect(() => {
+    if (openedMenuIdx > -1) {
+      if (!destroyContent && ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus)) {
+        const head = headFocusItemInContent.current[openedMenuIdx];
+        if (head) head.focus({ preventScroll: true });
+        else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
+      }
+    }
+  }, [openedMenuIdx, onlyKeyFocus, destroyContent])
+
   const triggerWrapperRef = useRef(null);
+  const contentWrapperRef = useRef(null);
 
   const contentContextVal = useMemo(() => ({
     overMenuPanel,
@@ -223,6 +239,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     transitionEnded,
     dur,
     triggerWrapperRef,
+    contentWrapperRef,
     nextContentInnerTransformVal,
     destroyContent,
   }), [openedMenuIdx, gap, transitionEnded, dur, isCollapse, destroyContent]);

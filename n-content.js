@@ -12,6 +12,7 @@ export default function Content({ children, inner = {}, style, ...contentWrapper
     gapHeight,
     width,
     triggerWrapperRef,
+    contentWrapperRef,
     nextContentInnerTransformVal,
     destroyContent,
   } = useContext(ContextForContent);
@@ -19,7 +20,6 @@ export default function Content({ children, inner = {}, style, ...contentWrapper
   if (destroyContent) return null;
 
   const { style: innerStyle, ...otherInnerProps } = inner;
-  const contentWrapperRef = useRef();
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
 
   return <div
