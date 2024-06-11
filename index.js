@@ -11,7 +11,7 @@ NavBar.Item = Item;
 NavBar.Content = Content;
 NavBar.Trigger = Trigger;
 
-export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, ...navProps }) {
+export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, onlyKeyFocus = true, ...navProps }) {
 
   /** 保存 trigger 的 aria-id */
   const triggerAriaIds = useRef([]);
@@ -38,6 +38,8 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   const leaveTimerRef = useRef();
   /** 是否变高 */
   const isPanelGetHigherRef = useRef(false);
+  // /** 当前操作是键盘操作吗，如果是键盘操作，就进行焦点转移 */
+  const isKeyActive = useRef(false);
 
   if (panelsHeightRef.current.length > 0) {
     const prevActiveH = panelsHeightRef.current[prevMenuIdxRef.current];
@@ -66,6 +68,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     const target = e.target;
     const targetIdx = btnsRef.current.findIndex(e => e === target);
     if (targetIdx > -1 && targetIdx !== openedMenuIdx) {
+      isKeyActive.current = false;
       setActivePanel(targetIdx);
     }
   };
@@ -77,6 +80,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
       leaveTimerRef.current = null;
     }
     leaveTimerRef.current = setTimeout(() => {
+      isKeyActive.current = false;
       setActivePanel(-1);
       leaveTimerRef.current = null;
     }, 600);
@@ -90,6 +94,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     const target = e.target;
     const targetIdx = btnsRef.current.findIndex(e => e === target);
     if (targetIdx > -1) {
+      isKeyActive.current = e.screenX === 0 && e.screenY === 0;
       if (targetIdx === openedMenuIdx) {
         // 关闭菜单
         setActivePanel(-1);
@@ -104,6 +109,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   const escapeMenu = idx => e => {
     if (e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) {
       // 关闭菜单
+      isKeyActive.current = true;
       setActivePanel(-1);
     }
 
@@ -172,11 +178,13 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
       setDestroy(true);
     }
     else {
-      const head = headFocusItemInContent.current[openedMenuIdx];
-      if (head) head.focus({ preventScroll: true });
-      else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
+      if ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus) {
+        const head = headFocusItemInContent.current[openedMenuIdx];
+        if (head) head.focus({ preventScroll: true });
+        else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
+      }
     }
-  }, [openedMenuIdx, dur]);
+  }, [openedMenuIdx, dur, onlyKeyFocus]);
 
   const nextContentInnerTransformVal = (transitionEnded || isCollapse) ?
     `translateY(-100%)` : // 入场的初始状态（退场结束）
@@ -193,10 +201,11 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   useEffect(() => {
     if (openedMenuIdx < 0) {
       if (prevMenuIdxRef.current > -1) {
-        btnsRef.current[prevMenuIdxRef.current].focus();
+        if ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus)
+          btnsRef.current[prevMenuIdxRef.current].focus();
       }
     }
-  }, [openedMenuIdx]);
+  }, [openedMenuIdx, onlyKeyFocus]);
 
   const triggerWrapperRef = useRef(null);
 
