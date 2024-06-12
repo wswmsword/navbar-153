@@ -42,6 +42,8 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   const isKeyActive = useRef(false);
   /** 动画正在进行吗，正在进行则不允许 tab 聚焦 */
   const transRunning = useRef(false);
+  /** 是否已经检查了焦点在切换面板之前在当前的面板中，用于性能优化 */
+  const checkedFocusOwnerContent = useRef(false);
 
   if (panelsHeightRef.current.length > 0) {
     const prevActiveH = panelsHeightRef.current[prevMenuIdxRef.current];
@@ -51,6 +53,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
 
   const setActivePanel = useCallback(cur => {
     transRunning.current = true;
+    checkedFocusOwnerContent.current = false;
     setIdx(v => {
       prevMenuIdxRef.current = v;
       return cur;
@@ -114,12 +117,28 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
       // 关闭菜单
       isKeyActive.current = true;
       setActivePanel(-1);
+      return;
     }
 
-    // 动画进行时期，禁止 tab，避免聚焦引起的样式错位
-    if ((e.key === "Tab" || e.keyCode === 9) && transRunning.current) {
-      e.preventDefault();
-      return false;
+    if (e.key === "Tab" || e.keyCode === 9) {
+      // 动画进行时期，禁止 tab，避免聚焦引起的样式错位
+      if (transRunning.current) {
+        e.preventDefault();
+        return;
+      }
+      // 非键盘模式下切换菜单之后，按下 tab
+      if (!checkedFocusOwnerContent.current && prevMenuIdxRef.current > -1 && onlyKeyFocus && !isKeyActive.current) {
+        const activeE = document.activeElement;
+        if (contentWrapperRef.current?.contains(activeE)) { // 焦点在所有面板的 wrapper 中
+          const focusTarget = panelsRef.current[openedMenuIdx]; // 当前面板
+          if (!focusTarget.contains(activeE)) { // 焦点不在当前面板
+            checkedFocusOwnerContent.current = true;
+            focusTarget.focus({ preventScroll: true });
+            e.preventDefault();
+            return;
+          }
+        }
+      }
     }
 
     const head = headFocusItemInContent.current[idx]
@@ -189,18 +208,8 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     if (openedMenuIdx < 0) {
       setEnded(true);
       setDestroy(true);
-    } else {
-      // 非键盘模式下的切换菜单
-      if (prevMenuIdxRef.current > -1 && onlyKeyFocus && !isKeyActive.current) {
-        const activeE = document.activeElement;
-        if (contentWrapper?.contains(activeE)) { // 焦点在之前的面板中，则把焦点聚焦到当前面板，避免 tab 之前的焦点导致的样式错位
-          const focusTarget = panelsRef.current[openedMenuIdx];
-          focusTarget.focus({ preventScroll: true });
-          focusTarget.blur(); // 非键盘模式，释放焦点
-        }
-      }
     }
-  }, [openedMenuIdx, dur, onlyKeyFocus]);
+  }, [openedMenuIdx]);
 
   const nextContentInnerTransformVal = (transitionEnded || isCollapse) ?
     `translateY(-100%)` : // 入场的初始状态（退场结束）
