@@ -181,12 +181,24 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     if (openedMenuIdx > -1) setEndI(openedMenuIdx);
   }, [openedMenuIdx, transitionEnded]);
 
-  const transitionEnd = useCallback(() => {
+  const transitionEnd = useCallback(e => {
+    const contentWrapper = contentWrapperRef.current;
+    if (e.target !== contentWrapper) return; // 过滤冒泡的 transitionend 事件
     transRunning.current = false;
     setStartI(openedMenuIdx);
     if (openedMenuIdx < 0) {
       setEnded(true);
       setDestroy(true);
+    } else {
+      // 非键盘模式下的切换菜单
+      if (prevMenuIdxRef.current > -1 && onlyKeyFocus && !isKeyActive.current) {
+        const activeE = document.activeElement;
+        if (contentWrapper?.contains(activeE)) { // 焦点在之前的面板中，则把焦点聚焦到当前面板，避免 tab 之前的焦点导致的样式错位
+          const focusTarget = panelsRef.current[openedMenuIdx];
+          focusTarget.focus({ preventScroll: true });
+          focusTarget.blur(); // 非键盘模式，释放焦点
+        }
+      }
     }
   }, [openedMenuIdx, dur, onlyKeyFocus]);
 
