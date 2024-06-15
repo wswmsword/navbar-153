@@ -178,9 +178,6 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     setDestroy(true);
   }, []);
 
-  const [xStartIdx, setStartI] = useState(-1); // 过渡动画起点按钮编号
-  const [xEndIdx, setEndI] = useState(-1); // 过渡动画结束按钮编号
-
   const [transitionEnded, setEnded] = useState(true); // 收起的过渡动画结束了吗
 
   useEffect(() => {
@@ -192,19 +189,16 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   useEffect(() => {
     // 面板动画开始
     if (openedMenuIdx > -1 && prevMenuIdxRef.current < 0 && transitionEnded) {
-      setStartI(openedMenuIdx);
       setTimeout(() => {
         setEnded(false);
       }, 18);
     }
-    if (openedMenuIdx > -1) setEndI(openedMenuIdx);
   }, [openedMenuIdx, transitionEnded]);
 
   const transitionEnd = useCallback(e => {
     const contentWrapper = contentWrapperRef.current;
     if (e.target !== contentWrapper) return; // 过滤冒泡的 transitionend 事件
     transRunning.current = false;
-    setStartI(openedMenuIdx);
     if (openedMenuIdx < 0) {
       setEnded(true);
       setDestroy(true);
@@ -215,9 +209,9 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     `translateY(-100%)` : // 入场的初始状态（退场结束）
     `translateY(${gap}px)`; // 入场的结束状态（退场初始）
 
-  const nextContentItemTransformVal = transitionEnded ?
-    `translateX(${getTranslateXVal(xStartIdx, panelsOffsetLeftRef)})` :
-    `translateX(${getTranslateXVal(xEndIdx, panelsOffsetLeftRef)})`;
+  const nextContentItemTransformVal = openedMenuIdx < 0 ?
+    `translateX(${getTranslateXVal(prevMenuIdxRef.current, panelsOffsetLeftRef)})` :
+    `translateX(${getTranslateXVal(openedMenuIdx, panelsOffsetLeftRef)})`;
 
   const headFocusItemInContent = useRef([]);
   const tailFocusItemInContent = useRef([]);
