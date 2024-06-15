@@ -11,7 +11,7 @@ NavBar.Item = Item;
 NavBar.Content = Content;
 NavBar.Trigger = Trigger;
 
-export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, onlyKeyFocus = true, ...navProps }) {
+export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, onlyKeyFocus = true, close = false, ...navProps }) {
 
   /** 保存 trigger 的 aria-id */
   const triggerAriaIds = useRef([]);
@@ -32,6 +32,8 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   const panelsWidthRef = useRef([]);
   /** 面板们的左边偏移量 */
   const panelsOffsetLeftRef = useRef([]);
+  /** 面板们的宽度 */
+  const panelsClientWidthRef = useRef([]);
   /** 面板的元素们 */
   const panelsRef = useRef([]);
   /** 如果不想离开，则清空这个 timer */
@@ -170,11 +172,12 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
 
   const [destroyContent, setDestroy] = useState(false);
 
-  // 缓存元素们的高度
+  // 缓存元素们的尺寸
   useLayoutEffect(() => {
     panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
     panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
     panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
+    panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
     setDestroy(true);
   }, []);
 
@@ -205,13 +208,28 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     }
   }, [openedMenuIdx]);
 
-  const nextContentInnerTransformVal = (transitionEnded || isCollapse) ?
-    `translateY(-100%)` : // 入场的初始状态（退场结束）
-    `translateY(${gap}px)`; // 入场的结束状态（退场初始）
+  const nextContentInnerTransformVal = (() => {
+
+    const collapseOrTEnded = (transitionEnded || isCollapse);
+    if (close) {
+      return collapseOrTEnded ?
+        getSlateWrapperTranslateVal(
+          "-100%",
+          openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx,
+          btnsRef,
+          panelsClientWidthRef) :
+        getSlateWrapperTranslateVal(`${gap}px`, openedMenuIdx, btnsRef, panelsClientWidthRef);
+
+    } else {
+      return collapseOrTEnded ?
+        `translateY(-100%)`: // 入场的初始状态（退场结束）
+        `translateY(${gap}px)`; // 入场的结束状态（退场初始）
+    }
+  })();
 
   const nextContentItemTransformVal = openedMenuIdx < 0 ?
-    `translateX(${getTranslateXVal(prevMenuIdxRef.current, panelsOffsetLeftRef)})` :
-    `translateX(${getTranslateXVal(openedMenuIdx, panelsOffsetLeftRef)})`;
+    getSlateTranslateVal(prevMenuIdxRef.current, panelsOffsetLeftRef) :
+    getSlateTranslateVal(openedMenuIdx, panelsOffsetLeftRef)
 
   const headFocusItemInContent = useRef([]);
   const tailFocusItemInContent = useRef([]);
@@ -287,6 +305,16 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   </Context.Provider>;
 }
 
-function getTranslateXVal(i, panelsOffsetLeftRef) {
-  return i < 1 ? 0 : `-${panelsOffsetLeftRef.current[i]}px`;
+function getSlateTranslateVal(i, panelsOffsetLeftRef) {
+  const left = i < 1 ? 0 : `-${panelsOffsetLeftRef.current[i]}px`;
+  return `translateX(${left})`;
+}
+
+function getSlateWrapperTranslateVal(y, openedMenuIdx, triggerRef, slateClientWidthRef) {
+  const curSlateWidth = slateClientWidthRef.current[openedMenuIdx];
+  const curTrigger = triggerRef.current[openedMenuIdx];
+  const left = (curSlateWidth == null || curTrigger == null) ?
+    0 :
+    (curTrigger.offsetLeft + curTrigger.clientWidth / 2 - curSlateWidth / 2);
+  return `translate(${left}px, ${y})`;
 }

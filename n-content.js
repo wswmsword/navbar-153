@@ -23,8 +23,6 @@ export default function Content({ children, inner = {}, style, ...contentWrapper
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
 
   return <div
-    onMouseOver={overMenuPanel}
-    onMouseLeave={leaveMenuPanel}
     ref={contentWrapperRef}
     style={{
       ...style,
@@ -37,6 +35,8 @@ export default function Content({ children, inner = {}, style, ...contentWrapper
     {...contentWrapperProps}>
     {/* 外层 div 用于 clipPath，内层 div 用于包裹实际内容，完成入场和退场的动画 */}
     <div
+      onMouseOver={overMenuPanel}
+      onMouseLeave={leaveMenuPanel}
       style={{
         ...innerStyle,
         display: "flex",
