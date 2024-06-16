@@ -113,6 +113,15 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     }
   };
 
+  const focusBackToSlateFromTrigger = useCallback((e) => {
+    if (openedMenuIdx > -1 && (e.key === "Tab" || e.keyCode === 9)) {
+      const head = headFocusItemInContent.current[openedMenuIdx];
+      e.preventDefault();
+      if (head) head.focus({ preventScroll: true });
+      else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
+    }
+  }, [openedMenuIdx]);
+
   /** 按下 Esc 退出菜单 */
   const escapeMenu = idx => e => {
     if (e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) {
@@ -277,7 +286,10 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     destroyContent,
   }), [openedMenuIdx, gap, transitionEnded, dur, isCollapse, destroyContent]);
 
-  const triggerContextVal = useMemo(() => triggerWrapperRef, []);
+  const triggerContextVal = useMemo(() => ({
+    triggerWrapperRef,
+    focusBackToSlateFromTrigger,
+  }), [focusBackToSlateFromTrigger]);
 
   return <Context.Provider value={{
     escapeMenu,
