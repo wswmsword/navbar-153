@@ -57,7 +57,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     transRunning.current = true;
     checkedFocusOwnerContent.current = false;
     setIdx(v => {
-      prevMenuIdxRef.current = v;
+      if (cur !== v) prevMenuIdxRef.current = v;
       return cur;
     });
   }, []);
