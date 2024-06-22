@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "navbar-153",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Super Smooth! Super Fast! Super Accessible!",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
