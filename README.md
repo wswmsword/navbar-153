@@ -2,7 +2,7 @@
 
 <a href="https://996.icu"><img src="https://img.shields.io/badge/link-996.icu-red.svg" alt="996.icu" align="right"></a>
 
-导航栏组件，包含一组触发器和一组对应的菜单面板，通过触发器切换菜单面板，通常放置在网站的顶部，提供最希望用户访问的链接和其它控件。组件有下面这些特性：
+navbar-153 是一个 React 导航栏组件，包含一组触发器和一组对应的菜单面板，用户可以通过触发器展开、切换、收起菜单面板。导航栏通常出现在网站的顶部，提供最希望用户访问的链接和其它控件。navbar-153 有下面这些特性：
 
 - 🍯 流畅的过渡动画；
 - ⌨️ 键盘导航；
@@ -28,7 +28,7 @@
 npm install navbar-153
 ```
 
-下面是安装之后，使用组件的大致形态，完整的范例可以打开[这个仓库的 `/demo` 文件夹](./demo/)查看：
+下面是安装之后，使用组件的大致形态，完整的范例可以打开[仓库的 `dark-space` 文件夹](./examples/dark-space)（Nextjs 项目）查看：
 
 ```javascript
 import N from "navbar-153";
@@ -72,7 +72,13 @@ export default MyNavBar;
 import N from "navbar-153";
 ```
 
-`<N>` 会被渲染成 `<nav>` 作为导航栏组件的最外层，`<N>` 接收任何内置的 props。此外，可以传入 `dur` 定义过渡动画的持续时间（s）。
+`<N>` 会被渲染成 `<nav>` 作为导航栏组件的最外层，`<N>` 接收任何用于 HTML 元素的 props，以及下面这些额外选项：
+
+- `dur`，number，定义过渡动画的持续时间（s）；
+- `gap`，number，设置面板和触发器之间的距离（px）；
+- `dynamicWidth`，boolean，当面板宽度变化，使用动画过渡；
+- `onlyKeyFocus`，boolean，设置焦点仅在键盘控制时触发转移；
+- `close`，boolean，切换面板时跟随触发器的位置。
 
 ### Trigger
 
@@ -123,11 +129,9 @@ const { Trigger, Content, Item } = N;
 | <kbd>Space</kbd> <kbd>Enter</kbd> | 当焦点在触发器上，按下按键，会展开或收起内容面板 |
 | <kbd>Esc</kbd> | 当焦点在内容面板中，按下按键会收起面板，焦点回到触发器 |
 
-## FAQ
+## 注意事项
 
-macOS 里，Firefox 无法使用 <kbd>Tab</kbd> 聚焦链接元素？
-
-> 打开“系统设置”，打开“键盘”，打开“键盘导航”即可。
+macOS 里，用户在 Firefox 可能无法使用 <kbd>Tab</kbd> 聚焦链接元素，需要用户执行下面的步骤：打开“系统设置”，打开“键盘”，打开“键盘导航”。
 
 ## 开发与维护方向
 
@@ -140,7 +144,7 @@ npm run watch
 保持上面的监听命令打开，再打开新的终端会话，执行下面的命令运行引入了源码组件的 React Demo 应用，在更改源码时，在浏览器实时查看效果：
 
 ```bash
-cd demo
+cd examples/demo
 npm i
 npm run dev
 ```
