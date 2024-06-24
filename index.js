@@ -100,7 +100,8 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   /** 点击菜单按钮 */
   const clickMenuBtn = e => {
     const target = e.target;
-    const targetIdx = btnsRef.current.findIndex(e => e === target);
+    let targetIdx = btnsRef.current.findIndex(e => e === target);
+    if (targetIdx < 0) targetIdx = btnsRef.current.findIndex(e => e.contains(target));
     if (targetIdx > -1) {
       isKeyActive.current = e.nativeEvent.offsetX === 0 && e.nativeEvent.offsetY === 0;
       if (targetIdx === openedMenuIdx) {
