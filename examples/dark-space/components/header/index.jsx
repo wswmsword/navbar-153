@@ -14,7 +14,7 @@ export default function Header() {
       <Trigger className={styles.triggerWrapper}>
         <Item><a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a></Item>
         <Item>{props => <button className={styles.navBtn} {...props}>Navbar-153</button>}</Item>
-        <Item>{props => <button className={styles.navBtn} {...props}>Postcss-Mobile-Forever</button>}</Item>
+        <Item>{props => <button className={styles.navBtn} {...props}><span className={styles.onlyDesktop}>Postcss-</span>Mobile-Forever</button>}</Item>
         <Item>{props => <button className={styles.navBtn} {...props}>Focus-Fly</button>}</Item>
       </Trigger>
       <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }}>

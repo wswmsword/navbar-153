@@ -55,7 +55,7 @@
   box-shadow: inset 0 1px 3px -1px #1b1d23, 0 1px 0 #3a3a3a;
 }
 
-.presentation {
+.presentation, .presentation2 {
   position: fixed;
   bottom: -20px;
   right: -16px;
@@ -64,11 +64,22 @@
   font-size: 77px;
   font-weight: 1000;
   z-index: -1;
+}
+
+.presentation2 {
+  background: #0e0e0e;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #232323, #0e0e0e);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #232323, #0e0e0e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.textShadow {
   text-shadow: -1px -1px 0 #6c6c6c, -2px -2px 0 #6c6c6c, -3px -3px 0 #6c6c6c, -4px -4px 0 #6c6c6c;
 }
 
 @media (max-width: 720px) {
-  .presentation {
+  .presentation, .presentation2 {
     font-size: 66px;
     bottom: -14px;
     right: -8px;
@@ -79,7 +90,7 @@
   .feats {
     gap: 10px;
   }
-  .presentation {
+  .presentation, .presentation2 {
     font-size: 46px;
     bottom: -14px;
     right: -8px;

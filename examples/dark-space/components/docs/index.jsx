@@ -13,7 +13,8 @@ export default function Docs() {
     </div>
     <p className={styles.txt}>navbar-153 的使用方法很简单，提供了直观简单的 API，有良好的开发体验，具体的使用方法请查看 <a href="https://github.com/wswmsword/navbar-153">navbar-153 的 GitHub 仓库主页</a>。</p>
     <p className={styles.txt}>星海闪烁，请握紧导航栏。</p>
-    <div role="presentation" className={styles.presentation}>NAVBAR-153</div>
+    <div role="presentation" className={`${styles.presentation} ${styles.textShadow}`}>NAVBAR-153</div>
+    <div role="presentation" className={styles.presentation2}>NAVBAR-153</div>
   </>;
 }
 
