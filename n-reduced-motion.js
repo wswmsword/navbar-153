@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useState, useCallback, useMemo, useEffect } from "react";
+import React, { createContext, useRef, useState, useCallback, useMemo } from "react";
 import { Context, ContextForTrigger } from "./index";
 import { useEntryExitFocus } from "./useHooks";
 
@@ -92,21 +92,7 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
   };
 
   /** 点击菜单按钮 */
-  const clickMenuBtn = e => {
-    const target = e.target;
-    let targetIdx = btnsRef.current.findIndex(e => e === target);
-    if (targetIdx < 0) targetIdx = btnsRef.current.findIndex(e => e.contains(target));
-    if (targetIdx > -1) {
-      isKeyActive.current = e.nativeEvent.offsetX === 0 && e.nativeEvent.offsetY === 0;
-      if (targetIdx === openedMenuIdx) {
-        // 关闭菜单
-        setActivePanel(-1);
-      } else {
-        // 打开菜单
-        setActivePanel(targetIdx);
-      }
-    }
-  };
+  const clickMenuBtn = _clickMenuBtn(btnsRef, isKeyActive, openedMenuIdx, setActivePanel);
 
   /** 进入一个菜单按钮 */
   const overMenu = (e) => {
@@ -170,4 +156,23 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
       </ContextForContent.Provider>
     </ContextForTrigger.Provider>
   </Context.Provider>;
+}
+
+/** 点击菜单按钮 */
+export function _clickMenuBtn(btnsRef, isKeyActive, openedMenuIdx, setActivePanel) {
+  return e => {
+    const target = e.target;
+    let targetIdx = btnsRef.current.findIndex(e => e === target);
+    if (targetIdx < 0) targetIdx = btnsRef.current.findIndex(e => e.contains(target));
+    if (targetIdx > -1) {
+      isKeyActive.current = e.nativeEvent.offsetX === 0 && e.nativeEvent.offsetY === 0;
+      if (targetIdx === openedMenuIdx) {
+        // 关闭菜单
+        setActivePanel(-1);
+      } else {
+        // 打开菜单
+        setActivePanel(targetIdx);
+      }
+    }
+  };
 }

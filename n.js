@@ -1,6 +1,7 @@
 import React, { createContext, useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from "react";
 import { Context, ContextForTrigger } from "./index";
 import { useEntryExitFocus } from "./useHooks";
+import { _clickMenuBtn } from "./n-reduced-motion";
 
 export const ContextForContent = createContext({});
 
@@ -90,21 +91,7 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   const leaveMenuPanel = leaveMenu;
 
   /** 点击菜单按钮 */
-  const clickMenuBtn = e => {
-    const target = e.target;
-    let targetIdx = btnsRef.current.findIndex(e => e === target);
-    if (targetIdx < 0) targetIdx = btnsRef.current.findIndex(e => e.contains(target));
-    if (targetIdx > -1) {
-      isKeyActive.current = e.nativeEvent.offsetX === 0 && e.nativeEvent.offsetY === 0;
-      if (targetIdx === openedMenuIdx) {
-        // 关闭菜单
-        setActivePanel(-1);
-      } else {
-        // 打开菜单
-        setActivePanel(targetIdx);
-      }
-    }
-  };
+  const clickMenuBtn = _clickMenuBtn(btnsRef, isKeyActive, openedMenuIdx, setActivePanel);
 
   const focusBackToSlateFromTrigger = useCallback((e) => {
     if (openedMenuIdx > -1 && (e.key === "Tab" || e.keyCode === 9)) {
