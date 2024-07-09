@@ -93,15 +93,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   /** 点击菜单按钮 */
   const clickMenuBtn = _clickMenuBtn(btnsRef, isKeyActive, openedMenuIdx, setActivePanel);
 
-  const focusBackToSlateFromTrigger = useCallback((e) => {
-    if (openedMenuIdx > -1 && (e.key === "Tab" || e.keyCode === 9)) {
-      const head = headFocusItemInContent.current[openedMenuIdx];
-      e.preventDefault();
-      if (head) head.focus({ preventScroll: true });
-      else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
-    }
-  }, [openedMenuIdx]);
-
   /** 菜单面板上的键盘操作 */
   const escapeMenu = idx => e => {
     if (e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) {
@@ -250,8 +241,10 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
 
   const triggerContextVal = useMemo(() => ({
     triggerWrapperRef,
-    focusBackToSlateFromTrigger,
-  }), [focusBackToSlateFromTrigger]);
+    openedMenuIdx,
+    headFocusItemInContent,
+    panelsRef,
+  }), [openedMenuIdx]);
 
   return <Context.Provider value={{
     escapeMenu,

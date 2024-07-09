@@ -110,18 +110,11 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
     setActivePanel(-1);
   }, []);
 
-  const focusBackToSlateFromTrigger = useCallback((e) => {
-    if (openedMenuIdx > -1 && (e.key === "Tab" || e.keyCode === 9)) {
-      const head = headFocusItemInContent.current[openedMenuIdx];
-      e.preventDefault();
-      if (head) head.focus({ preventScroll: true });
-      else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
-    }
-  }, [openedMenuIdx]);
-
   const triggerContextVal = useMemo(() => ({
-    focusBackToSlateFromTrigger,
-  }), [focusBackToSlateFromTrigger]);
+    openedMenuIdx,
+    headFocusItemInContent,
+    panelsRef,
+  }), [openedMenuIdx]);
 
   const contentContextVal = useMemo(() => ({
     leaveMenuPanel: leaveMenu,
