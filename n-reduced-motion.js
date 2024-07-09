@@ -1,5 +1,6 @@
 import React, { createContext, useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { Context, ContextForTrigger } from "./index";
+import { useEntryExitFocus } from "./useHooks";
 
 export const ContextForContent = createContext({});
 
@@ -27,26 +28,8 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
   const triggerWrapperRef = useRef(null);
   const contentWrapperRef = useRef(null);
 
-  // 离开的焦点控制
-  useEffect(() => {
-    if (openedMenuIdx < 0) {
-      if (prevMenuIdxRef.current > -1) {
-        if ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus)
-          btnsRef.current[prevMenuIdxRef.current].focus();
-      }
-    }
-  }, [openedMenuIdx, onlyKeyFocus]);
-
-  // 进入的焦点控制
-  useEffect(() => {
-    if (openedMenuIdx > -1) {
-      if ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus) {
-        const head = headFocusItemInContent.current[openedMenuIdx];
-        if (head) head.focus({ preventScroll: true });
-        else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
-      }
-    }
-  }, [openedMenuIdx, onlyKeyFocus]);
+  // 焦点的入口和出口控制
+  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, false);
 
   const setActivePanel = useCallback(cur => {
     checkedFocusOwnerContent.current = false;
