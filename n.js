@@ -22,8 +22,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   const panelsHeightRef = useRef([]);
   /** 面板元素们的宽度，完成过渡动画 */
   const panelsWidthRef = useRef([]);
-  /** 面板们的左边偏移量 */
-  const panelsOffsetLeftRef = useRef([]);
   /** 面板们的宽度 */
   const panelsClientWidthRef = useRef([]);
   /** 面板的元素们 */
@@ -95,7 +93,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   useLayoutEffect(() => {
     panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
     panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
-    panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
     panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
     setDestroy(true);
   }, []);
@@ -147,8 +144,8 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   })();
 
   const nextContentItemTransformVal = openedMenuIdx < 0 ?
-    getSlateTranslateVal(prevMenuIdxRef.current, panelsOffsetLeftRef) :
-    getSlateTranslateVal(openedMenuIdx, panelsOffsetLeftRef)
+    getSlateTranslateVal(prevMenuIdxRef.current, panelsRef) :
+    getSlateTranslateVal(openedMenuIdx, panelsRef)
 
   const headFocusItemInContent = useRef([]);
   const tailFocusItemInContent = useRef([]);
@@ -216,8 +213,8 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   </Context.Provider>;
 }
 
-function getSlateTranslateVal(i, panelsOffsetLeftRef) {
-  const left = i < 1 ? 0 : `-${panelsOffsetLeftRef.current[i]}px`;
+function getSlateTranslateVal(i, slatesRef) {
+  const left = i < 1 ? 0 : `-${slatesRef.current?.[i]?.offsetLeft || 0}px`;
   return `translateX(${left})`;
 }
 
