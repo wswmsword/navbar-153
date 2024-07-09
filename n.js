@@ -89,63 +89,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   /** 离开菜单面板 */
   const leaveMenuPanel = leaveMenu;
 
-  /** 菜单面板上的键盘操作 */
-  const escapeMenu = idx => e => {
-    if (e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) {
-      // 关闭菜单
-      isKeyActive.current = true;
-      setActivePanel(-1);
-      return;
-    }
-
-    if (e.key === "Tab" || e.keyCode === 9) {
-      // 动画进行时期，禁止 tab，避免聚焦引起的样式错位
-      if (transRunning.current) {
-        e.preventDefault();
-        return;
-      }
-      // 非键盘模式下切换菜单之后，按下 tab
-      if (!checkedFocusOwnerContent.current && prevMenuIdxRef.current > -1 && onlyKeyFocus && !isKeyActive.current) {
-        const activeE = document.activeElement;
-        if (contentWrapperRef.current?.contains(activeE)) { // 焦点在所有面板的 wrapper 中
-          const focusTarget = panelsRef.current[openedMenuIdx]; // 当前面板
-          if (!focusTarget.contains(activeE)) { // 焦点不在当前面板
-            checkedFocusOwnerContent.current = true;
-            focusTarget.focus({ preventScroll: true });
-            e.preventDefault();
-            return;
-          }
-        }
-      }
-    }
-
-    const head = headFocusItemInContent.current[idx]
-    const tail = tailFocusItemInContent.current[idx];
-    // 焦点矫正
-    if (e.target === panelsRef.current[idx]) {
-      if (e.key === "Tab" || e.keyCode === 9) {
-        if (e.shiftKey) {
-          tail && tail.focus();
-        } else {
-          head && head.focus();
-        }
-        e.preventDefault();
-      }
-    }
-
-    // 回尾
-    if (e.target === head && (e.key === "Tab" || e.keyCode === 9) && e.shiftKey) {
-      tail && tail.focus();
-      e.preventDefault();
-    }
-
-    // 回头
-    if (e.target === tail && (e.key === "Tab" || e.keyCode === 9) && !e.shiftKey) {
-      head && head.focus();
-      e.preventDefault();
-    }
-  };
-
   const [destroyContent, setDestroy] = useState(false);
 
   // 缓存元素们的尺寸
@@ -243,7 +186,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   }), [openedMenuIdx]);
 
   return <Context.Provider value={{
-    escapeMenu,
     panelsRef,
     btnsRef,
     nextContentItemTransformVal,
@@ -258,6 +200,11 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
     dur,
     isKeyActive,
     setActivePanel,
+    checkedFocusOwnerContent,
+    prevMenuIdxRef,
+    onlyKeyFocus,
+    contentWrapperRef,
+    transRunning
   }}>
     <ContextForContent.Provider value={contentContextVal}>
       <ContextForTrigger.Provider value={triggerContextVal}>
