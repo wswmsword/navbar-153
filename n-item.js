@@ -16,9 +16,25 @@ export default function Item({ children, type, orderI }) {
 
   if (isTrigger) {
     if (typeof children === "function") {
-      const { btnsRef, clickMenuBtn, overMenu, leaveMenu, triggerAriaIds, openedMenuIdx } = nbContext;
+      const { btnsRef, overMenu, leaveMenu, triggerAriaIds, openedMenuIdx, setActivePanel, isKeyActive } = nbContext;
       const openedMenu = openedMenuIdx === orderI;
       triggerAriaIds.current[orderI] = ariaId;
+      /** 点击菜单按钮 */
+      const clickMenuBtn = e => {
+        const target = e.target;
+        let targetIdx = btnsRef.current.findIndex(e => e === target);
+        if (targetIdx < 0) targetIdx = btnsRef.current.findIndex(e => e.contains(target));
+        if (targetIdx > -1) {
+          isKeyActive.current = e.nativeEvent.offsetX === 0 && e.nativeEvent.offsetY === 0;
+          if (targetIdx === openedMenuIdx) {
+            // 关闭菜单
+            setActivePanel(-1);
+          } else {
+            // 打开菜单
+            setActivePanel(targetIdx);
+          }
+        }
+      };
       return children({
         ref: e => btnsRef.current[orderI] = e,
         onClick: clickMenuBtn,

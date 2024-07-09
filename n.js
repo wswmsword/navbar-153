@@ -1,7 +1,6 @@
 import React, { createContext, useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from "react";
 import { Context, ContextForTrigger } from "./index";
 import { useEntryExitFocus } from "./useHooks";
-import { _clickMenuBtn } from "./n-reduced-motion";
 
 export const ContextForContent = createContext({});
 
@@ -89,9 +88,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
 
   /** 离开菜单面板 */
   const leaveMenuPanel = leaveMenu;
-
-  /** 点击菜单按钮 */
-  const clickMenuBtn = _clickMenuBtn(btnsRef, isKeyActive, openedMenuIdx, setActivePanel);
 
   /** 菜单面板上的键盘操作 */
   const escapeMenu = idx => e => {
@@ -252,7 +248,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
     btnsRef,
     nextContentItemTransformVal,
     transitionEnded,
-    clickMenuBtn,
     overMenu,
     leaveMenu,
     openedMenuIdx,
@@ -261,6 +256,8 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
     headFocusItemInContent,
     tailFocusItemInContent,
     dur,
+    isKeyActive,
+    setActivePanel,
   }}>
     <ContextForContent.Provider value={contentContextVal}>
       <ContextForTrigger.Provider value={triggerContextVal}>
