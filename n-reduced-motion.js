@@ -1,6 +1,5 @@
 import React, { createContext, useRef, useState, useCallback, useMemo } from "react";
 import { Context, ContextForTrigger } from "./index";
-import { useEntryExitFocus } from "./useHooks";
 
 export const ContextForContent = createContext({});
 
@@ -27,9 +26,6 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
 
   const triggerWrapperRef = useRef(null);
   const contentWrapperRef = useRef(null);
-
-  // 焦点的入口和出口控制
-  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, false);
 
   const setActivePanel = useCallback(cur => {
     checkedFocusOwnerContent.current = false;
@@ -71,7 +67,11 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
     panelsRef,
     close,
     btnsRef,
-  }), [leaveMenu, gap, openedMenuIdx, dynamicWidth, close]);
+    onlyKeyFocus,
+    prevMenuIdxRef,
+    isKeyActive,
+    headFocusItemInContent,
+  }), [leaveMenu, gap, openedMenuIdx, dynamicWidth, close, onlyKeyFocus]);
 
   return <Context.Provider value={{
     panelsRef,

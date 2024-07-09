@@ -1,7 +1,8 @@
-import React, { Children, cloneElement, useContext, useLayoutEffect, useRef, useState } from "react";
+import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useEffect, useCallback } from "react";
 import { ContextForContent } from "./n";
 import { ContextForContent as ContextFormReducedMotionContent } from "./n-reduced-motion";
 import { ContextMotion } from "./index";
+import { useEntryExitFocus } from "./useHooks";
 
 export default function Content({ children, inner = {}, style, ...contentWrapperProps }) {
   const motion = useContext(ContextMotion);
@@ -14,9 +15,9 @@ Content.displayName = "Content";
 
 function ContentWithMotion({ children, inner = {}, style, ...contentWrapperProps }) {
   const {
+    openedMenuIdx,
     overMenuPanel,
     leaveMenuPanel,
-    transitionEnd,
     transitionEnded,
     dur,
     innerHeight,
@@ -25,8 +26,40 @@ function ContentWithMotion({ children, inner = {}, style, ...contentWrapperProps
     triggerWrapperRef,
     contentWrapperRef,
     nextContentInnerTransformVal,
-    destroyContent,
+    setEnded,
+    transRunning,
+    onlyKeyFocus,
+    prevMenuIdxRef,
+    isKeyActive,
+    btnsRef,
+    panelsRef,
+    headFocusItemInContent,
   } = useContext(ContextForContent);
+
+  const [destroyContent, setDestroy] = useState(false);
+
+  useLayoutEffect(() => {
+    setDestroy(true);
+  }, []);
+
+  useEffect(() => {
+    if (openedMenuIdx > -1) {
+      setDestroy(false);
+    }
+  }, [openedMenuIdx]);
+
+  // 焦点的入口和出口控制
+  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, destroyContent);
+
+  const transitionEnd = useCallback(e => {
+    const contentWrapper = contentWrapperRef.current;
+    if (e.target !== contentWrapper) return; // 过滤冒泡的 transitionend 事件
+    transRunning.current = false;
+    if (openedMenuIdx < 0) {
+      setEnded(true);
+      setDestroy(true);
+    }
+  }, [openedMenuIdx]);
 
   if (destroyContent) return null;
 
@@ -65,7 +98,7 @@ function ContentWithMotion({ children, inner = {}, style, ...contentWrapperProps
 }
 
 function ContentReducedMotion({ children, inner = {}, style, ...contentWrapperProps }) {
-  const { leaveMenuPanel, gap, triggerWrapperRef, contentWrapperRef, openedMenuIdx, dynamicWidth, panelsRef, close, btnsRef } = useContext(ContextFormReducedMotionContent);
+  const { leaveMenuPanel, gap, triggerWrapperRef, contentWrapperRef, openedMenuIdx, dynamicWidth, panelsRef, close, btnsRef, onlyKeyFocus, prevMenuIdxRef, isKeyActive, headFocusItemInContent } = useContext(ContextFormReducedMotionContent);
   const { style: innerStyle, ...otherInnerProps } = inner;
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
   const [width, setW] = useState(0);
@@ -83,6 +116,9 @@ function ContentReducedMotion({ children, inner = {}, style, ...contentWrapperPr
       }
     }
   }, [openedMenuIdx, close, dynamicWidth]);
+
+  // 焦点的入口和出口控制
+  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, false);
 
   if (openedMenuIdx < 0) return null;
 

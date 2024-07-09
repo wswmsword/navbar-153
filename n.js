@@ -1,6 +1,5 @@
 import React, { createContext, useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from "react";
 import { Context, ContextForTrigger } from "./index";
-import { useEntryExitFocus } from "./useHooks";
 
 export const ContextForContent = createContext({});
 
@@ -89,24 +88,15 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   /** 离开菜单面板 */
   const leaveMenuPanel = leaveMenu;
 
-  const [destroyContent, setDestroy] = useState(false);
-
   // 缓存元素们的尺寸
   useLayoutEffect(() => {
     panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
     panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
     panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
     panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
-    setDestroy(true);
   }, []);
 
   const [transitionEnded, setEnded] = useState(true); // 收起的过渡动画结束了吗
-
-  useEffect(() => {
-    if (openedMenuIdx > -1) {
-      setDestroy(false);
-    }
-  }, [openedMenuIdx]);
 
   useEffect(() => {
     // 面板动画开始
@@ -116,16 +106,6 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
       }, 18);
     }
   }, [openedMenuIdx, transitionEnded]);
-
-  const transitionEnd = useCallback(e => {
-    const contentWrapper = contentWrapperRef.current;
-    if (e.target !== contentWrapper) return; // 过滤冒泡的 transitionend 事件
-    transRunning.current = false;
-    if (openedMenuIdx < 0) {
-      setEnded(true);
-      setDestroy(true);
-    }
-  }, [openedMenuIdx]);
 
   const nextContentInnerTransformVal = (() => {
 
@@ -153,16 +133,13 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
   const headFocusItemInContent = useRef([]);
   const tailFocusItemInContent = useRef([]);
 
-  // 焦点的入口和出口控制
-  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, destroyContent);
-
   const triggerWrapperRef = useRef(null);
   const contentWrapperRef = useRef(null);
 
   const contentContextVal = useMemo(() => ({
+    openedMenuIdx,
     overMenuPanel,
     leaveMenuPanel,
-    transitionEnd,
     innerHeight: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
     gapHeight: + gap + panelsHeightRef.current[openedMenuIdx] || 0,
     width: !dynamicWidth ?
@@ -175,8 +152,15 @@ export default function N({ children, dur = 0.5, gap = 0, dynamicWidth = false, 
     triggerWrapperRef,
     contentWrapperRef,
     nextContentInnerTransformVal,
-    destroyContent,
-  }), [openedMenuIdx, gap, transitionEnded, dur, isCollapse, destroyContent]);
+    setEnded,
+    transRunning,
+    onlyKeyFocus,
+    prevMenuIdxRef,
+    isKeyActive,
+    btnsRef,
+    panelsRef,
+    headFocusItemInContent,
+  }), [openedMenuIdx, gap, transitionEnded, dur, isCollapse, isKeyActive, onlyKeyFocus]);
 
   const triggerContextVal = useMemo(() => ({
     triggerWrapperRef,
