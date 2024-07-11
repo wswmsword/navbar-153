@@ -1,6 +1,5 @@
 import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useEffect, useCallback, useRef, createContext } from "react";
-import { ContextForContent } from "./n";
-import { ContextForContent as ContextFormReducedMotionContent } from "./n-reduced-motion";
+import { ContextForContent } from "./index";
 import { ContextMotion } from "./index";
 import { useEntryExitFocus } from "./useHooks";
 
@@ -155,7 +154,7 @@ function ContentWithMotion({ children, inner = {}, style, ...contentWrapperProps
 }
 
 function ContentReducedMotion({ children, inner = {}, style, ...contentWrapperProps }) {
-  const { leaveMenuPanel, gap, contentWrapperRef, openedMenuIdx, dynamicWidth, panelsRef, close, btnsRef, onlyKeyFocus, prevMenuIdxRef, isKeyActive, headFocusItemInContent } = useContext(ContextFormReducedMotionContent);
+  const { leaveMenuPanel, overMenuPanel, gap, contentWrapperRef, openedMenuIdx, dynamicWidth, panelsRef, close, btnsRef, onlyKeyFocus, prevMenuIdxRef, isKeyActive, headFocusItemInContent } = useContext(ContextForContent);
   const { style: innerStyle, ...otherInnerProps } = inner;
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
   const [width, setW] = useState(0);
@@ -187,6 +186,7 @@ function ContentReducedMotion({ children, inner = {}, style, ...contentWrapperPr
       width: dynamicWidth ? width : null }}
     {...contentWrapperProps}>
     <div
+      onMouseOver={overMenuPanel}
       onMouseLeave={leaveMenuPanel}
       style={{
         ...innerStyle,
