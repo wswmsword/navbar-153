@@ -24,7 +24,6 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
   const headFocusItemInContent = useRef([]);
   const tailFocusItemInContent = useRef([]);
 
-  const triggerWrapperRef = useRef(null);
   const contentWrapperRef = useRef(null);
 
   const setActivePanel = useCallback(cur => {
@@ -58,19 +57,20 @@ export default function NReducedMotion({ children, gap = 0, dynamicWidth = false
   }), [openedMenuIdx]);
 
   const contentContextVal = useMemo(() => ({
-    leaveMenuPanel: leaveMenu,
-    triggerWrapperRef,
-    contentWrapperRef,
-    gap,
     openedMenuIdx,
-    dynamicWidth,
-    panelsRef,
-    close,
-    btnsRef,
+    // overMenuPanel
+    leaveMenuPanel: leaveMenu,
+    // dur
+    contentWrapperRef,
     onlyKeyFocus,
     prevMenuIdxRef,
     isKeyActive,
+    btnsRef,
+    panelsRef,
     headFocusItemInContent,
+    close,
+    gap,
+    dynamicWidth,
   }), [leaveMenu, gap, openedMenuIdx, dynamicWidth, close, onlyKeyFocus]);
 
   return <Context.Provider value={{

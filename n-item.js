@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useId, useState } from "react";
 import { Context } from "./index";
+import { MotionContentContext } from "./n-content";
 
 export default function Item({ children, type, orderI }) {
   const isTrigger = type === 'T';
@@ -7,6 +8,7 @@ export default function Item({ children, type, orderI }) {
   const nbContext = useContext(Context);
   const ariaId = useId();
   const [controlOrDescribeId, setCD] = useState();
+  const motionContentContext = useContext(MotionContentContext);
 
   useEffect(() => {
     setCD(isTrigger ?
@@ -50,15 +52,12 @@ export default function Item({ children, type, orderI }) {
   if (isContent) {
     const {
       panelsRef,
-      nextContentItemTransformVal,
-      transitionEnded,
       contentAriaIds,
       headFocusItemInContent,
       tailFocusItemInContent,
       openedMenuIdx,
       isKeyActive,
       setActivePanel,
-      transRunning,
       checkedFocusOwnerContent,
       prevMenuIdxRef,
       onlyKeyFocus,
@@ -78,7 +77,7 @@ export default function Item({ children, type, orderI }) {
 
       if (e.key === "Tab" || e.keyCode === 9) {
         // 动画进行时期，禁止 tab，避免聚焦引起的样式错位
-        if (transRunning?.current) {
+        if (motionContentContext?.transRunning?.current) {
           e.preventDefault();
           return;
         }
@@ -124,13 +123,16 @@ export default function Item({ children, type, orderI }) {
       }
     };
 
+    const style = motionContentContext ? {
+        transform: motionContentContext.nextContentItemTransformVal,
+        transition: motionContentContext.transitionEnded ? null : `transform ${nbContext.dur}s`,
+      } :
+      null;
+
     return children({
       onKeyDown,
       ref: e => panelsRef.current[orderI] = e,
-      style: {
-        transform: nextContentItemTransformVal,
-        transition: transitionEnded ? null : `transform ${nbContext.dur}s`,
-      },
+      style,
       id: ariaId,
       "aria-labelledby": controlOrDescribeId,
       "aria-hidden": !openedMenu,
