@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef, useCallback, useMemo, useLayoutEffect } from "react";
+import React, { createContext, useState, useRef, useCallback, useMemo } from "react";
 import Item from "./n-item";
 import Content from "./n-content";
 import Trigger from "./n-trigger";
@@ -13,11 +13,6 @@ NavBar.Content = Content;
 NavBar.Trigger = Trigger;
 
 export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, onlyKeyFocus = true, close = false, motion = true, ...navProps }) {
-
-  /** 保存 trigger 的 a`ria-id */
-  const triggerAriaIds = useRef([]);
-  /** 保存 content 的 aria-id */
-  const contentAriaIds = useRef([]);
 
   const [openedMenuIdx, setIdx] = useState(-1); // 当前菜单序号
   /** 上一个菜单序号 */
@@ -55,7 +50,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   }, []);
 
   /** 进入一个菜单按钮 */
-  const overMenu = (e) => {
+  const overMenu = useCallback((e) => {
     overMenuPanel();
     const target = e.target;
     const targetIdx = btnsRef.current.findIndex(e => e === target);
@@ -63,7 +58,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
       isKeyActive.current = false;
       setActivePanel(targetIdx);
     }
-  };
+  }, [openedMenuIdx]);
 
   /** 离开一个菜单按钮 */
   const leaveMenu = useCallback(() => {
@@ -92,38 +87,37 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     overMenuPanel,
     leaveMenuPanel,
     dur,
-    contentWrapperRef,
+    close,
+    gap,
+    dynamicWidth,
     onlyKeyFocus,
+    contentWrapperRef,
     prevMenuIdxRef,
     isKeyActive,
     btnsRef,
     panelsRef,
     headFocusItemInContent,
-    close,
-    gap,
-    dynamicWidth,
-  }), [openedMenuIdx, gap, dur, isKeyActive, onlyKeyFocus, close]);
+  }), [openedMenuIdx, gap, dur, onlyKeyFocus, close, dynamicWidth]);
+
+  const sharedContextVal = useMemo(() => ({
+    openedMenuIdx,
+    overMenu,
+    leaveMenu,
+    dur,
+    onlyKeyFocus,
+    setActivePanel,
+    checkedFocusOwnerContent,
+    isKeyActive,
+    headFocusItemInContent,
+    tailFocusItemInContent,
+    prevMenuIdxRef,
+    contentWrapperRef,
+    panelsRef,
+    btnsRef,
+  }), [openedMenuIdx, dur, onlyKeyFocus]);
 
   return <ContextMotion.Provider value={motion}>
-    <Context.Provider value={{
-      panelsRef,
-      btnsRef,
-      overMenu,
-      leaveMenu,
-      openedMenuIdx,
-      triggerAriaIds,
-      contentAriaIds,
-      headFocusItemInContent,
-      tailFocusItemInContent,
-      dur,
-      isKeyActive,
-      setActivePanel,
-      checkedFocusOwnerContent,
-      prevMenuIdxRef,
-      onlyKeyFocus,
-      contentWrapperRef,
-      motion,
-    }}>
+    <Context.Provider value={sharedContextVal}>
       <ContextForContent.Provider value={contentContextVal}>
         <ContextForTrigger.Provider value={triggerContextVal}>
           <nav aria-label="Main" {...navProps}>
