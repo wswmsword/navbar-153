@@ -13,13 +13,14 @@ export default function ContentReducedMotion({ children, inner = {}, style, ...c
     if (dynamicWidth && openedMenuIdx > -1) {
       const curSlate = panelsRef.current[openedMenuIdx];
       setW(curSlate?.scrollWidth || 0);
-      if (close) {
-        const curTrigger = btnsRef.current[openedMenuIdx];
-        const offsetLeft = curTrigger != null ?
-          curTrigger.offsetLeft + curTrigger.clientWidth / 2 - curSlate.clientWidth / 2 :
-          0;
-        setL(offsetLeft);
-      }
+    }
+    if (openedMenuIdx > -1 && close) {
+      const curSlate = panelsRef.current[openedMenuIdx];
+      const curTrigger = btnsRef.current[openedMenuIdx];
+      const offsetLeft = curTrigger != null ?
+        curTrigger.offsetLeft + curTrigger.clientWidth / 2 - curSlate.clientWidth / 2 :
+        0;
+      setL(offsetLeft);
     }
   }, [openedMenuIdx, close, dynamicWidth]);
 
