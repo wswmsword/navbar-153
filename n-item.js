@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useId, useState, useRef } from "react";
-import { Context } from "./index";
+import { ContextForItem } from "./index";
 import { MotionContentContext } from "./n-content-motion";
 
 export default function Item({ children, type, orderI }) {
   const isTrigger = type === 'T';
   const isContent = type === 'C';
-  const nbContext = useContext(Context);
+  const context = useContext(ContextForItem);
   const ariaId = useId();
   /** 保存 trigger 的 a`ria-id */
   const triggerAriaIds = useRef([]);
@@ -22,7 +22,7 @@ export default function Item({ children, type, orderI }) {
 
   if (isTrigger) {
     if (typeof children === "function") {
-      const { btnsRef, overMenu, leaveMenu, openedMenuIdx, setActivePanel, isKeyActive } = nbContext;
+      const { btnsRef, overMenu, leaveMenu, openedMenuIdx, setActivePanel, isKeyActive } = context;
       const openedMenu = openedMenuIdx === orderI;
       triggerAriaIds.current[orderI] = ariaId;
       /** 点击菜单按钮 */
@@ -65,7 +65,7 @@ export default function Item({ children, type, orderI }) {
       prevMenuIdxRef,
       onlyKeyFocus,
       contentWrapperRef
-    } = nbContext;
+    } = context;
     const openedMenu = openedMenuIdx === orderI;
     contentAriaIds.current[orderI] = ariaId;
 
@@ -128,7 +128,7 @@ export default function Item({ children, type, orderI }) {
 
     const style = motionContentContext ? {
         transform: motionContentContext.nextContentItemTransformVal,
-        transition: motionContentContext.transitionEnded ? null : `transform ${nbContext.dur}s`,
+        transition: motionContentContext.transitionEnded ? null : `transform ${context.dur}s`,
       } :
       null;
 

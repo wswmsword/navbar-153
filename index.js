@@ -3,9 +3,8 @@ import Item from "./n-item";
 import Content from "./n-content";
 import Trigger from "./n-trigger";
 
-export const Context = createContext({});
+export const ContextForItem = createContext({});
 export const ContextForTrigger = createContext();
-export const ContextMotion = createContext();
 export const ContextForContent = createContext({});
 
 NavBar.Item = Item;
@@ -91,15 +90,16 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     gap,
     dynamicWidth,
     onlyKeyFocus,
+    motion,
     contentWrapperRef,
     prevMenuIdxRef,
     isKeyActive,
     btnsRef,
     panelsRef,
     headFocusItemInContent,
-  }), [openedMenuIdx, gap, dur, onlyKeyFocus, close, dynamicWidth]);
+  }), [openedMenuIdx, gap, dur, onlyKeyFocus, close, dynamicWidth, motion]);
 
-  const sharedContextVal = useMemo(() => ({
+  const itemContextVal = useMemo(() => ({
     openedMenuIdx,
     overMenu,
     leaveMenu,
@@ -116,15 +116,13 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     btnsRef,
   }), [openedMenuIdx, dur, onlyKeyFocus]);
 
-  return <ContextMotion.Provider value={motion}>
-    <Context.Provider value={sharedContextVal}>
-      <ContextForContent.Provider value={contentContextVal}>
-        <ContextForTrigger.Provider value={triggerContextVal}>
-          <nav aria-label="Main" {...navProps}>
-            {children}
-          </nav>
-        </ContextForTrigger.Provider>
-      </ContextForContent.Provider>
-    </Context.Provider>
-  </ContextMotion.Provider>
+  return <ContextForItem.Provider value={itemContextVal}>
+    <ContextForContent.Provider value={contentContextVal}>
+      <ContextForTrigger.Provider value={triggerContextVal}>
+        <nav aria-label="Main" {...navProps}>
+          {children}
+        </nav>
+      </ContextForTrigger.Provider>
+    </ContextForContent.Provider>
+  </ContextForItem.Provider>
 }
