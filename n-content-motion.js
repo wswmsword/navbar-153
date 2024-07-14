@@ -23,7 +23,8 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     dynamicWidth,
   } = useContext(ContextForContent);
 
-  const [destroyContent, setDestroy] = useState(false);
+  const [destroyContent, setDestroy] = useState(true); // 创建 dom
+  const [shown, setShown] = useState(false); // 显示，控制外层 visibility
   /** 面板们的宽度 */
   const panelsClientWidthRef = useRef([]);
   /** 面板们的左边偏移量 */
@@ -35,24 +36,6 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
   const [transitionEnded, setEnded] = useState(true); // 收起的过渡动画结束了吗
   /** 动画正在进行吗，正在进行则不允许 tab 聚焦 */
   const transRunning = useRef(false);
-
-  useEffect(() => {
-    // 面板动画开始
-    if (openedMenuIdx > -1 && prevMenuIdxRef.current < 0 && transitionEnded) {
-      setTimeout(() => {
-        setEnded(false);
-      }, 18);
-    }
-  }, [openedMenuIdx, transitionEnded]);
-
-  // 缓存的元素们的尺寸
-  useLayoutEffect(() => {
-    panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
-    panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
-    panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
-    panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
-    setDestroy(true);
-  }, []);
 
   useEffect(() => {
     transRunning.current = true;
@@ -71,8 +54,23 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     if (openedMenuIdx < 0) {
       setEnded(true);
       setDestroy(true);
+      setShown(false);
     }
   }, [openedMenuIdx]);
+
+  useLayoutEffect(() => {
+    if (!destroyContent) {
+      // 缓存的元素们的尺寸
+      panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
+      panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
+      panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
+      panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
+      setShown(true);
+      setTimeout(() => {
+        setEnded(false);
+      }, 18)
+    }
+  }, [destroyContent]);
 
   if (destroyContent) return null;
 
@@ -117,9 +115,10 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     ref={contentWrapperRef}
     style={{
       ...style,
+      visibility: shown ? "visible" : "hidden",
       height: transitionEnded ? "0" : (+ gap + panelsHeightRef.current[openedMenuIdx] || 0),
       width,
-      transition: `height ${dur}s, width ${dur}s`,
+      transition: transitionEnded ? null : `height ${dur}s, width ${dur}s`,
       clipPath: "inset(0 -100vw -100vw -100vw)"
     }}
     onTransitionEnd={transitionEnd}
@@ -134,7 +133,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
         alignItems: "flex-start",
         width,
         height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
-        transition: `transform ${dur}s, height ${dur}s, width ${dur}s`,
+        transition: transitionEnded ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
         transform: nextContentInnerTransformVal,
         overflow: "hidden",
       }}
