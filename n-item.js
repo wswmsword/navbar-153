@@ -128,7 +128,7 @@ export default function Item({ children, type, orderI }) {
 
     const style = motionContentContext ? {
         transform: motionContentContext.nextContentItemTransformVal,
-        transition: motionContentContext.transitionEnded ? null : `transform ${context.dur}s`,
+        transition: motionContentContext.transitionBeforeStart ? null : `transform ${context.dur}s`,
       } :
       null;
 

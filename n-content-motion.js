@@ -33,7 +33,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
   const panelsHeightRef = useRef([]);
   /** 面板元素们的宽度，完成过渡动画 */
   const panelsWidthRef = useRef([]);
-  const [transitionEnded, setEnded] = useState(true); // 收起的过渡动画结束了吗
+  const [transitionBeforeStart, setBeforeStart] = useState(true); // 收起的过渡动画结束了吗
   /** 动画正在进行吗，正在进行则不允许 tab 聚焦 */
   const transRunning = useRef(false);
 
@@ -52,7 +52,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     if (e.target !== contentWrapper) return; // 过滤冒泡的 transitionend 事件
     transRunning.current = false;
     if (openedMenuIdx < 0) {
-      setEnded(true);
+      setBeforeStart(true);
       setDestroy(true);
       setShown(false);
     }
@@ -67,7 +67,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
       panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
       setShown(true);
       setTimeout(() => {
-        setEnded(false);
+        setBeforeStart(false);
       }, 18)
     }
   }, [destroyContent]);
@@ -78,7 +78,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
   const isCollapse = openedMenuIdx < 0 && prevMenuIdxRef.current > -1;
   const nextContentInnerTransformVal = (() => {
 
-    const collapseOrTEnded = (transitionEnded || isCollapse);
+    const collapseOrTEnded = (transitionBeforeStart || isCollapse);
     if (close) {
       return collapseOrTEnded ?
         getSlateWrapperTranslateVal(
@@ -108,7 +108,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
       (panelsWidthRef.current[openedMenuIdx] || 0);
 
   return <MotionContentContext.Provider value={{
-    transitionEnded,
+    transitionBeforeStart,
     nextContentItemTransformVal,
     transRunning,
   }}><div
@@ -116,9 +116,9 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     style={{
       ...style,
       visibility: shown ? "visible" : "hidden",
-      height: transitionEnded ? "0" : (+ gap + panelsHeightRef.current[openedMenuIdx] || 0),
+      height: transitionBeforeStart ? "0" : (+ gap + panelsHeightRef.current[openedMenuIdx] || 0),
       width,
-      transition: transitionEnded ? null : `height ${dur}s, width ${dur}s`,
+      transition: transitionBeforeStart ? null : `height ${dur}s, width ${dur}s`,
       clipPath: "inset(0 -100vw -100vw -100vw)"
     }}
     onTransitionEnd={transitionEnd}
@@ -133,7 +133,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
         alignItems: "flex-start",
         width,
         height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
-        transition: transitionEnded ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
+        transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
         transform: nextContentInnerTransformVal,
         overflow: "hidden",
       }}
