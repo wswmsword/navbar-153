@@ -53,7 +53,7 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     if (transitionBeforeStart && !destroyContent) {
       setTimeout(() => {
         setBeforeStart(false);
-      }, 0)
+      }, 11); // 90fps
     }
   }, [destroyContent, transitionBeforeStart]);
 
