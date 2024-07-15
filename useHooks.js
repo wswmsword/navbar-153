@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export function useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, destroyContent) {
+export function useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, shown) {
   // 离开的焦点控制
   useEffect(() => {
     if (openedMenuIdx < 0) {
@@ -14,11 +14,11 @@ export function useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, i
   // 进入的焦点控制
   useEffect(() => {
     if (openedMenuIdx > -1) {
-      if (!destroyContent && ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus)) {
+      if (shown && ((onlyKeyFocus && isKeyActive.current) || !onlyKeyFocus)) {
         const head = headFocusItemInContent.current[openedMenuIdx];
         if (head) head.focus({ preventScroll: true });
         else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
       }
     }
-  }, [openedMenuIdx, onlyKeyFocus, destroyContent]);
+  }, [openedMenuIdx, onlyKeyFocus, shown]);
 }

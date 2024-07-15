@@ -23,8 +23,8 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     dynamicWidth,
   } = useContext(ContextForContent);
 
-  const [destroyContent, setDestroy] = useState(true); // 创建 dom
-  const [shown, setShown] = useState(false); // 显示，控制外层 visibility
+  const [destroyContent, setDestroy] = useState(true);
+  const loaded = openedMenuIdx > -1;
   /** 面板们的宽度 */
   const panelsClientWidthRef = useRef([]);
   /** 面板们的左边偏移量 */
@@ -37,15 +37,28 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
   /** 动画正在进行吗，正在进行则不允许 tab 聚焦 */
   const transRunning = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     transRunning.current = true;
     if (openedMenuIdx > -1) {
       setDestroy(false);
+      // 缓存的元素们的尺寸
+      panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
+      panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
+      panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
+      panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
     }
   }, [openedMenuIdx]);
 
+  useEffect(() => {
+    if (transitionBeforeStart && !destroyContent) {
+      setTimeout(() => {
+        setBeforeStart(false);
+      }, 0)
+    }
+  }, [destroyContent, transitionBeforeStart]);
+
   // 焦点的入口和出口控制
-  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, destroyContent);
+  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, !transitionBeforeStart);
 
   const transitionEnd = useCallback(e => {
     const contentWrapper = contentWrapperRef.current;
@@ -54,93 +67,80 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
     if (openedMenuIdx < 0) {
       setBeforeStart(true);
       setDestroy(true);
-      setShown(false);
     }
   }, [openedMenuIdx]);
+  console.log(openedMenuIdx)
 
-  useLayoutEffect(() => {
-    if (!destroyContent) {
-      // 缓存的元素们的尺寸
-      panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
-      panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
-      panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
-      panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
-      setShown(true);
-      setTimeout(() => {
-        setBeforeStart(false);
-      }, 18)
-    }
-  }, [destroyContent]);
+  if (loaded || (!loaded && !destroyContent)) {
+    /** 是否为收起菜单操作 */
+    const isCollapse = openedMenuIdx < 0 && prevMenuIdxRef.current > -1;
+    const nextContentInnerTransformVal = (() => {
 
-  if (destroyContent) return null;
+      const collapseOrTEnded = (transitionBeforeStart || isCollapse);
+      if (close) {
+        return collapseOrTEnded ?
+          getSlateWrapperTranslateVal(
+            "-100%",
+            openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx,
+            btnsRef,
+            panelsClientWidthRef) :
+          getSlateWrapperTranslateVal(`${gap}px`, openedMenuIdx, btnsRef, panelsClientWidthRef);
 
-  /** 是否为收起菜单操作 */
-  const isCollapse = openedMenuIdx < 0 && prevMenuIdxRef.current > -1;
-  const nextContentInnerTransformVal = (() => {
+      } else {
+        return collapseOrTEnded ?
+          `translateY(-100%)`: // 入场的初始状态（退场结束）
+          `translateY(${gap}px)`; // 入场的结束状态（退场初始）
+      }
+    })();
 
-    const collapseOrTEnded = (transitionBeforeStart || isCollapse);
-    if (close) {
-      return collapseOrTEnded ?
-        getSlateWrapperTranslateVal(
-          "-100%",
-          openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx,
-          btnsRef,
-          panelsClientWidthRef) :
-        getSlateWrapperTranslateVal(`${gap}px`, openedMenuIdx, btnsRef, panelsClientWidthRef);
+    const nextContentItemTransformVal = openedMenuIdx < 0 ?
+      getSlateTranslateVal(prevMenuIdxRef.current, panelsOffsetLeftRef) :
+      getSlateTranslateVal(openedMenuIdx, panelsOffsetLeftRef)
 
-    } else {
-      return collapseOrTEnded ?
-        `translateY(-100%)`: // 入场的初始状态（退场结束）
-        `translateY(${gap}px)`; // 入场的结束状态（退场初始）
-    }
-  })();
+    const { style: innerStyle, ...otherInnerProps } = inner;
+    const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
+    const width = !dynamicWidth ?
+      null :
+      openedMenuIdx === -1 ?
+        (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
+        (panelsWidthRef.current[openedMenuIdx] || 0);
 
-  const nextContentItemTransformVal = openedMenuIdx < 0 ?
-    getSlateTranslateVal(prevMenuIdxRef.current, panelsOffsetLeftRef) :
-    getSlateTranslateVal(openedMenuIdx, panelsOffsetLeftRef)
-
-  const { style: innerStyle, ...otherInnerProps } = inner;
-  const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
-  const width = !dynamicWidth ?
-    null :
-    openedMenuIdx === -1 ?
-      (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
-      (panelsWidthRef.current[openedMenuIdx] || 0);
-
-  return <MotionContentContext.Provider value={{
-    transitionBeforeStart,
-    nextContentItemTransformVal,
-    transRunning,
-  }}><div
-    ref={contentWrapperRef}
-    style={{
-      ...style,
-      visibility: shown ? "visible" : "hidden",
-      height: transitionBeforeStart ? "0" : (+ gap + panelsHeightRef.current[openedMenuIdx] || 0),
-      width,
-      transition: transitionBeforeStart ? null : `height ${dur}s, width ${dur}s`,
-      clipPath: "inset(0 -100vw -100vw -100vw)"
-    }}
-    onTransitionEnd={transitionEnd}
-    {...contentWrapperProps}>
-    {/* 外层 div 用于 clipPath，内层 div 用于包裹实际内容，完成入场和退场的动画 */}
-    <div
-      onMouseOver={overMenuPanel}
-      onMouseLeave={leaveMenuPanel}
+    return <MotionContentContext.Provider value={{
+      transitionBeforeStart,
+      nextContentItemTransformVal,
+      transRunning,
+    }}><div
+      ref={contentWrapperRef}
       style={{
-        ...innerStyle,
-        display: "flex",
-        alignItems: "flex-start",
+        ...style,
+        visibility: transitionBeforeStart ? "hidden" : "visible",
+        height: transitionBeforeStart ? "0" : (+ gap + panelsHeightRef.current[openedMenuIdx] || 0),
         width,
-        height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
-        transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
-        transform: nextContentInnerTransformVal,
-        overflow: "hidden",
+        transition: transitionBeforeStart ? null : `height ${dur}s, width ${dur}s`,
+        clipPath: "inset(0 -100vw -100vw -100vw)"
       }}
-      {...otherInnerProps}>
-      {mapped}
-    </div>
-  </div></MotionContentContext.Provider>;
+      onTransitionEnd={transitionEnd}
+      {...contentWrapperProps}>
+      {/* 外层 div 用于 clipPath，内层 div 用于包裹实际内容，完成入场和退场的动画 */}
+      <div
+        onMouseOver={overMenuPanel}
+        onMouseLeave={leaveMenuPanel}
+        style={{
+          ...innerStyle,
+          display: "flex",
+          alignItems: "flex-start",
+          width,
+          height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
+          transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
+          transform: nextContentInnerTransformVal,
+          overflow: "hidden",
+        }}
+        {...otherInnerProps}>
+        {mapped}
+      </div>
+    </div></MotionContentContext.Provider>;
+  }
+  return null;
 }
 
 

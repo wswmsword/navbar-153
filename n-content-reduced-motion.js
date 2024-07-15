@@ -25,7 +25,7 @@ export default function ContentReducedMotion({ children, inner = {}, style, ...c
   }, [openedMenuIdx, close, dynamicWidth]);
 
   // 焦点的入口和出口控制
-  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, false);
+  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, true);
 
   if (openedMenuIdx < 0) return null;
 
