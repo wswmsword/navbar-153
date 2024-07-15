@@ -69,7 +69,6 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
       setDestroy(true);
     }
   }, [openedMenuIdx]);
-  console.log(openedMenuIdx)
 
   if (loaded || (!loaded && !destroyContent)) {
     /** 是否为收起菜单操作 */
