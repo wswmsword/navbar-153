@@ -7,22 +7,23 @@ export default function Item({ children, type, orderI }) {
   const isContent = type === 'C';
   const context = useContext(ContextForItem);
   const ariaId = useId();
-  /** 保存 trigger 的 a`ria-id */
-  const triggerAriaIds = useRef([]);
-  /** 保存 content 的 aria-id */
-  const contentAriaIds = useRef([]);
-  const [controlOrDescribeId, setCD] = useState();
   const motionContentContext = useContext(MotionContentContext);
 
+  const { triggerAriaIds, contentAriaIds, prevMenuIdxRef, openedMenuIdx, isKeyActive, setActivePanel } = context;
+
+  const [controlContentId, setControl] = useState(); // 收起 slate 会移除 dom，因此动态设置 id
+
   useEffect(() => {
-    setCD(isTrigger ?
-      contentAriaIds.current[orderI] :
-      triggerAriaIds.current[orderI]);
-  }, []);
+    if (openedMenuIdx > -1 && prevMenuIdxRef.current < 0) {
+      setControl(contentAriaIds.current[orderI]);
+    } else if (openedMenuIdx < 0) {
+      setControl(null);
+    }
+  }, [openedMenuIdx, orderI, controlContentId]);
 
   if (isTrigger) {
     if (typeof children === "function") {
-      const { btnsRef, overMenu, leaveMenu, openedMenuIdx, setActivePanel, isKeyActive } = context;
+      const { btnsRef, overMenu, leaveMenu } = context;
       const openedMenu = openedMenuIdx === orderI;
       triggerAriaIds.current[orderI] = ariaId;
       /** 点击菜单按钮 */
@@ -48,7 +49,7 @@ export default function Item({ children, type, orderI }) {
         onMouseLeave: leaveMenu,
         id: ariaId,
         "aria-expanded": openedMenu,
-        "aria-controls": controlOrDescribeId,
+        "aria-controls": controlContentId,
       });
     }
     return children;
@@ -58,9 +59,6 @@ export default function Item({ children, type, orderI }) {
       panelsRef,
       headFocusItemInContent,
       tailFocusItemInContent,
-      openedMenuIdx,
-      isKeyActive,
-      setActivePanel,
       checkedFocusOwnerContent,
       prevMenuIdxRef,
       onlyKeyFocus,
@@ -137,7 +135,7 @@ export default function Item({ children, type, orderI }) {
       ref: e => panelsRef.current[orderI] = e,
       style,
       id: ariaId,
-      "aria-labelledby": controlOrDescribeId,
+      "aria-labelledby": triggerAriaIds.current[orderI],
       "aria-hidden": !openedMenu,
       tabIndex: 0,
     },

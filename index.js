@@ -32,6 +32,11 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
 
   const contentWrapperRef = useRef(null);
 
+  /** 保存 trigger 的 aria-id */
+  const triggerAriaIds = useRef([]);
+  /** 保存 content 的 aria-id */
+  const contentAriaIds = useRef([]);
+
   const setActivePanel = useCallback(cur => {
     checkedFocusOwnerContent.current = false;
     setIdx(v => {
@@ -114,6 +119,9 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     contentWrapperRef,
     panelsRef,
     btnsRef,
+    triggerAriaIds,
+    contentAriaIds,
+    prevMenuIdxRef,
   }), [openedMenuIdx, dur, onlyKeyFocus]);
 
   return <ContextForItem.Provider value={itemContextVal}>
