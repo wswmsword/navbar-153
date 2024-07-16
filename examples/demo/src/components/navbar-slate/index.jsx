@@ -1,8 +1,8 @@
 import styles from "./index.module.css";
 
-export default function NavbarSlate({ propsFromN, head, tail }) {
+export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth }) {
   const contentItemStyle = {
-    width: "100%",
+    width: dynamicWidth ? 300 : "100%",
     flexShrink: 0,
   };
   return <div

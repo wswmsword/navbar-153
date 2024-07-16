@@ -1,0 +1,7 @@
+.centerBox {
+  max-width: 469px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 12px;
+  box-sizing: border-box;
+}

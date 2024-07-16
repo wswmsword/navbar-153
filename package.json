@@ -2,12 +2,9 @@
   "type": "module",
   "name": "navbar-153",
   "version": "1.1.0",
-  "description": "Super Smooth! Super Fast! Super Accessible!",
+  "description": "A React navigation menu component. Super Smooth! Super Fast! Super Accessible!",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "directories": {
-    "example": "examples"
-  },
   "scripts": {
     "watch": "npm-watch",
     "build": "rollup -c --bundleConfigAsCjs",
@@ -28,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/wswmsword/navbar-153/issues"
   },
-  "homepage": "https://github.com/wswmsword/navbar-153#readme",
+  "homepage": "https://wswmsword.github.io/examples/navbar-153/",
   "devDependencies": {
     "@babel/core": "^7.24.5",
     "@babel/preset-env": "^7.24.5",

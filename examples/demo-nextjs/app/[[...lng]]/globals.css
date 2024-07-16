@@ -39,3 +39,17 @@ kbd {
 label {
   color: #c5c5c5;
 }
+
+.lang_switch {
+  color: #406391;
+  text-decoration: none;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-size: 14px;
+  z-index: 2;
+}
+
+.lang_switch:hover {
+  text-decoration: underline;
+}
