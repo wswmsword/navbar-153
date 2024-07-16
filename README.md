@@ -2,12 +2,16 @@
 
 <a href="https://996.icu"><img src="https://img.shields.io/badge/link-996.icu-red.svg" alt="996.icu" align="right"></a>
 
+中文 | [English](./README_EN.md)
+
 navbar-153 是一个 React 导航栏组件，包含一组触发器和一组对应的菜单面板，用户可以通过触发器展开、切换、收起菜单面板。导航栏通常出现在网站的顶部，提供最希望用户访问的链接和其它控件。navbar-153 有下面这些特性：
 
 - 🍯 流畅的过渡动画；
 - ⌨️ 键盘导航；
 - ♿️ 屏幕阅读器导航；
 - 🎨 高度自定义。
+
+> navbar-153 is a React navigation menu component that includes a set of triggers and a corresponding set of menu panels. For more information, please refer to [the English README](./README_EN.md) or [demo](https://wswmsword.github.io/examples/navbar-153/en).
 
 您可以打开[演示链接](https://wswmsword.github.io/examples/navbar-153)，查看使用效果。
 
@@ -74,9 +78,10 @@ import N from "navbar-153";
 
 `<N>` 会被渲染成 `<nav>` 作为导航栏组件的最外层，`<N>` 接收任何用于 HTML 元素的 props，以及下面这些额外选项：
 
+- `motion`，boolean，是否减弱动态效果；
 - `dur`，number，定义过渡动画的持续时间（s）；
 - `gap`，number，设置面板和触发器之间的距离（px）；
-- `dynamicWidth`，boolean，当面板宽度变化，使用动画过渡；
+- `dynamicWidth`，boolean，允许面板的宽度变化；
 - `onlyKeyFocus`，boolean，设置焦点仅在键盘控制时触发转移；
 - `close`，boolean，切换面板时跟随触发器的位置。
 
