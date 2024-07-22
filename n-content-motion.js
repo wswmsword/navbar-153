@@ -44,8 +44,8 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
       // 缓存的元素们的尺寸
       panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
       panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
-      panelsHeightRef.current = panelsRef.current.map(e => e?.scrollHeight || 0);
-      panelsWidthRef.current = panelsRef.current.map(e => e?.scrollWidth || 0);
+      panelsHeightRef.current = panelsRef.current.map(e => e?.clientHeight || 0);
+      panelsWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
     }
   }, [openedMenuIdx]);
 

@@ -12,7 +12,7 @@ export default function ContentReducedMotion({ children, inner = {}, style, ...c
   useLayoutEffect(() => {
     if (dynamicWidth && openedMenuIdx > -1) {
       const curSlate = panelsRef.current[openedMenuIdx];
-      setW(curSlate?.scrollWidth || 0);
+      setW(curSlate?.clientWidth || 0);
     }
     if (openedMenuIdx > -1 && close) {
       const curSlate = panelsRef.current[openedMenuIdx];
