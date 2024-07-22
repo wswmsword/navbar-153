@@ -137,7 +137,7 @@ export default function Item({ children, type, orderI }) {
       id: ariaId,
       "aria-labelledby": triggerAriaIds.current[orderI],
       "aria-hidden": !openedMenu,
-      tabIndex: 0,
+      tabIndex: -1
     },
     e => headFocusItemInContent.current[orderI] = e,
     e => tailFocusItemInContent.current[orderI] = e);
