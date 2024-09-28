@@ -5,7 +5,7 @@ import { ContextForContent } from "./index";
 
 export const MotionContentContext = createContext();
 
-export default function ContentWithMotion({ children, inner = {}, style, ...contentWrapperProps }) {
+export default function ContentWithMotion({ children, inner = {}, customTransProps, style, ...contentWrapperProps }) {
   const {
     openedMenuIdx,
     overMenuPanel,
@@ -36,11 +36,19 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
   const [transitionBeforeStart, setBeforeStart] = useState(true); // 收起的过渡动画结束了吗
   /** 动画正在进行吗，正在进行则不允许 tab 聚焦 */
   const transRunning = useRef(false);
+  /** 是否自定义切换动画 */
+  const isCustomTrans = customTransProps != null;
+  const [, setCustomTrans] = useState(); // 触发后，重新渲染，用于面板切换过渡动画
+  const startCustomTransRef = useRef(false);
 
   useLayoutEffect(() => {
     transRunning.current = true;
     if (openedMenuIdx > -1) {
       setDestroy(false);
+      if (openedMenuIdx > -1 && prevMenuIdxRef.current > -1) {
+        isCustomTrans && setCustomTrans({}); // 刷新自定义过渡动画
+        startCustomTransRef.current = true;
+      }
       // 缓存的元素们的尺寸
       panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
       panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
@@ -92,9 +100,6 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
       }
     })();
 
-    const nextContentItemTransformVal =
-      getSlateTranslateVal(openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx, panelsOffsetLeftRef);
-
     const { style: innerStyle, ...otherInnerProps } = inner;
     const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
     const width = !dynamicWidth ?
@@ -105,8 +110,11 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
 
     return <MotionContentContext.Provider value={{
       transitionBeforeStart,
-      nextContentItemTransformVal,
       transRunning,
+      isCustomTrans,
+      startCustomTransRef,
+      panelsOffsetLeftRef,
+      customTransProps,
     }}><div
       ref={contentWrapperRef}
       style={{
@@ -125,8 +133,8 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
         onMouseLeave={leaveMenuPanel}
         style={{
           ...innerStyle,
-          display: "flex",
-          alignItems: "flex-start",
+          display: !isCustomTrans && "flex",
+          alignItems: !isCustomTrans && "flex-start",
           width,
           height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
           transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
@@ -149,9 +157,4 @@ function getSlateWrapperTranslateVal(y, openedMenuIdx, triggerRef, slateClientWi
     0 :
     (curTrigger.offsetLeft + curTrigger.clientWidth / 2 - curSlateWidth / 2);
   return `translate(${left}px, ${y})`;
-}
-
-function getSlateTranslateVal(i, panelsOffsetLeftRef) {
-  const left = i < 1 ? 0 : `-${panelsOffsetLeftRef.current[i]}px`;
-  return `translateX(${left})`;
 }
