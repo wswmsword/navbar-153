@@ -92,9 +92,8 @@ export default function ContentWithMotion({ children, inner = {}, style, ...cont
       }
     })();
 
-    const nextContentItemTransformVal = openedMenuIdx < 0 ?
-      getSlateTranslateVal(prevMenuIdxRef.current, panelsOffsetLeftRef) :
-      getSlateTranslateVal(openedMenuIdx, panelsOffsetLeftRef)
+    const nextContentItemTransformVal =
+      getSlateTranslateVal(openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx, panelsOffsetLeftRef);
 
     const { style: innerStyle, ...otherInnerProps } = inner;
     const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
