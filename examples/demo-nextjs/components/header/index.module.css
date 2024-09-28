@@ -128,6 +128,9 @@
 }
 
 @media (max-width: 520px) {
+  .placeholder {
+    height: 110px;
+  }
   .tooltip {
     width: calc(100vw - 108px);
     bottom: -86px;
@@ -142,5 +145,6 @@
   }
   .navBtn, .navLink {
     padding: 0px 7px;
+    font-size: 15px;
   }
 }

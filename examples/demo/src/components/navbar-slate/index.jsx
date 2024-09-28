@@ -12,7 +12,7 @@ export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth }) {
     <p className={styles.navDesc}>请握紧导航栏，不要因为走得太远，就忘了当初为什么出发。</p>
     <div className={styles.feats}>
       <FeatSlate e="🍯" t="流畅的过渡动画" d="符合直觉的入场、退场和切换动画" />
-      <FeatSlate e="⌨️" t="键盘导航" d={<>按下 <kbd>Tab</kbd> 和 <kbd>Esc</kbd>，让焦点流动</>} />
+      <FeatSlate e="🎹" t="键盘导航" d={<>按下 <kbd>Tab</kbd> 和 <kbd>Esc</kbd>，让焦点流动</>} />
       <FeatSlate e="♿️" t="屏幕阅读器导航" d="有规范的 ARIA 属性，具备可访问性" />
       <FeatSlate e="🎨" t="高度自定义" d="为每个元素设置样式，让每个导航栏变得不一样" />
     </div>

@@ -11,14 +11,14 @@ export default async function Docs({ lng }) {
     <p className={styles.txt}>{desc}</p>
     <div className={styles.feats}>
       <FeatSlate emoji="🍯" title={t("smooth_t")} desc={t("smooth_d")} />
-      <FeatSlate emoji="⌨️" title={t("key_t")} desc={<Trans i18nKey="key_d" t={t}>0<kbd>1</kbd>2<kbd>3</kbd>4</Trans>} />
+      <FeatSlate emoji="🎹" title={t("key_t")} desc={<Trans i18nKey="key_d" t={t}>0<kbd>1</kbd>2<kbd>3</kbd>4</Trans>} />
       <FeatSlate emoji="♿️" title={t("a11y_t")} desc={t("a11y_d")} />
       <FeatSlate emoji="🎨" title={t("style_t")} desc={t("style_d")} />
     </div>
     <p className={styles.txt}><Trans i18nKey="usage" t={t}>0<a href="https://github.com/wswmsword/navbar-153">1</a>2</Trans></p>
     <p className={styles.txt}>{t("stars")}</p>
-    <div role="presentation" className={`${styles.presentation} ${styles.textShadow}`}>NAVBAR-153</div>
-    <div role="presentation" className={styles.presentation2}>NAVBAR-153</div>
+    <div aria-hidden="true" className={`${styles.presentation} ${styles.textShadow}`}>NAVBAR-153</div>
+    <div aria-hidden="true" className={styles.presentation2}>NAVBAR-153</div>
   </>;
 }
 

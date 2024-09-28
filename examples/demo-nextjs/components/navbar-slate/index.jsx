@@ -13,7 +13,7 @@ export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth, t })
     <p className={styles.navDesc}>{t("slate_navbar_desc")}</p>
     <div className={styles.feats}>
       <FeatSlate e="🍯" t={t("smooth_t")} d={t("s_nb_smooth_d")} />
-      <FeatSlate e="⌨️" t={t("key_t")} d={<Trans i18nKey="s_nb_key_d" t={t}>0<kbd>1</kbd>two<kbd>3</kbd>4</Trans>} />
+      <FeatSlate e="🎹" t={t("key_t")} d={<Trans i18nKey="s_nb_key_d" t={t}>0<kbd>1</kbd>two<kbd>3</kbd>4</Trans>} />
       <FeatSlate e="♿️" t={t("a11y_t")} d={t("s_nb_a11y_d")} />
       <FeatSlate e="🎨" t={t("style_t")} d={t("s_nb_style_d")} />
     </div>

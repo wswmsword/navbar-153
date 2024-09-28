@@ -32,3 +32,10 @@
   font-size: 15px;
   margin-top: 3px;
 }
+
+@media (max-width: 520px) {
+  .wrapper {
+    max-height: 400px;
+    overflow: auto;
+  }
+}

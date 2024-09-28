@@ -9,7 +9,7 @@ navbar-153 is a React navigation menu component that includes a set of triggers 
 Features include:
 
 - 🍯 Smooth transition animation
-- ⌨️ Keyboard navigation.
+- 🎹 Keyboard navigation.
 - ♿️ Assistive devices navigation.
 - 🎨 Highly customizable.
 
