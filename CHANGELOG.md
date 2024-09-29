@@ -7,6 +7,13 @@
 
 ## [Unreleased]
 
+## [1.3.1] - 2024-09-29
+
+### Fixed
+
+- 修复关闭 `motion` 后，开启 `customTransProps`，导致 `customTransProps` 传入原生标签上的问题；
+- 修复关闭 `motion` 后，开启 `customTransProps`，切换面板，计算属于 motion 的代码，导致运行错误问题。
+
 ## [1.3.0] - 2024-09-29
 
 ### Added
