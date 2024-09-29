@@ -24,7 +24,7 @@ export default function Header() {
           <Item>{props => <button className={styles.navBtn} {...props}>Postcss-Mobile-Forever</button>}</Item>
           <Item>{props => <button className={styles.navBtn} {...props}>Focus-Fly</button>}</Item>
         </Trigger>
-        <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }}>
+        <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }} customTransProps={{ opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }}>
           <Item>
             {(props, head, tail) =>
               <NavbarSlate

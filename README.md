@@ -98,7 +98,20 @@ const { Trigger, Content, Item } = N;
 
 ### Content
 
-`<Content>` 的导入方式和 `<Trigger>` 相同。`<Content>` 组件内部是一组内容面板，每一个内容面板都按顺序对应了 `<Trigger>` 组件内部的触发器，`<Content>` 与 `<Trigger>` 应该在同一层级，`<Content>` 组件会被渲染成两层 `<div>`，接收任何内置的 props，这些 props 最终生效在外层 `<div>` 上，此外，可以传入 `inner`，`inner` 中的对象会作为 props 传入内层 `<div>`。可以向 `<Content>` 传入 `className` 或 `style` 来为面板设置阴影等样式。
+`<Content>` 的导入方式和 `<Trigger>` 相同。`<Content>` 组件内部是一组内容面板，每一个内容面板都按顺序对应了 `<Trigger>` 组件内部的触发器，`<Content>` 与 `<Trigger>` 应该在同一层级，`<Content>` 组件会被渲染成两层 `<div>`，接收任何内置的 props，这些 props 最终生效在外层 `<div>` 上。可以向 `<Content>` 传入 `className` 或 `style` 来为面板设置阴影等样式。
+
+- `inner`，`inner` 中的对象会作为 props 传入 `<Content>` 渲染的内层 `<div>` 上；
+- `customTransProps`，自定义面板切换时的过渡动画，传入一个对象，对象的键是 CSS 属性，值是长度为 2 或 3 的数组，长度 2 的数组表示动画拥有**起止**两个状态，长度 3 的数组表示动画有**进入前**、**正常**、**退出后**三个状态吗，除了这两种数组类型，还接受一个特殊的 `transition` 属性，这个属性的值是一个字符串，用于设置切换动画时的过渡时间，如果不设置将应用默认值（`transition: all ${dur}s`）。
+
+例如设置渐变进入、离开的自定义过渡动画：
+
+```json
+{
+  "opacity": [0, 1],
+  "transform": ["translate(0)", "translateX(-280px)", "translateX(280px)"],
+  "transition": "opacity .4s, transform .4s"
+}
+```
 
 ### Item
 

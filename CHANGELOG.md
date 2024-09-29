@@ -7,6 +7,17 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2024-09-29
+
+### Added
+
+- 添加 `customTransProps` 选项，用于自定义切换面板的过渡动画。
+
+### Fixed
+
+- 修复火狐无障碍开发者工具的焦点警告；
+- 使用 `clientWidth`/`clientHeight` 获取面板尺寸。
+
 ## [1.2.0] - 2024-07-16
 
 ### Added

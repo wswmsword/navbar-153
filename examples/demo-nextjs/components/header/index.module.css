@@ -3,7 +3,7 @@
   position: fixed;
   display: flex;
   justify-content: center;
-  padding: 36px 0;
+  margin: 36px 0;
   z-index: 1;
 }
 
@@ -110,6 +110,7 @@
   transform: rotateX(-30deg) scale(0.95);
   transition: opacity .2s, transform .2s, visibility .2s;
   transition-delay: .3s;
+  z-index: 3;
 }
 
 .tLink {

@@ -44,7 +44,7 @@
   "a11y_t": "Assistive Devices Navigation",
   "a11y_d": "There are standardized ARIA attributes, ensuring accessibility, and the content can be accessed using assistive devices like TalkBack or VoiceOver.",
   "style_t": "Highly Customizable",
-  "style_d": "The rendering of the component to the browser's DOM corresponds one-to-one, allowing styles to be set for each element, making each navigation menu unique.",
+  "style_d": "The rendered DOM corresponds one-to-one with the components, allowing styles to be set for each element and enabling the customization of transition animations.",
   "usage": "The usage of navbar-153 is very simple, providing an intuitive and straightforward API, offering a great development experience. For detailed usage instructions, please refer to <1>the navbar-153 GitHub repository homepage</1>.",
   "stars": "Amidst the twinkling sea of stars, please hold tight to the navigation-153."
 }

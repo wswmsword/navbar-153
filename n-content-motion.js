@@ -39,7 +39,7 @@ export default function ContentWithMotion({ children, inner = {}, customTransPro
   /** 是否自定义切换动画 */
   const isCustomTrans = customTransProps != null;
   const [, setCustomTrans] = useState(); // 触发后，重新渲染，用于面板切换过渡动画
-  const startCustomTransRef = useRef(false);
+  const startCustomTransRef = useRef(false); // 为 true 时，开始进行结束状态动画，开始后设为 false
 
   useLayoutEffect(() => {
     transRunning.current = true;

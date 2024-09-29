@@ -18,6 +18,7 @@ export default function Header({ lng }) {
   const [dynamicWidth, setD] = useState(false);
   const [close, setClose] = useState(false);
   const [onlyKeyFocus, setOnly] = useState(true);
+  const [customTrans, setCT] = useState(false);
 
   const { t } = useTranslation(lng);
 
@@ -44,7 +45,7 @@ export default function Header({ lng }) {
         <Item>{props => <button className={styles.navBtn} {...props}><span className={styles.onlyDesktop}>Postcss-</span>Mobile-Forever</button>}</Item>
         <Item>{props => <button className={styles.navBtn} {...props}>Focus-Fly</button>}</Item>
       </Trigger>
-      <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }}>
+      <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }} customTransProps={customTrans ? { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] } : null}>
         <Item>
           {(props, head, tail) =>
             <NavbarSlate
@@ -83,5 +84,6 @@ export default function Header({ lng }) {
     <label className={styles.formItem}><input type="checkbox" checked={dynamicWidth} onChange={() => setD(v => !v)} /> dynamicWidth</label>
     <label className={styles.formItem}><input type="checkbox" checked={close} onChange={() => setClose(v => !v)} /> close</label>
     <label className={styles.formItem}><input type="checkbox" checked={onlyKeyFocus} onChange={() => setOnly(v => !v)} /> onlyKeyFocus</label>
+    <label className={styles.formItem}><input type="checkbox" checked={customTrans} onChange={() => setCT(v => !v)} /> customTransProps</label>
   </CenterBox></>;
 }

@@ -98,7 +98,20 @@ const { Trigger, Content, Item } = N;
 
 ### Content
 
-`<Content>` is imported in the same way as `<Trigger>`. Inside `<Content>`, there is a set of content panels, each corresponding sequentially to the triggers inside `<Trigger>`. `<Content>` and `<Trigger>` should be at the same hierarchy level. `<Content>` is rendered as a two-layer `<div>`, accepting any built-in props, with these props ultimately affecting the outer `<div>`. Additionally, you can pass `inner`, where the objects in `inner` will be passed as props to the inner `<div>`. You can also pass `className` or `style` to `<Content>` to set styles like shadows for the panels.
+`<Content>` is imported in the same way as `<Trigger>`. Inside `<Content>`, there is a set of content panels, each corresponding sequentially to the triggers inside `<Trigger>`. Both `<Content>` and `<Trigger>` should be at the same level. The `<Content>` component will be rendered as two layers of `<div>`, accepting any built-in props that will ultimately take effect on the outer `<div>`. You can pass `className` or `style` to `<Content>` to set styles like shadows for the panels.
+
+- `inner`: The objects within `inner` will be passed as props to the inner `<div>` rendered by `<Content>`.
+- `customTransProps`: Custom transition animations for panel switching. Pass an object where the keys are CSS properties, and the values are arrays of length 2 or 3. An array of length 2 indicates the animation has **start** and **end** states, while an array of length 3 indicates the animation has **before enter**, **normal**, and **after exit** states. In addition to these two array types, a special `transition` property is accepted, which is a string used to set the transition duration for the switch animation. If not set, a default value will be applied (`transition: all ${dur}s`).
+
+For example, setting a custom transition animation for fading in and out:
+
+```json
+{
+  "opacity": [0, 1],
+  "transform": ["translate(0)", "translateX(-280px)", "translateX(280px)"],
+  "transition": "opacity .4s, transform .4s"
+}
+```
 
 ### Item
 

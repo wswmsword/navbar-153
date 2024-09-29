@@ -3,7 +3,7 @@
   position: fixed;
   display: flex;
   justify-content: center;
-  padding: 36px 0;
+  margin: 36px 0;
 }
 
 .placeholder {
