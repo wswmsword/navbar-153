@@ -124,34 +124,35 @@ export default function Item({ children, type, orderI }) {
       }
     };
 
-    const { isCustomTrans, transitionBeforeStart, startCustomTransRef, panelsOffsetLeftRef, customTransProps } = motionContentContext;
+    const { isCustomTrans, transitionBeforeStart, startCustomTransRef, panelsOffsetLeftRef, customTransProps } = motionContentContext || {};
 
-    let transStyles = {};
-    if (isCustomTrans) {
-      for (const p in customTransProps) {
-        const v = customTransProps[p];
-        const transitionProp = p === "transition";
-        if (transitionProp) transStyles.transition = genCustomTransition(v);
-        else {
-          const arrayV = [].concat(v);
-          if (arrayV.length > 3 || arrayV.length < 1) throw("customTransProps array length error");
-          transStyles = {
-            ...transStyles,
-            [p]: arrayV.length === 2 ? genCustom2State(...arrayV) : genCustom3State(...arrayV),
+    const style = motionContentContext ? (() => {
+      let transStyles = {};
+      if (isCustomTrans) {
+        for (const p in customTransProps) {
+          const v = customTransProps[p];
+          const transitionProp = p === "transition";
+          if (transitionProp) transStyles.transition = genCustomTransition(v);
+          else {
+            const arrayV = [].concat(v);
+            if (arrayV.length > 3 || arrayV.length < 1) throw("customTransProps array length error");
+            transStyles = {
+              ...transStyles,
+              [p]: arrayV.length === 2 ? genCustom2State(...arrayV) : genCustom3State(...arrayV),
+            }
           }
         }
+        transStyles.position = "absolute";
+        if (transStyles.transition == null) transStyles.transition = genCustomTransition();
+        if (openedMenu && startCustomTransRef.current) startCustomTransRef.current = false;
+      } else {
+        transStyles = {
+          transform: genDefaultTransform(),
+          transition: transitionBeforeStart ? null : `transform ${context.dur}s`,
+        }
       }
-      transStyles.position = "absolute";
-      if (transStyles.transition == null) transStyles.transition = genCustomTransition();
-      if (openedMenu && startCustomTransRef.current) startCustomTransRef.current = false;
-    } else {
-      transStyles = {
-        transform: genDefaultTransform(),
-        transition: transitionBeforeStart ? null : `transform ${context.dur}s`,
-      }
-    }
-
-    const style = motionContentContext ? transStyles : null;
+      return transStyles;
+    })() : null;
 
     return children({
       onKeyDown,
