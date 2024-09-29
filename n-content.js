@@ -3,10 +3,10 @@ import { ContextForContent } from "./index";
 import ContentWithMotion from "./n-content-motion";
 import ContentReducedMotion from "./n-content-reduced-motion";
 
-export default function Content({ children, inner = {}, style, ...contentWrapperProps }) {
+export default function Content({ children, inner = {}, style, customTransProps, ...contentWrapperProps }) {
   const { motion } = useContext(ContextForContent);
   return motion ?
-    <ContentWithMotion inner={inner} style={style} {...contentWrapperProps}>{children}</ContentWithMotion> :
+    <ContentWithMotion inner={inner} style={style} customTransProps={customTransProps} {...contentWrapperProps}>{children}</ContentWithMotion> :
     <ContentReducedMotion inner={inner} style={style} {...contentWrapperProps}>{children}</ContentReducedMotion>
 }
 
