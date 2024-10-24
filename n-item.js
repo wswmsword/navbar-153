@@ -157,7 +157,7 @@ export default function Item({ children, type, orderI }) {
       return transStyles;
     })() : null;
 
-    return children({
+    const contentProps = {
       onKeyDown,
       ref: e => panelsRef.current[orderI] = e,
       style,
@@ -165,9 +165,14 @@ export default function Item({ children, type, orderI }) {
       "aria-labelledby": triggerAriaIds.current[orderI],
       "aria-hidden": !openedMenu,
       tabIndex: -1
-    },
-    e => headFocusItemInContent.current[orderI] = e,
-    e => tailFocusItemInContent.current[orderI] = e);
+    };
+    const getHead = e => headFocusItemInContent.current[orderI] = e;
+    const getTail = e => tailFocusItemInContent.current[orderI] = e;
+    // render props
+    if (typeof children === "function")
+      return children(contentProps, getHead, getTail);
+    // component
+    return cloneElement(children, { head: getHead, tail: getTail, propsFromN: contentProps });
 
     function genCustom2State(start, end) {
       if (orderI === prevMenuIdxRef.current && openedMenuIdx < 0) return end;

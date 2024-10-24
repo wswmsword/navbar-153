@@ -25,30 +25,9 @@ export default function Header() {
           <Item><button className={styles.navBtn}>Focus-Fly</button></Item>
         </Trigger>
         <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }} customTransProps={{ opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }}>
-          <Item>
-            {(props, head, tail) =>
-              <NavbarSlate
-                dynamicWidth={dynamicWidth}
-                propsFromN={props}
-                head={head}
-                tail={tail} />}
-          </Item>
-          <Item>
-            {(props, head, tail) =>
-              <MobileForeverSlate
-                dynamicWidth={dynamicWidth}
-                propsFromN={props}
-                head={head}
-                tail={tail} />}
-          </Item>
-          <Item>
-          {(props, head, tail) =>
-            <FocusFlySlate
-              dynamicWidth={dynamicWidth}
-              propsFromN={props}
-              head={head}
-              tail={tail} />}
-          </Item>
+          <Item><NavbarSlate dynamicWidth={dynamicWidth} /></Item>
+          <Item><MobileForeverSlate dynamicWidth={dynamicWidth} /></Item>
+          <Item><FocusFlySlate dynamicWidth={dynamicWidth} /></Item>
         </Content>
       </N>
     </div>
