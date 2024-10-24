@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useId, useState } from "react";
+import React, { cloneElement, useContext, useEffect, useId, useState } from "react";
 import { ContextForItem } from "./index";
 import { MotionContentContext } from "./n-content-motion";
 
@@ -22,37 +22,40 @@ export default function Item({ children, type, orderI }) {
   }, [openedMenuIdx, orderI, controlContentId]);
 
   if (isTrigger) {
-    if (typeof children === "function") {
-      const { btnsRef, overMenu, leaveMenu } = context;
-      const openedMenu = openedMenuIdx === orderI;
-      triggerAriaIds.current[orderI] = ariaId;
-      /** 点击菜单按钮 */
-      const clickMenuBtn = e => {
-        const target = e.target;
-        let targetIdx = btnsRef.current.findIndex(e => e === target);
-        if (targetIdx < 0) targetIdx = btnsRef.current.findIndex(e => e.contains(target));
-        if (targetIdx > -1) {
-          isKeyActive.current = e.nativeEvent.offsetX === 0 && e.nativeEvent.offsetY === 0;
-          if (targetIdx === openedMenuIdx) {
-            // 关闭菜单
-            setActivePanel(-1);
-          } else {
-            // 打开菜单
-            setActivePanel(targetIdx);
-          }
+    
+    const { btnsRef, overMenu, leaveMenu } = context;
+    const openedMenu = openedMenuIdx === orderI;
+    triggerAriaIds.current[orderI] = ariaId;
+    /** 点击菜单按钮 */
+    const clickMenuBtn = e => {
+      const target = e.target;
+      let targetIdx = btnsRef.current.findIndex(e => e === target);
+      if (targetIdx < 0) targetIdx = btnsRef.current.findIndex(e => e.contains(target));
+      if (targetIdx > -1) {
+        isKeyActive.current = e.nativeEvent.offsetX === 0 && e.nativeEvent.offsetY === 0;
+        if (targetIdx === openedMenuIdx) {
+          // 关闭菜单
+          setActivePanel(-1);
+        } else {
+          // 打开菜单
+          setActivePanel(targetIdx);
         }
-      };
-      return children({
-        ref: e => btnsRef.current[orderI] = e,
-        onClick: clickMenuBtn,
-        onMouseOver: overMenu,
-        onMouseLeave: leaveMenu,
-        id: ariaId,
-        "aria-expanded": openedMenu,
-        "aria-controls": controlContentId,
-      });
-    }
-    return children;
+      }
+    };
+    const triggerProps = {
+      ref: e => btnsRef.current[orderI] = e,
+      onClick: clickMenuBtn,
+      onMouseOver: overMenu,
+      onMouseLeave: leaveMenu,
+      id: ariaId,
+      "aria-expanded": openedMenu,
+      "aria-controls": controlContentId,
+    };
+    // render props
+    if (typeof children === "function")
+      return children(triggerProps);
+    // component
+    return cloneElement(children, triggerProps);
   }
   if (isContent) {
     const {

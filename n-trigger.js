@@ -13,7 +13,8 @@ export default function Trigger({ children, ...triggerWrapperProps }) {
   };
   let relatedIdx = -1;
   const mapped = Children.map(children, child => {
-    if (typeof child.props.children == "function") {
+    const dn = (child.type || {}).displayName;
+    if (dn === "Item") {
        ++ relatedIdx;
        return cloneElement(child, { type: "T", orderI: relatedIdx });
     }

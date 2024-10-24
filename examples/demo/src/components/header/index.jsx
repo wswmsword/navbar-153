@@ -20,9 +20,9 @@ export default function Header() {
       <N className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
         <Trigger className={styles.triggerWrapper}>
           <a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a>
-          <Item>{props => <button className={styles.navBtn} {...props}>Navbar-153</button>}</Item>
-          <Item>{props => <button className={styles.navBtn} {...props}>Postcss-Mobile-Forever</button>}</Item>
-          <Item>{props => <button className={styles.navBtn} {...props}>Focus-Fly</button>}</Item>
+          <Item><button className={styles.navBtn}>Navbar-153</button></Item>
+          <Item><button className={styles.navBtn}>Postcss-Mobile-Forever</button></Item>
+          <Item><button className={styles.navBtn}>Focus-Fly</button></Item>
         </Trigger>
         <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }} customTransProps={{ opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }}>
           <Item>
