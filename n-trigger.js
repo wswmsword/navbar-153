@@ -13,8 +13,11 @@ export default function Trigger({ children, ...triggerWrapperProps }) {
   };
   let relatedIdx = -1;
   const mapped = Children.map(children, child => {
-    if (typeof child.props.children == "function") ++ relatedIdx;
-    return cloneElement(child, { type: "T", orderI: relatedIdx });
+    if (typeof child.props.children == "function") {
+       ++ relatedIdx;
+       return cloneElement(child, { type: "T", orderI: relatedIdx });
+    }
+    return child;
   });
   return <div {...triggerWrapperProps} ref={wrapperRef} onKeyDown={focusBackToSlateFromTrigger}>{mapped}</div>;
 }

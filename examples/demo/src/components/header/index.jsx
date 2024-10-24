@@ -19,7 +19,7 @@ export default function Header() {
     <div className={styles.header}> 
       <N className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
         <Trigger className={styles.triggerWrapper}>
-          <Item><a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a></Item>
+          <a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a>
           <Item>{props => <button className={styles.navBtn} {...props}>Navbar-153</button>}</Item>
           <Item>{props => <button className={styles.navBtn} {...props}>Postcss-Mobile-Forever</button>}</Item>
           <Item>{props => <button className={styles.navBtn} {...props}>Focus-Fly</button>}</Item>
