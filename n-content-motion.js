@@ -1,9 +1,7 @@
-import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useEffect, useCallback, useRef, createContext } from "react";
+import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useEffect, useCallback, useRef } from "react";
 
 import { useEntryExitFocus } from "./useHooks";
 import { ContextForContent } from "./index";
-
-export const MotionContentContext = createContext();
 
 export default function ContentWithMotion({ children, inner = {}, customTransProps, style, ...contentWrapperProps }) {
   const {
@@ -101,21 +99,14 @@ export default function ContentWithMotion({ children, inner = {}, customTransPro
     })();
 
     const { style: innerStyle, ...otherInnerProps } = inner;
-    const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
+    const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i, contentItemStyle: genItemStyle(i), transRunning }));
     const width = !dynamicWidth ?
       null :
       openedMenuIdx === -1 ?
         (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
         (panelsWidthRef.current[openedMenuIdx] || 0);
 
-    return <MotionContentContext.Provider value={{
-      transitionBeforeStart,
-      transRunning,
-      isCustomTrans,
-      startCustomTransRef,
-      panelsOffsetLeftRef,
-      customTransProps,
-    }}><div
+    return <div
       ref={contentWrapperRef}
       style={{
         ...style,
@@ -144,7 +135,92 @@ export default function ContentWithMotion({ children, inner = {}, customTransPro
         {...otherInnerProps}>
         {mapped}
       </div>
-    </div></MotionContentContext.Provider>;
+    </div>;
+
+    function genItemStyle(orderI) {
+      let transStyles = {};
+      const openedMenu = openedMenuIdx === orderI;
+      if (isCustomTrans) {
+        for (const p in customTransProps) {
+          const v = customTransProps[p];
+          const transitionProp = p === "transition";
+          if (transitionProp) transStyles.transition = genCustomTransition(v, orderI);
+          else {
+            const arrayV = [].concat(v);
+            if (arrayV.length > 3 || arrayV.length < 1) throw("customTransProps array length error");
+            transStyles = {
+              ...transStyles,
+              [p]: arrayV.length === 2 ? genCustom2State(...arrayV, orderI) : genCustom3State(...arrayV, orderI),
+            }
+          }
+        }
+        transStyles.position = "absolute";
+        if (transStyles.transition == null) transStyles.transition = genCustomTransition(null, orderI);
+        if (openedMenu && startCustomTransRef.current) startCustomTransRef.current = false;
+      } else {
+        transStyles = {
+          transform: genDefaultTransform(),
+          transition: transitionBeforeStart ? null : `transform ${dur}s`,
+        }
+      }
+      return transStyles;
+    }
+
+    function genCustom2State(start, end, orderI) {
+      if (orderI === prevMenuIdxRef.current && openedMenuIdx < 0) return end;
+      const isLeaveI = prevMenuIdxRef.current === orderI;
+      if (isLeaveI) return start;
+      const openedMenu = openedMenuIdx === orderI;
+      if (openedMenu) {
+        if (prevMenuIdxRef.current < 0) return end;
+        if (startCustomTransRef.current) {
+          return end;
+        }
+      }
+      return start;
+    }
+
+    function genCustom3State(init, forward, backward, orderI) {
+      const openedMenu = openedMenuIdx === orderI;
+      const curI = openedMenuIdx;
+      const prevI = prevMenuIdxRef.current;
+      const isInitState = curI === -1 || prevI === -1;
+      if (isInitState) return init;
+      const isLeaveI = orderI === prevI;
+      const isBackward = curI < prevI;
+      if (isLeaveI) {
+        return isBackward ? backward : forward;
+      }
+      if (openedMenu) {
+        if (startCustomTransRef.current) {
+          return init;
+        }
+        return isBackward ? forward : backward;  
+      }
+      return isBackward ? backward : forward;
+    }
+
+    function genDefaultTransform() {
+      const prevI = prevMenuIdxRef.current;
+      const i = openedMenuIdx < 0 ? prevI : openedMenuIdx;
+      const left = i < 1 ? 0 : `-${panelsOffsetLeftRef.current[i]}px`;
+      return `translateX(${left})`;
+    }
+
+    function genCustomTransition(v, orderI) {
+      const defaultV = `all ${dur}s`;
+      const finalV = v || defaultV;
+      const isLeaveI = prevMenuIdxRef.current === orderI;
+      if (isLeaveI) return finalV;
+      const openedMenu = openedMenuIdx === orderI;
+      if (openedMenu) {
+        if (startCustomTransRef.current) {
+          return finalV;
+        }
+        return null;
+      }
+      return finalV;
+    }
   }
   return null;
 }

@@ -24,7 +24,10 @@ export default function Header() {
           <Item><button className={styles.navBtn}>Postcss-Mobile-Forever</button></Item>
           <Item><button className={styles.navBtn}>Focus-Fly</button></Item>
         </Trigger>
-        <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }} customTransProps={{ opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }}>
+        <Content
+          className={styles.panelsWrapper}
+          inner={{ className: styles.panelsWrapperInner }}
+          customTransProps={{ opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }}>
           <Item><NavbarSlate dynamicWidth={dynamicWidth} /></Item>
           <Item><MobileForeverSlate dynamicWidth={dynamicWidth} /></Item>
           <Item><FocusFlySlate dynamicWidth={dynamicWidth} /></Item>
