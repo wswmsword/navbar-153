@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { ContextForContent } from "./index";
 import ContentWithMotion from "./n-content-motion";
 import ContentReducedMotion from "./n-content-reduced-motion";
+import { ContextForContent } from "./context";
 
 export default function Content({ children, inner = {}, style, customTransProps, ...contentWrapperProps }) {
   const { motion } = useContext(ContextForContent);

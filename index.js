@@ -1,11 +1,8 @@
-import React, { createContext, useState, useRef, useCallback, useMemo } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import Item from "./n-item";
 import Content from "./n-content";
 import Trigger from "./n-trigger";
-
-export const ContextForItem = createContext({});
-export const ContextForTrigger = createContext();
-export const ContextForContent = createContext({});
+import { ContextForItem, ContextForContent, ContextForTrigger } from "./context";
 
 NavBar.Item = Item;
 NavBar.Content = Content;

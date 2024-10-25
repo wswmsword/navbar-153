@@ -1,5 +1,5 @@
 import React, { Children, cloneElement, useContext } from "react";
-import { ContextForTrigger } from "./index";
+import { ContextForTrigger } from "./context";
 
 export default function Trigger({ children, ...triggerWrapperProps }) {
   const { wrapperRef, openedMenuIdx, headFocusItemInContent, panelsRef } = useContext(ContextForTrigger);

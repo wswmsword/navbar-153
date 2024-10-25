@@ -1,5 +1,5 @@
 import React, { cloneElement, useContext, useEffect, useId, useState } from "react";
-import { ContextForItem } from "./index";
+import { ContextForItem } from "./context";
 
 export default function Item({ children, type, orderI, contentItemStyle, transRunning }) {
   const isTrigger = type === 'T';

@@ -1,7 +1,7 @@
 import React, { Children, cloneElement, useContext, useLayoutEffect, useState } from "react";
 
 import { useEntryExitFocus } from "./useHooks";
-import { ContextForContent } from "./index";
+import { ContextForContent } from "./context";
 
 export default function ContentReducedMotion({ children, inner = {}, style, ...contentWrapperProps }) {
   const { leaveMenuPanel, overMenuPanel, gap, contentWrapperRef, openedMenuIdx, dynamicWidth, panelsRef, close, btnsRef, onlyKeyFocus, prevMenuIdxRef, isKeyActive, headFocusItemInContent } = useContext(ContextForContent);

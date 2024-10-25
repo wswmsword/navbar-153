@@ -1,7 +1,7 @@
 import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useEffect, useCallback, useRef } from "react";
 
 import { useEntryExitFocus } from "./useHooks";
-import { ContextForContent } from "./index";
+import { ContextForContent } from "./context";
 
 export default function ContentWithMotion({ children, inner = {}, customTransProps, style, ...contentWrapperProps }) {
   const {
