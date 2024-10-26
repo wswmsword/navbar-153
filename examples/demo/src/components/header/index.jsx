@@ -1,12 +1,10 @@
 import styles from "./index.module.css";
-import N from "navbar-153";
+import { NavBar, Trigger, Content, Item } from "navbar-153";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate";
 import CenterBox from "../center-box";
 import { useState } from "react";
-
-const { Trigger, Item, Content } = N;
 
 export default function Header() {
 
@@ -17,7 +15,7 @@ export default function Header() {
 
   return <>
     <div className={styles.header}> 
-      <N className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
+      <NavBar className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
         <Trigger className={styles.triggerWrapper}>
           <a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a>
           <Item><button className={styles.navBtn}>Navbar-153</button></Item>
@@ -32,7 +30,7 @@ export default function Header() {
           <Item><MobileForeverSlate dynamicWidth={dynamicWidth} /></Item>
           <Item><FocusFlySlate dynamicWidth={dynamicWidth} /></Item>
         </Content>
-      </N>
+      </NavBar>
     </div>
     <div className={styles.placeholder} />
     <CenterBox className={styles.form}>

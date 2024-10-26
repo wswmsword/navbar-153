@@ -1,7 +1,7 @@
 "use client"
 
 import styles from "./index.module.css";
-import N from "navbar-153";
+import { NavBar, Trigger, Content, Item } from "navbar-153";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate"
@@ -9,8 +9,6 @@ import { useEffect, useState } from "react";
 import CenterBox from "../center-box";
 import { useTranslation } from "@/i18n/client";
 import { Trans } from "react-i18next";
-
-const { Trigger, Item, Content } = N;
 
 export default function Header({ lng }) {
   
@@ -38,7 +36,7 @@ export default function Header({ lng }) {
   }, []);
 
   return <><div className={styles.header}> 
-    <N className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
+    <NavBar className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
       <Trigger className={styles.triggerWrapper}>
         <Item><a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a></Item>
         <Item>{props => <button className={styles.navBtn} {...props}>Navbar-153</button>}</Item>
@@ -74,7 +72,7 @@ export default function Header({ lng }) {
             tail={tail} />}
         </Item>
       </Content>
-    </N>
+    </NavBar>
   </div><div className={styles.placeholder} />
   <CenterBox className={styles.form}>
     <div className={styles.motionWrapper}>
