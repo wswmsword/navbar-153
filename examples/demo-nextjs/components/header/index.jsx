@@ -1,7 +1,7 @@
 "use client"
 
 import styles from "./index.module.css";
-import { NavBar, Trigger, Content, Item } from "navbar-153";
+import { NavBar, Trigger, Content, Item, CustomContent } from "navbar-153";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate"
@@ -19,6 +19,11 @@ export default function Header({ lng }) {
   const [customTrans, setCT] = useState(false);
 
   const { t } = useTranslation(lng);
+
+  const FinalC = customTrans ? CustomContent : Content;
+  const customTransProps = customTrans ? {
+    customTransProps: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
+  } : {};
 
   // 检测操作系统是否打开了“减弱动态效果”
   useEffect(() => {
@@ -38,12 +43,12 @@ export default function Header({ lng }) {
   return <><div className={styles.header}> 
     <NavBar className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
       <Trigger className={styles.triggerWrapper}>
-        <Item><a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a></Item>
+        <a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a>
         <Item>{props => <button className={styles.navBtn} {...props}>Navbar-153</button>}</Item>
         <Item>{props => <button className={styles.navBtn} {...props}><span className={styles.onlyDesktop}>Postcss-</span>Mobile-Forever</button>}</Item>
         <Item>{props => <button className={styles.navBtn} {...props}>Focus-Fly</button>}</Item>
       </Trigger>
-      <Content className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }} customTransProps={customTrans ? { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] } : null}>
+      <FinalC className={styles.panelsWrapper} inner={{ className: styles.panelsWrapperInner }} {...customTransProps}>
         <Item>
           {(props, head, tail) =>
             <NavbarSlate
@@ -71,7 +76,7 @@ export default function Header({ lng }) {
             head={head}
             tail={tail} />}
         </Item>
-      </Content>
+      </FinalC>
     </NavBar>
   </div><div className={styles.placeholder} />
   <CenterBox className={styles.form}>
