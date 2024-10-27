@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { NavBar, Trigger, Item, CustomContent } from "navbar-153";
+import { NavBar, Trigger, Item, CustomMotionContent, ReducedMotionContent } from "navbar-153";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate";
@@ -13,6 +13,11 @@ export default function Header() {
   const [close, setClose] = useState(false);
   const [onlyKeyFocus, setOnly] = useState(true);
 
+  const FinalC = motion ? CustomMotionContent : ReducedMotionContent;
+  const customTransProps = motion ? {
+    customTransProps: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
+  } : null;
+
   return <>
     <div className={styles.header}> 
       <NavBar className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
@@ -22,14 +27,14 @@ export default function Header() {
           <Item><button className={styles.navBtn}>Postcss-Mobile-Forever</button></Item>
           <Item><button className={styles.navBtn}>Focus-Fly</button></Item>
         </Trigger>
-        <CustomContent
+        <FinalC
           className={styles.panelsWrapper}
           inner={{ className: styles.panelsWrapperInner }}
-          customTransProps={{ opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }}>
+          {...customTransProps}>
           <Item><NavbarSlate dynamicWidth={dynamicWidth} /></Item>
           <Item><MobileForeverSlate dynamicWidth={dynamicWidth} /></Item>
           <Item><FocusFlySlate dynamicWidth={dynamicWidth} /></Item>
-        </CustomContent>
+        </FinalC>
       </NavBar>
     </div>
     <div className={styles.placeholder} />

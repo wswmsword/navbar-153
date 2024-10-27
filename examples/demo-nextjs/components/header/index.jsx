@@ -1,7 +1,7 @@
 "use client"
 
 import styles from "./index.module.css";
-import { NavBar, Trigger, Content, Item, CustomContent } from "navbar-153";
+import { NavBar, Trigger, Content, Item, CustomMotionContent, ReducedMotionContent } from "navbar-153";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate"
@@ -20,7 +20,7 @@ export default function Header({ lng }) {
 
   const { t } = useTranslation(lng);
 
-  const FinalC = customTrans ? CustomContent : Content;
+  const FinalC = !motion ? ReducedMotionContent : customTrans ? CustomMotionContent : Content;
   const customTransProps = customTrans ? {
     customTransProps: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
   } : {};
