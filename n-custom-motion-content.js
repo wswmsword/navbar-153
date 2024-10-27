@@ -7,6 +7,7 @@ export default function ContentWithCusomizedMotion({ children, inner = {}, custo
     openedMenuIdx,
     dur,
     prevMenuIdxRef,
+    collapsePrevMenuIdx2Ref,
   } = useContext(ContextForContent);
 
   const [, setCustomTrans] = useState(); // 触发后，重新渲染，用于面板切换过渡动画
@@ -14,7 +15,7 @@ export default function ContentWithCusomizedMotion({ children, inner = {}, custo
 
   useLayoutEffect(() => {
     if (openedMenuIdx > -1) {
-      if (prevMenuIdxRef.current > -1) {
+      if (prevMenuIdxRef.current > -1 || collapsePrevMenuIdx2Ref.current > -1) {
         setCustomTrans({});
         startCustomTransRef.current = true;
       }
@@ -68,13 +69,12 @@ export default function ContentWithCusomizedMotion({ children, inner = {}, custo
     const openedMenu = openedMenuIdx === orderI;
     const curI = openedMenuIdx;
     const prevI = prevMenuIdxRef.current;
-    const isInitState = curI === -1 || prevI === -1;
+    const prevI2 = collapsePrevMenuIdx2Ref.current;
+    const commonExpand = curI > -1 && prevI < 0 && prevI2 < 0;
+    const collapse = curI < 0;
+    const isInitState = commonExpand || collapse;
     if (isInitState) return init;
-    const isLeaveI = orderI === prevI;
-    const isBackward = curI < prevI;
-    if (isLeaveI) {
-      return isBackward ? backward : forward;
-    }
+    const isBackward = prevI2 > 0 ? curI < prevI2 : curI < prevI;
     if (openedMenu) {
       if (startCustomTransRef.current) {
         return init;

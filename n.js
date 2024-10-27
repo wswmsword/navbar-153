@@ -6,6 +6,8 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   const [openedMenuIdx, setIdx] = useState(-1); // 当前菜单序号
   /** 上一个菜单序号 */
   const prevMenuIdxRef = useRef(-1);
+  /** 上一个菜单序号的上一个菜单序号，用于 `<CustomMotionContent>` 收回面板时切换菜单的动画 */
+  const collapsePrevMenuIdx2Ref = useRef(-1);
   /** 菜单按钮的元素们 */
   const btnsRef = useRef([]);
   /** 面板的元素们 */
@@ -29,8 +31,14 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
 
   const setActivePanel = useCallback(cur => {
     checkedFocusOwnerContent.current = false;
+    collapsePrevMenuIdx2Ref.current = -1; // 初始化
     setIdx(v => {
-      if (cur !== v) prevMenuIdxRef.current = v;
+      if (cur !== v) {
+        // 收起一半展开其它面板
+        if (v < 0 && prevMenuIdxRef.current > -1 && cur > -1 && cur !== prevMenuIdxRef.current)
+          collapsePrevMenuIdx2Ref.current = prevMenuIdxRef.current;
+        prevMenuIdxRef.current = v;
+      }
       return cur;
     });
   }, []);
@@ -88,6 +96,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     motion,
     contentWrapperRef,
     prevMenuIdxRef,
+    collapsePrevMenuIdx2Ref,
     isKeyActive,
     btnsRef,
     panelsRef,
@@ -111,7 +120,6 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     btnsRef,
     triggerAriaIds,
     contentAriaIds,
-    prevMenuIdxRef,
   }), [openedMenuIdx, dur, onlyKeyFocus]);
 
   return <ContextForItem.Provider value={itemContextVal}>

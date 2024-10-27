@@ -62,6 +62,7 @@ export default function ContentWrapper({ children, inner = {}, style, innerStyle
     if (openedMenuIdx < 0) {
       setBeforeStart(true);
       setDestroy(true);
+      prevMenuIdxRef.current = -1;
     }
   }, [openedMenuIdx]);
 
