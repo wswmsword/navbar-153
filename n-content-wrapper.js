@@ -96,19 +96,15 @@ export default function ContentWrapper({ children, inner = {}, style, innerStyle
         (panelsWidthRef.current[openedMenuIdx] || 0);
 
     return <div
-      ref={contentWrapperRef}
       style={{
         ...style,
-        visibility: transitionBeforeStart ? "hidden" : "visible",
-        height: transitionBeforeStart ? "0" : (+ gap + panelsHeightRef.current[openedMenuIdx] || 0),
-        width,
-        transition: transitionBeforeStart ? null : `height ${dur}s, width ${dur}s`,
         clipPath: "inset(0 -100vw -100vw -100vw)"
       }}
       onTransitionEnd={transitionEnd}
       {...contentWrapperProps}>
       {/* 外层 div 用于 clipPath，内层 div 用于包裹实际内容，完成入场和退场的动画 */}
       <div
+        ref={contentWrapperRef}
         onMouseOver={overMenuPanel}
         onMouseLeave={leaveMenuPanel}
         style={{
