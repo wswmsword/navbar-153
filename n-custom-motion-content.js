@@ -46,6 +46,7 @@ export default function ContentWithCusomizedMotion({ children, inner = {}, custo
       }
     }
     transStyles.position = "absolute";
+    transStyles.zIndex = openedMenu ? 1 : null;
     if (transStyles.transition == null) transStyles.transition = genCustomTransition(null, orderI);
     if (openedMenu && startCustomTransRef.current) startCustomTransRef.current = false;
     return transStyles;
