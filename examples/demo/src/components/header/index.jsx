@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { NavBar, Trigger, Item, CustomMotionContent, ReducedMotionContent } from "navbar-153";
+import { NavBar, Trigger, Item, Content, ReducedMotionContent } from "navbar-153";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate";
@@ -13,7 +13,7 @@ export default function Header() {
   const [close, setClose] = useState(false);
   const [onlyKeyFocus, setOnly] = useState(true);
 
-  const FinalC = motion ? CustomMotionContent : ReducedMotionContent;
+  const FinalC = motion ? Content : ReducedMotionContent;
   const customTransProps = motion ? {
     customTransProps: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
   } : null;

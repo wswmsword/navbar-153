@@ -3,7 +3,7 @@ import React, { useContext, useLayoutEffect, useState, useEffect, useCallback, u
 import { useEntryExitFocus } from "./useHooks";
 import { ContextForContent } from "./context";
 
-export default function ContentWrapper({ children, inner = {}, style, innerStyleFromContent, ...contentWrapperProps }) {
+export default function ContentWrapper({ children, inner = {}, style, style2, innerStyle2, getNextContentInnerTransformVal, ...contentWrapperProps }) {
   const {
     openedMenuIdx,
     overMenuPanel,
@@ -69,24 +69,8 @@ export default function ContentWrapper({ children, inner = {}, style, innerStyle
   if (loaded || (!loaded && !destroyContent)) {
     /** 是否为收起菜单操作 */
     const isCollapse = openedMenuIdx < 0 && prevMenuIdxRef.current > -1;
-    const nextContentInnerTransformVal = (() => {
-
-      const collapseOrTEnded = (transitionBeforeStart || isCollapse);
-      if (close) {
-        return collapseOrTEnded ?
-          getSlateWrapperTranslateVal(
-            "-100%",
-            openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx,
-            btnsRef,
-            panelsClientWidthRef) :
-          getSlateWrapperTranslateVal(`${gap}px`, openedMenuIdx, btnsRef, panelsClientWidthRef);
-
-      } else {
-        return collapseOrTEnded ?
-          `translateY(-100%)`: // 入场的初始状态（退场结束）
-          `translateY(${gap}px)`; // 入场的结束状态（退场初始）
-      }
-    })();
+    const collapseOrTEnded = (transitionBeforeStart || isCollapse);
+    const nextContentInnerTransformVal = getNextContentInnerTransformVal(collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap);
 
     const { style: innerStyle, ...otherInnerProps } = inner;
     const width = !dynamicWidth ?
@@ -98,18 +82,17 @@ export default function ContentWrapper({ children, inner = {}, style, innerStyle
     return <div
       style={{
         ...style,
-        clipPath: "inset(0 -100vw -100vw -100vw)"
+        ...style2,
       }}
       onTransitionEnd={transitionEnd}
       {...contentWrapperProps}>
-      {/* 外层 div 用于 clipPath，内层 div 用于包裹实际内容，完成入场和退场的动画 */}
       <div
         ref={contentWrapperRef}
         onMouseOver={overMenuPanel}
         onMouseLeave={leaveMenuPanel}
         style={{
           ...innerStyle,
-          ...innerStyleFromContent,
+          ...innerStyle2,
           width,
           height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
           transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
@@ -122,14 +105,4 @@ export default function ContentWrapper({ children, inner = {}, style, innerStyle
     </div>;
   }
   return null;
-}
-
-
-function getSlateWrapperTranslateVal(y, openedMenuIdx, triggerRef, slateClientWidthRef) {
-  const curSlateWidth = slateClientWidthRef.current[openedMenuIdx];
-  const curTrigger = triggerRef.current[openedMenuIdx];
-  const left = (curSlateWidth == null || curTrigger == null) ?
-    0 :
-    (curTrigger.offsetLeft + curTrigger.clientWidth / 2 - curSlateWidth / 2);
-  return `translate(${left}px, ${y})`;
 }

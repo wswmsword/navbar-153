@@ -1,8 +1,9 @@
 import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useRef } from "react";
-import ContentWrapper from "./n-content-wrapper";
 import { ContextForContent } from "./context";
 
-export default function ContentWithCusomizedMotion({ children, inner = {}, customTransProps, style, ...contentWrapperProps }) {
+/** 自定义 X 轴切换动画的 Items */
+export default function CustomMotionItems({ children, customTransProps, transRunning }) {
+
   const {
     openedMenuIdx,
     dur,
@@ -22,12 +23,9 @@ export default function ContentWithCusomizedMotion({ children, inner = {}, custo
     }
   }, [openedMenuIdx]);
 
-  return <ContentWrapper inner={inner} style={style} {...contentWrapperProps}>
-    {({ transRunning }) =>
-      Children.map(
-        children,
-        (child, i) => cloneElement(child, { type: "C", orderI: i, contentItemStyle: genItemStyle(i), transRunning }))}
-  </ContentWrapper>;
+  return Children.map(
+    children,
+    (child, i) => cloneElement(child, { type: "C", orderI: i, contentItemStyle: genItemStyle(i), transRunning }));
 
   function genItemStyle(orderI) {
     let transStyles = {};

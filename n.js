@@ -6,7 +6,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   const [openedMenuIdx, setIdx] = useState(-1); // 当前菜单序号
   /** 上一个菜单序号 */
   const prevMenuIdxRef = useRef(-1);
-  /** 上一个菜单序号的上一个菜单序号，用于 `<CustomMotionContent>` 收回面板时切换菜单的动画 */
+  /** 上一个菜单序号的上一个菜单序号，用于 `<CustomMotionItems>` 收回面板时切换菜单的动画 */
   const collapsePrevMenuIdx2Ref = useRef(-1);
   /** 菜单按钮的元素们 */
   const btnsRef = useRef([]);
