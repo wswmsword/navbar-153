@@ -57,7 +57,7 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
 
   const transitionEnd = useCallback(e => {
     const contentWrapper = contentWrapperRef.current;
-    if (e.target !== contentWrapper) return; // 过滤冒泡的 transitionend 事件
+    if (e.target !== contentWrapper && e.target !== contentWrapper.parentNode) return; // 过滤冒泡的 transitionend 事件
     transRunning.current = false;
     if (openedMenuIdx < 0) {
       setBeforeStart(true);
@@ -79,10 +79,12 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
         (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
         (panelsWidthRef.current[openedMenuIdx] || 0);
 
+    const _style2 = typeof style2 === "function" ? style2(collapseOrTEnded) : style2;
+
     return <div
       style={{
         ...style,
-        ...style2,
+        ..._style2,
       }}
       onTransitionEnd={transitionEnd}
       {...contentWrapperProps}>
