@@ -2,12 +2,9 @@ import React from "react";
 import MotionContentWrapper from "./n-motion-content-wrapper";
 import CustomMotionItems from "./n-custom-motion-items";
 
-export default function CustomXMotionContent({ children, inner = {}, customTransProps, style, ...contentWrapperProps }) {
+export default function CustomXMotionContent({ children, customTransProps, ...contentWrapperProps }) {
 
-  return <MotionContentWrapper
-    inner={inner}
-    style={style}
-    {...contentWrapperProps}>
+  return <MotionContentWrapper {...contentWrapperProps}>
     {({ transRunning }) =>
       <CustomMotionItems
         customTransProps={customTransProps}
