@@ -2,7 +2,7 @@ import React from "react";
 import ContentWrapper from "./n-content-wrapper";
 import { getSlateWrapperTranslateVal } from "./utils";
 
-export default function CustomMotionContentWrapper({ children, transProps = [], ...props }) {
+export default function CustomMotionContentWrapper({ children, trans = [], ...props }) {
 
   const getNextContentInnerTransformVal = (collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap) => {
 
@@ -19,12 +19,12 @@ export default function CustomMotionContentWrapper({ children, transProps = [], 
   }
 
   function collapseOrExpand(collapseOrTEnded) {
-    const [start, end] = Object.keys(transProps).reduce((acc, cur) => [{
+    const [start, end] = Object.keys(trans).reduce((acc, cur) => [{
       ...acc[0],
-      [cur]: transProps[cur][0]
+      [cur]: trans[cur][0]
     }, {
       ...acc[1],
-      [cur]: transProps[cur][1]
+      [cur]: trans[cur][1]
     }], [{}, {}]);
     return collapseOrTEnded ? start : end;
   }

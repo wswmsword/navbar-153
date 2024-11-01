@@ -60,6 +60,11 @@
   left: 0;
 }
 
+.customYWrapper {
+  transition: opacity .3s, transform .3s;
+  transform-origin: top center;
+}
+
 .panelsWrapperInner {
   color: white;
   background: rgb(32, 32, 32);

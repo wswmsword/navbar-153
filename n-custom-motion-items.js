@@ -2,7 +2,7 @@ import React, { Children, cloneElement, useContext, useLayoutEffect, useState, u
 import { ContextForContent } from "./context";
 
 /** 自定义 X 轴切换动画的 Items */
-export default function CustomMotionItems({ children, customTransProps, transRunning }) {
+export default function CustomMotionItems({ children, trans, transRunning }) {
 
   const {
     openedMenuIdx,
@@ -30,13 +30,13 @@ export default function CustomMotionItems({ children, customTransProps, transRun
   function genItemStyle(orderI) {
     let transStyles = {};
     const openedMenu = openedMenuIdx === orderI;
-    for (const p in customTransProps) {
-      const v = customTransProps[p];
+    for (const p in trans) {
+      const v = trans[p];
       const transitionProp = p === "transition";
       if (transitionProp) transStyles.transition = genCustomTransition(v, orderI);
       else {
         const arrayV = [].concat(v);
-        if (arrayV.length > 3 || arrayV.length < 1) throw("customTransProps array length error");
+        if (arrayV.length > 3 || arrayV.length < 1) throw("Transition steps length can only be 2 or 3.");
         transStyles = {
           ...transStyles,
           [p]: arrayV.length === 2 ? genCustom2State(...arrayV, orderI) : genCustom3State(...arrayV, orderI),

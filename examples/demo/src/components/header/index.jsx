@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { NavBar, Trigger, Item, Content, ReducedMotionContent } from "navbar-153";
+import { NavBar, Trigger, Item, CustomMotionContent, ReducedMotionContent } from "navbar-153";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate";
@@ -13,9 +13,9 @@ export default function Header() {
   const [close, setClose] = useState(false);
   const [onlyKeyFocus, setOnly] = useState(true);
 
-  const FinalC = motion ? Content : ReducedMotionContent;
-  const customTransProps = motion ? {
-    customTransProps: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
+  const FinalC = motion ? CustomMotionContent : ReducedMotionContent;
+  const xTrans = motion ? {
+    xTrans: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
   } : null;
 
   return <>
@@ -28,9 +28,13 @@ export default function Header() {
           <Item><button className={styles.navBtn}>Focus-Fly</button></Item>
         </Trigger>
         <FinalC
-          className={styles.panelsWrapper}
+          className={`${styles.panelsWrapper} ${styles.customYWrapper}`}
           inner={{ className: styles.panelsWrapperInner }}
-          {...customTransProps}>
+          yTrans={{
+            opacity: [0, 1],
+            transform: ["rotateX(-30deg) scale(.9)", "rotateX(0deg) scale(1)"],
+          }}
+          {...xTrans}>
           <Item><NavbarSlate dynamicWidth={dynamicWidth} /></Item>
           <Item><MobileForeverSlate dynamicWidth={dynamicWidth} /></Item>
           <Item><FocusFlySlate dynamicWidth={dynamicWidth} /></Item>

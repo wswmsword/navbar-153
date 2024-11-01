@@ -2,12 +2,12 @@ import React from "react";
 import CustomMotionItems from "./n-custom-motion-items";
 import CustomMotionContentWrapper from "./n-custom-motion-content-wrapper";
 
-export default function CustomMotionContent({ children, customTransProps, ...contentWrapperProps }) {
+export default function CustomMotionContent({ children, yTrans, xTrans, ...contentWrapperProps }) {
 
-  return <CustomMotionContentWrapper {...contentWrapperProps}>
+  return <CustomMotionContentWrapper trans={yTrans} {...contentWrapperProps}>
     {({ transRunning }) =>
       <CustomMotionItems
-        customTransProps={customTransProps}
+        trans={xTrans}
         transRunning={transRunning}>{children}</CustomMotionItems>}
   </CustomMotionContentWrapper>;
 }
