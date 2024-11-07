@@ -34,6 +34,7 @@ export default function ContentReducedMotion({ children, inner = {}, style, ...c
     style={{
       ...style,
       visibility: dynamicWidth ? width === 0 ? 'hidden' : 'visible' : null,
+      transform: close ? `translate(${offsetL}px,${gap}px)` : `translateY(${gap}px)`,
       width: dynamicWidth ? width : null }}
     {...contentWrapperProps}>
     <div
@@ -41,7 +42,6 @@ export default function ContentReducedMotion({ children, inner = {}, style, ...c
       onMouseLeave={leaveMenuPanel}
       style={{
         ...innerStyle,
-        transform: close ? `translate(${offsetL}px,${gap}px)` : `translateY(${gap}px)`,
         width: dynamicWidth ? width : null }}
       {...otherInnerProps}>
       {mapped[openedMenuIdx]}

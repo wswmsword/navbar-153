@@ -4,34 +4,29 @@ import { getSlateWrapperTranslateVal } from "./utils";
 
 export default function MotionContentWrapper({ children, ...props }) {
 
-
-  const getNextContentInnerTransformVal = (collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap) => {
+  const moveX = (collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap) => {
 
     if (close) {
-      return collapseOrTEnded ?
-        getSlateWrapperTranslateVal(
-          "-100%",
-          openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx,
-          btnsRef,
-          panelsClientWidthRef) :
-        getSlateWrapperTranslateVal(`${gap}px`, openedMenuIdx, btnsRef, panelsClientWidthRef);
+      const menuIdx = collapseOrTEnded && openedMenuIdx < 0 ? prevMenuIdxRef.current : openedMenuIdx;
+      return getSlateWrapperTranslateVal(`${gap}px`, menuIdx, btnsRef, panelsClientWidthRef);
+    }
+    return `translateY(${gap}px)`;
+  }
 
-    } else {
-      return collapseOrTEnded ?
-        `translateY(-100%)`: // 入场的初始状态（退场结束）
-        `translateY(${gap}px)`; // 入场的结束状态（退场初始）
+  function moveY(collapseOrTEnded, gap) {
+    return {
+      display: "flex",
+      alignItems: "flex-start",
+      transform: collapseOrTEnded ? `translateY(calc(-100% - ${gap}px))` : `translateY(0)`,
     }
   }
 
   return <ContentWrapper
-    getNextContentInnerTransformVal={getNextContentInnerTransformVal}
-    style2={{
-      clipPath: "inset(0 -100vw -100vw -100vw)",
-    }}
-    innerStyle2={{
-      display: "flex",
-      alignItems: "flex-start",
-    }}
+    moveX={moveX}
+    style2={gap => ({
+      clipPath: `inset(-${gap}px -100vw -100vw -100vw)`,
+    })}
+    innerStyle2={moveY}
     {...props}>
     {children}
   </ContentWrapper>

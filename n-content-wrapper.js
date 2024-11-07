@@ -3,7 +3,7 @@ import React, { useContext, useLayoutEffect, useState, useEffect, useCallback, u
 import { useEntryExitFocus } from "./useHooks";
 import { ContextForContent } from "./context";
 
-export default function ContentWrapper({ children, inner = {}, style, style2, innerStyle2, getNextContentInnerTransformVal, ...contentWrapperProps }) {
+export default function ContentWrapper({ children, inner = {}, style, style2, innerStyle2, moveX, ...contentWrapperProps }) {
   const {
     openedMenuIdx,
     overMenuPanel,
@@ -70,7 +70,7 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
     /** 是否为收起菜单操作 */
     const isCollapse = openedMenuIdx < 0 && prevMenuIdxRef.current > -1;
     const collapseOrTEnded = (transitionBeforeStart || isCollapse);
-    const nextContentInnerTransformVal = getNextContentInnerTransformVal(collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap);
+    const xTransform = moveX(collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap);
 
     const { style: innerStyle, ...otherInnerProps } = inner;
     const width = !dynamicWidth ?
@@ -79,12 +79,17 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
         (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
         (panelsWidthRef.current[openedMenuIdx] || 0);
 
-    const _style2 = typeof style2 === "function" ? style2(collapseOrTEnded) : style2;
+    const _innerStyle2 = typeof innerStyle2 === "function" ? innerStyle2(collapseOrTEnded, gap) : innerStyle2;
+    const _style2 = typeof style2 === "function" ? style2(gap) : style2;
 
     return <div
       style={{
         ...style,
         ..._style2,
+        width,
+        height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
+        transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
+        transform: xTransform,
       }}
       onTransitionEnd={transitionEnd}
       {...contentWrapperProps}>
@@ -94,11 +99,9 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
         onMouseLeave={leaveMenuPanel}
         style={{
           ...innerStyle,
-          ...innerStyle2,
-          width,
-          height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
-          transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
-          transform: nextContentInnerTransformVal,
+          ..._innerStyle2,
+          width: "100%",
+          height: "100%",
           overflow: "hidden",
         }}
         {...otherInnerProps}>
