@@ -3,7 +3,7 @@ import React, { useContext, useLayoutEffect, useState, useEffect, useCallback, u
 import { useEntryExitFocus } from "../../hooks";
 import { ContextForContent } from "../../context";
 
-export default function ContentWrapper({ children, inner = {}, style, style2, innerStyle2, moveX, ...contentWrapperProps }) {
+export default function ContentWrapper({ children, outer = {}, style, style2, innerStyle2, moveX, ...wrapperInnerProps }) {
   const {
     openedMenuIdx,
     overMenuPanel,
@@ -72,7 +72,7 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
     const collapseOrTEnded = (transitionBeforeStart || isCollapse);
     const xTransform = moveX(collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap);
 
-    const { style: innerStyle, ...otherInnerProps } = inner;
+    const { style: outerStyle, ...otherOuterProps } = outer;
     const width = !dynamicWidth ?
       "100%" :
       openedMenuIdx === -1 ?
@@ -91,10 +91,10 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
         height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
         transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
         transform: xTransform,
-        ...style,
+        ...outerStyle,
       }}
       onTransitionEnd={transitionEnd}
-      {...contentWrapperProps}>
+      {...otherOuterProps}>
       <div
         ref={contentWrapperRef}
         onMouseOver={overMenuPanel}
@@ -104,9 +104,9 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
           width: "100%",
           height: "100%",
           overflow: "hidden",
-          ...innerStyle,
+          ...style,
         }}
-        {...otherInnerProps}>
+        {...wrapperInnerProps}>
         {children({ transitionBeforeStart, transRunning })}
       </div>
     </div>;

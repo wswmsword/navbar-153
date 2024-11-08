@@ -2,7 +2,7 @@ import React from "react";
 import MotionContentWrapper from "./wrapper/slide-motion";
 import CustomMotionItems from "../items/custom-motion";
 
-export default function CustomXMotionContent({ children, trans, xTrans, ...contentWrapperProps }) {
+export default function CustomXMotionContent({ children, trans, xTrans, yTrans, ...contentWrapperProps }) {
 
   return <MotionContentWrapper {...contentWrapperProps}>
     {({ transRunning }) =>

@@ -3,7 +3,7 @@ import React, { Children, cloneElement, useContext, useLayoutEffect, useState } 
 import { useEntryExitFocus } from "../hooks";
 import { ContextForContent } from "../context";
 
-export default function ContentReducedMotion({ children, inner = {}, style, ...contentWrapperProps }) {
+export default function ContentReducedMotion({ children, inner = {}, xTrans, yTrans, trans, style, ...contentWrapperProps }) {
   const { leaveMenuPanel, overMenuPanel, gap, contentWrapperRef, openedMenuIdx, dynamicWidth, panelsRef, close, btnsRef, onlyKeyFocus, prevMenuIdxRef, isKeyActive, headFocusItemInContent } = useContext(ContextForContent);
   const { style: innerStyle, ...otherInnerProps } = inner;
   const mapped = Children.map(children, (child, i) => cloneElement(child, { type: "C", orderI: i }));
