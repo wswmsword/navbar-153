@@ -1,5 +1,5 @@
 import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useRef } from "react";
-import { ContextForContent } from "./context";
+import { ContextForContent } from "../context";
 
 /** 自定义 X 轴切换动画的 Items */
 export default function CustomMotionItems({ children, trans, transRunning }) {

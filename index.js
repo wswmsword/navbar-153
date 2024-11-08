@@ -1,9 +1,9 @@
 
-export { default as NavBar } from "./n";
-export { default as Content } from "./n-motion-content";
-export { default as Item } from "./n-item";
-export { default as Trigger } from "./n-trigger";
-export { default as CustomXMotionContent } from "./n-custom-x-motion-content";
-export { default as CustomYMotionContent } from "./n-custom-y-motion-content";
-export { default as CustomMotionContent } from "./n-custom-motion-content";
-export { default as ReducedMotionContent } from "./n-reduced-motion-content";
+export { default as NavBar } from "./src/nb";
+export { default as Content } from "./src/content/slide-motion";
+export { default as Item } from "./src/item";
+export { default as Trigger } from "./src/trigger";
+export { default as CustomXMotionContent } from "./src/content/custom-x-motion";
+export { default as CustomYMotionContent } from "./src/content/custom-y-motion";
+export { default as CustomMotionContent } from "./src/content/custom-motion";
+export { default as ReducedMotionContent } from "./src/content/reduced-motion";

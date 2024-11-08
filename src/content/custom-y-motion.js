@@ -1,6 +1,6 @@
 import React from "react";
-import Items from "./n-items";
-import CustomMotionContentWrapper from "./n-custom-motion-content-wrapper";
+import Items from "../items/slide-motion";
+import CustomMotionContentWrapper from "./wrapper/custom-motion";
 
 export default function CustomYMotionContent({ children, yTrans, trans, ...contentWrapperProps }) {
 

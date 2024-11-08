@@ -1,6 +1,6 @@
 import React from "react";
-import ContentWrapper from "./n-content-wrapper";
-import { getSlateWrapperTranslateVal } from "./utils";
+import ContentWrapper from "./base";
+import { getSlateWrapperTranslateVal } from "../../utils";
 
 export default function MotionContentWrapper({ children, ...props }) {
 

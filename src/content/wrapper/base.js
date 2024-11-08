@@ -1,7 +1,7 @@
 import React, { useContext, useLayoutEffect, useState, useEffect, useCallback, useRef } from "react";
 
-import { useEntryExitFocus } from "./useHooks";
-import { ContextForContent } from "./context";
+import { useEntryExitFocus } from "../../hooks";
+import { ContextForContent } from "../../context";
 
 export default function ContentWrapper({ children, inner = {}, style, style2, innerStyle2, moveX, ...contentWrapperProps }) {
   const {

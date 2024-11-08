@@ -1,5 +1,5 @@
 import React, { Children, cloneElement, useLayoutEffect, useContext, useRef } from "react";
-import { ContextForContent } from "./context";
+import { ContextForContent } from "../context";
 
 /** 默认 X 轴切换动画的 Items */
 export default function Items({ children, transitionBeforeStart }) {
