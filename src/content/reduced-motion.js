@@ -32,17 +32,19 @@ export default function ContentReducedMotion({ children, inner = {}, style, ...c
   return <div
     ref={contentWrapperRef}
     style={{
-      ...style,
+      position: "absolute",
+      left: 0,
+      width: dynamicWidth ? width : "100%",
       visibility: dynamicWidth ? width === 0 ? 'hidden' : 'visible' : null,
       transform: close ? `translate(${offsetL}px,${gap}px)` : `translateY(${gap}px)`,
-      width: dynamicWidth ? width : null }}
+      ...style }}
     {...contentWrapperProps}>
     <div
       onMouseOver={overMenuPanel}
       onMouseLeave={leaveMenuPanel}
       style={{
-        ...innerStyle,
-        width: dynamicWidth ? width : null }}
+        width: dynamicWidth ? width : null,
+        ...innerStyle }}
       {...otherInnerProps}>
       {mapped[openedMenuIdx]}
     </div>

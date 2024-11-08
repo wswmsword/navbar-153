@@ -74,7 +74,7 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
 
     const { style: innerStyle, ...otherInnerProps } = inner;
     const width = !dynamicWidth ?
-      null :
+      "100%" :
       openedMenuIdx === -1 ?
         (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
         (panelsWidthRef.current[openedMenuIdx] || 0);
@@ -84,12 +84,14 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
 
     return <div
       style={{
-        ...style,
         ..._style2,
+        position: "absolute",
+        left: 0,
         width,
         height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
         transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
         transform: xTransform,
+        ...style,
       }}
       onTransitionEnd={transitionEnd}
       {...contentWrapperProps}>
@@ -98,11 +100,11 @@ export default function ContentWrapper({ children, inner = {}, style, style2, in
         onMouseOver={overMenuPanel}
         onMouseLeave={leaveMenuPanel}
         style={{
-          ...innerStyle,
           ..._innerStyle2,
           width: "100%",
           height: "100%",
           overflow: "hidden",
+          ...innerStyle,
         }}
         {...otherInnerProps}>
         {children({ transitionBeforeStart, transRunning })}
