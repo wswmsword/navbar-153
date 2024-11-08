@@ -30,6 +30,8 @@ export default function Items({ children, transitionBeforeStart }) {
     return {
       transform: genDefaultTransform(),
       transition: transitionBeforeStart ? null : `transform ${dur}s`,
+      flexShrink: 0,
+      width: "100%",
     };
   }
 
