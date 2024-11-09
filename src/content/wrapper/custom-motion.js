@@ -2,7 +2,10 @@ import React from "react";
 import ContentWrapper from "./base";
 import { getSlateWrapperTranslateVal } from "../../utils";
 
-export default function CustomMotionContentWrapper({ children, trans = [], ...props }) {
+export default function CustomMotionContentWrapper({ children, trans = {}, className = "", ...props }) {
+
+  const { className: cnByTrans = "", transition, ...otherTrans } = trans;
+  const _className = className.concat(" ", transition == null ? cnByTrans : "");
 
   const moveX = (collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap) => {
 
@@ -19,7 +22,7 @@ export default function CustomMotionContentWrapper({ children, trans = [], ...pr
   }
 
   function moveY(collapseOrTEnded) {
-    const [start, end] = Object.keys(trans).reduce((acc, cur) => [{
+    const [start, end] = Object.keys(otherTrans).reduce((acc, cur) => [{
       ...acc[0],
       [cur]: trans[cur][0]
     }, {
@@ -29,6 +32,7 @@ export default function CustomMotionContentWrapper({ children, trans = [], ...pr
     const style = collapseOrTEnded ? start : end;
     return {
       ...style,
+      transition,
       display: "flex",
       alignItems: "flex-start",
     };
@@ -37,6 +41,7 @@ export default function CustomMotionContentWrapper({ children, trans = [], ...pr
   return <ContentWrapper
     moveX={moveX}
     innerStyle2={moveY}
+    className={_className}
     {...props}>
     {children}
   </ContentWrapper>
