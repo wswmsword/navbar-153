@@ -79,7 +79,7 @@ export default function ContentWrapper({ children, outer = {}, style, style2, in
         (panelsWidthRef.current[prevMenuIdxRef.current] || 0) :
         (panelsWidthRef.current[openedMenuIdx] || 0);
 
-    const _innerStyle2 = typeof innerStyle2 === "function" ? innerStyle2(collapseOrTEnded, gap) : innerStyle2;
+    const _innerStyle2 = typeof innerStyle2 === "function" ? innerStyle2(collapseOrTEnded, gap, dur) : innerStyle2;
     const _style2 = typeof style2 === "function" ? style2(gap) : style2;
 
     return <div

@@ -5,7 +5,7 @@ import { getSlateWrapperTranslateVal } from "../../utils";
 export default function CustomMotionContentWrapper({ children, trans = {}, className = "", ...props }) {
 
   const { className: cnByTrans = "", transition, ...otherTrans } = trans;
-  const _className = className.concat(" ", transition == null ? cnByTrans : "");
+  const _className = className.concat(" ", cnByTrans);
 
   const moveX = (collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap) => {
 
@@ -21,18 +21,34 @@ export default function CustomMotionContentWrapper({ children, trans = {}, class
     return `translateY(${gap}px`;
   }
 
-  function moveY(collapseOrTEnded) {
-    const [start, end] = Object.keys(otherTrans).reduce((acc, cur) => [{
-      ...acc[0],
-      [cur]: trans[cur][0]
-    }, {
-      ...acc[1],
-      [cur]: trans[cur][1]
-    }], [{}, {}]);
+  function moveY(collapseOrTEnded, _, dur) {
+    const [start, end, stringProps] = Object.keys(otherTrans).reduce((acc, cur) => {
+      if (typeof trans[cur] === "string") {
+        return [acc[0], acc[1], {
+          ...acc[2],
+          [cur]: otherTrans[cur],
+        }]
+      }
+      return [{
+        ...acc[0],
+        [cur]: trans[cur][0]
+      }, {
+        ...acc[1],
+        [cur]: trans[cur][1]
+      }, acc[2]];
+    }, [{}, {}, {}]);
     const style = collapseOrTEnded ? start : end;
+    const hasTransition = transition !== false;
     return {
       ...style,
-      transition,
+      ...stringProps,
+      transition: hasTransition ? (() => {
+        if (transition == null) {
+          const tProps = Object.keys(otherTrans || {}).filter(p => Array.isArray(otherTrans[p]));
+          return tProps.map(p => `${p} ${dur}s`).join();
+        }
+        return transition;
+      })() : null,
       display: "flex",
       alignItems: "flex-start",
     };

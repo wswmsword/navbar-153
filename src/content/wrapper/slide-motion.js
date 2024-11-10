@@ -13,11 +13,12 @@ export default function MotionContentWrapper({ children, ...props }) {
     return `translateY(${gap}px)`;
   }
 
-  function moveY(collapseOrTEnded, gap) {
+  function moveY(collapseOrTEnded, gap, dur) {
     return {
       display: "flex",
       alignItems: "flex-start",
       transform: collapseOrTEnded ? `translateY(calc(-100% - ${gap}px))` : `translateY(0)`,
+      transition: `transform ${dur}s`,
     }
   }
 

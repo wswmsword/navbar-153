@@ -30,22 +30,20 @@ export default function CustomMotionItems({ children, trans, transRunning }) {
   function genItemStyle(orderI) {
     let transStyles = {};
     const openedMenu = openedMenuIdx === orderI;
-    for (const p in trans) {
+    const { transition, ...otherTrans } = trans;
+    const hasTransition = transition !== false;
+    if (hasTransition) transStyles.transition = genCustomTransition(transition, orderI, Object.keys(otherTrans || {}).filter(p => Array.isArray(otherTrans[p])));
+    for (const p in otherTrans) {
       const v = trans[p];
-      const transitionProp = p === "transition";
-      if (transitionProp) transStyles.transition = genCustomTransition(v, orderI);
-      else {
-        const arrayV = [].concat(v);
-        if (arrayV.length > 3 || arrayV.length < 1) throw("Transition steps length can only be 2 or 3.");
-        transStyles = {
-          ...transStyles,
-          [p]: arrayV.length === 2 ? genCustom2State(...arrayV, orderI) : genCustom3State(...arrayV, orderI),
-        }
+      const aryV = [].concat(v);
+      const legalAryV = [aryV[0], aryV[1], aryV[2]].filter(n => n != null);
+      transStyles = {
+        ...transStyles,
+        [p]: legalAryV[2] ? genCustom3State(...legalAryV, orderI) : legalAryV[1] ? genCustom2State(...legalAryV, orderI) : legalAryV[0],
       }
     }
     transStyles.position = "absolute";
     transStyles.zIndex = openedMenu ? 1 : null;
-    if (transStyles.transition == null) transStyles.transition = genCustomTransition(null, orderI);
     if (openedMenu && startCustomTransRef.current) startCustomTransRef.current = false;
     return transStyles;
   }
@@ -83,9 +81,8 @@ export default function CustomMotionItems({ children, trans, transRunning }) {
     return isBackward ? backward : forward;
   }
 
-  function genCustomTransition(v, orderI) {
-    const defaultV = `all ${dur}s`;
-    const finalV = v || defaultV;
+  function genCustomTransition(v, orderI, transProps) {
+    const finalV = v || transProps.map(p => `${p} ${dur}s`).join();
     const isLeaveI = prevMenuIdxRef.current === orderI;
     if (isLeaveI) return finalV;
     const openedMenu = openedMenuIdx === orderI;
