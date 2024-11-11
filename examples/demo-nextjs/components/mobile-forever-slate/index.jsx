@@ -3,7 +3,7 @@ import styles from "./index.module.css";
 
 export default function MobileForeverSlate({ propsFromN, head, tail, dynamicWidth, t }) {
   const contentItemStyle = {
-    width: dynamicWidth ? 280 : "100%",
+    width: dynamicWidth ? 320 : "100%",
     flexShrink: 0,
   };
   return <div

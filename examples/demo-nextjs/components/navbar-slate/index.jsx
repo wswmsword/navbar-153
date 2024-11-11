@@ -3,7 +3,7 @@ import styles from "./index.module.css";
 
 export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth, t }) {
   const contentItemStyle = {
-    width: dynamicWidth ? 300 : "100%",
+    width: dynamicWidth ? 400 : "100%",
     flexShrink: 0,
   };
   return <div

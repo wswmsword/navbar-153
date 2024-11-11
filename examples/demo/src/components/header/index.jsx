@@ -1,35 +1,39 @@
 import styles from "./index.module.css";
-import { NavBar, Trigger, Item, CustomMotionContent, ReducedMotionContent } from "navbar-153";
+import { NavBar, Trigger, Item, Content, ReducedMotionContent } from "hanav";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate";
 import CenterBox from "../center-box";
 import { useState } from "react";
+import { ContextF } from "../../main";
+import { useContext, useMemo, memo } from "react";
 
-export default function Header() {
-
+export default memo(function Header() {
+  const setG = useContext(ContextF);
   const [motion, setMotion] = useState(true);
   const [dynamicWidth, setD] = useState(false);
   const [close, setClose] = useState(false);
   const [onlyKeyFocus, setOnly] = useState(true);
 
-  const FinalC = motion ? CustomMotionContent : ReducedMotionContent;
-  const xTrans = motion ? {
+  const FinalC = motion ? Content : ReducedMotionContent;
+  const xTrans = useMemo(() => motion ? {
     xTrans: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
-  } : null;
+  } : null, [motion]);
+
+  const hoverA = () => setG(true);
+  const leaveA = () => setG(false);
 
   return <>
     <div className={styles.header}> 
       <NavBar className={styles.nav} gap="16" onlyKeyFocus={onlyKeyFocus} dur={.4} motion={motion} dynamicWidth={dynamicWidth} close={close}>
         <Trigger className={styles.triggerWrapper}>
-          <a href="https://github.com/wswmsword/navbar-153" className={styles.navLink}>Repo</a>
-          <Item><button className={styles.navBtn}>Navbar-153</button></Item>
+          <a href="https://github.com/wswmsword/hanav" className={styles.navLink} onMouseEnter={hoverA} onMouseLeave={leaveA} onFocus={hoverA} onBlur={leaveA}>Repo</a>
+          <Item><button className={styles.navBtn}>HANAV</button></Item>
           <Item><button className={styles.navBtn}>Postcss-Mobile-Forever</button></Item>
           <Item><button className={styles.navBtn}>Focus-Fly</button></Item>
         </Trigger>
         <FinalC
-          className={`${styles.panelsWrapper} ${styles.customYWrapper}`}
-          inner={{ className: styles.panelsWrapperInner }}
+          className={`${styles.panelsWrapperInner} ${styles.customYWrapper}`}
           yTrans={{
             opacity: [0, 1],
             transform: ["rotateX(-30deg) scale(.9)", "rotateX(0deg) scale(1)"],
@@ -49,4 +53,4 @@ export default function Header() {
       <label className={styles.formItem}><input type="checkbox" checked={onlyKeyFocus} onChange={() => setOnly(v => !v)} /> onlyKeyFocus</label>
     </CenterBox>
   </>;
-}
+});

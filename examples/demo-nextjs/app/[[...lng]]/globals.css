@@ -53,3 +53,9 @@ label {
 .lang_switch:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 520px) {
+  .lang_switch {
+    display: none;
+  }
+}

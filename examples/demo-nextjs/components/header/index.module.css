@@ -39,11 +39,13 @@
   border-radius: 6px;
   font-size: 14px;
   line-height: 30px;
-  padding: 4px 9px;
+  padding: 4px 7px;
 }
 
 .navLink {
   text-decoration: none;
+  margin-right: 8px;
+  padding: 4px 26px;
 }
 
 .navBtn:hover, .navLink:hover, .navBtn:focus, .navLink:focus {
@@ -53,12 +55,6 @@
 
 .navBtn:active, .navLink:active {
   background-color: rgba(0, 0, 0, 0.121);
-}
-
-.panelsWrapper {
-  position: absolute;
-  width: 100%;
-  left: 0;
 }
 
 .panelsWrapperInner {
@@ -102,7 +98,7 @@
   border: 1px solid #383838;
   border-radius: 7px;
   box-shadow: 0 2px 5px #220b0410;
-  width: 400px;
+  width: 300px;
   padding: 12px;
   left: 0;
   bottom: -80px;
@@ -128,13 +124,33 @@
   transform: rotateX(0deg) scale(1);
 }
 
+.lang_switch {
+  display: none;
+}
+
 @media (max-width: 520px) {
+  .lang_switch {
+    display: block;
+    color: #406391;
+    text-decoration: none;
+  }
+  
+  .lang_switch:hover {
+    text-decoration: underline;
+  }
+  .header {
+    width: 100%;
+    position: fixed;
+    display: block;
+    margin: 0 0 26px 0;
+  }
   .placeholder {
-    height: 110px;
+    height: 70px;
   }
   .tooltip {
-    width: calc(100vw - 108px);
+    width: calc(100vw - 196px);
     bottom: -86px;
+    left: -76px;
   }
   .onlyDesktop {
     display: none;
@@ -142,10 +158,21 @@
   .triggerWrapper {
     gap: 0;
     box-shadow: 0 1px 2px -1px #00144381 ,inset 0 20px 0 hsla(0 ,0% ,100% ,.23);
-    border-radius: 5px;
+    border-radius: 0 0 5px 5px;
+    padding: 4px 12px;
+  }
+
+  .panelsWrapperInner {
+    border: none;
+    border-bottom: 1px solid #383838;
+    border-radius: 0;
   }
   .navBtn, .navLink {
-    padding: 0px 7px;
-    font-size: 15px;
+    padding: 3px 7px;
+    font-size: 14px;
+    flex-grow: 1;
+  }
+  .navLink {
+    margin-right: 32px;
   }
 }

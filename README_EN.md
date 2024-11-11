@@ -1,10 +1,10 @@
-# navbar-153
+# hanav
 
 <a href="https://996.icu"><img src="https://img.shields.io/badge/link-996.icu-red.svg" alt="996.icu" align="right"></a>
 
 English | [中文](./README.md)
 
-navbar-153 is a React navigation menu component that includes a set of triggers and a corresponding set of menu panels. Users can expand, switch, and collapse the menu panels through the triggers. The navigation menu typically appears at the top of a website, providing the most desired links and other controls for users.
+hanav is a React navigation menu component that includes a set of triggers and a corresponding set of menu panels. Users can expand, switch, and collapse the menu panels through the triggers. The navigation menu typically appears at the top of a website, providing the most desired links and other controls for users.
 
 Features include:
 
@@ -13,7 +13,7 @@ Features include:
 - ♿️ Assistive devices navigation.
 - 🎨 Highly customizable.
 
-You can open [the demo link](https://wswmsword.github.io/examples/navbar-153/en) to see how it works.
+You can open [the demo link](https://wswmsword.github.io/examples/hanav/en) to see how it works.
 
 <details>
 <summary>In Chrome, you can enable the 'Show a quick highlight on the focused object' accessibility feature to visually track the focus movement of components.</summary>
@@ -29,56 +29,51 @@ You can enter `chrome://settings/accessibility` in the address bar or go to 'Set
 With npm：
 
 ```bash
-npm install navbar-153
+npm install hanav
 ```
 
 Below is the general layout of using components after installation. For a complete example, you can open [the `dark-space` folder in the repository](./examples/dark-space) (Next.js project) to view.
 
 ```javascript
-import N from "navbar-153";
-const { Trigger, Item, Content } = N;
+import { NavBar, Trigger, Item, Content } from "hanav";
 function MyNavBar() {
-  const contentItemStyle = props => ({ ...props.style, width: "100%", flexShrink: 0 });
-  return (
-    <N style={{ position: "relative" }}>
-      <Trigger style={{ display: "flex", gap: 8 }}>
-        <Item><a href="https://github.com/wswmsword/navbar-153">Repo</a></Item>
-        <Item>{props => <button {...props}>Trigger 1</button>}</Item>
-        <Item>{props => <button {...props}>Trigger 2</button>}</Item>
-        <Item>{props => <button {...props}>Trigger 3</button>}</Item>
-      </Trigger>
-      <Content className="panelsWrapper">
-        <Item>{props => <div {...props} style={contentItemStyle(props)}>Content 1</div>}</Item>
-        <Item>
-          {(props, head, tail) => <div {...props} style={contentItemStyle(props)}>
-            <a href="https://react.dev/?uwu" ref={head}>React</a>
-            vs
-            <a href="https://vuejs.org/?uwu" ref={tail}>Vue</a>
-          </div>}
-        </Item>
-        <Item>{props => <div {...props} style={contentItemStyle(props)}>Content 3</div>}</Item>
-      </Content>
-    </N>
-  );
+  return <NavBar style={{ position: "relative" }}>
+    <Trigger style={{ display: "flex", gap: 8 }}>
+      <a href="https://github.com/wswmsword/hanav">Repo</a>
+      <Item><button>Trigger 1</button></Item>
+      <Item><button>Trigger 2</button></Item>
+      <Item><button>Trigger 3</button></Item>
+    </Trigger>
+    <Content className="panelsWrapper">
+      <Item>{props => <div {...props}>Content 1</div>}</Item>
+      <Item>
+        {(props, head, tail) => <div {...props}>
+          <a href="https://react.dev/?uwu" ref={head}>React</a>
+          vs
+          <a href="https://vuejs.org/?uwu" ref={tail}>Vue</a>
+        </div>}
+      </Item>
+      <Item>{props => <div {...props}>Content 3</div>}</Item>
+    </Content>
+  </NavBar>;
 }
 export default MyNavBar;
 ```
 
 ## API
 
-The navigation menu component is composed of several components: `<N>`、`<Trigger>`、`<Content>` and `<Item>`.
+The NavBar component is primarily composed of four parts: `<NavBar>`, `<Trigger>`, `<Content>`, and `<Item>`. Additionally, `<Content>` includes some variants to accommodate requirements for **closing** or **customizing** transition animations.
 
-### N (Root)
+### NavBar
 
-The outermost component of the navigation menu component is imported by default when used, for example:
+The outermost component of the NavBar, imported with a named import, for example:
 
 ```javascript
-import N from "navbar-153";
+import { NavBar } from "hanav";
 ```
 
-`<N>` will be rendered as `<nav>` as the outermost layer of the navigation menu component. `<N>` accepts props for HTML elements and the following additional options:
+`<NavBar>` is rendered as a `<nav>` element, serving as the outermost layer of the NavBar component. `<NavBar>` accepts any props applicable to HTML elements, along with the following additional options:
 
-- `motion`, boolean, whether to reduce motion
 - `dur`, number, define the duration of the transition animation (s)
 - `gap`, number, Set the distance between the panel and the trigger (px)
 - `dynamicWidth`, boolean, allow the panel width to vary
@@ -90,42 +85,45 @@ import N from "navbar-153";
 Import the `<Trigger>` component like this:
 
 ```javascript
-import N from "navbar-153";
-const { Trigger, Content, Item } = N;
+import { Trigger } from "hanav";
 ```
 
 `<Trigger>` is rendered as a `<div>` within `<nav>` as a child element. `<Trigger>` accepts any built-in props. Inside `<Trigger>` component is a set of triggers, so you can pass className or style to define the layout of the trigger.
 
 ### Content
 
-`<Content>` is imported in the same way as `<Trigger>`. Inside `<Content>`, there is a set of content panels, each corresponding sequentially to the triggers inside `<Trigger>`. Both `<Content>` and `<Trigger>` should be at the same level. The `<Content>` component will be rendered as two layers of `<div>`, accepting any built-in props that will ultimately take effect on the outer `<div>`. You can pass `className` or `style` to `<Content>` to set styles like shadows for the panels.
-
-- `inner`: The objects within `inner` will be passed as props to the inner `<div>` rendered by `<Content>`.
-- `customTransProps`: Custom transition animations for panel switching. Pass an object where the keys are CSS properties, and the values are arrays of length 2 or 3. An array of length 2 indicates the animation has **start** and **end** states, while an array of length 3 indicates the animation has **before enter**, **normal**, and **after exit** states. In addition to these two array types, a special `transition` property is accepted, which is a string used to set the transition duration for the switch animation. If not set, a default value will be applied (`transition: all ${dur}s`).
-
-For example, setting a custom transition animation for fading in and out:
-
-```json
-{
-  "opacity": [0, 1],
-  "transform": ["translate(0)", "translateX(-280px)", "translateX(280px)"],
-  "transition": "opacity .4s, transform .4s"
-}
+```javascript
+import { Content } from "hanav";
 ```
+
+The `<Content>` component contains a set of content panels, each sequentially corresponding to a trigger within the `<Trigger>` component. `<Content>` and `<Trigger>` must be sibling elements. `<Content>` is rendered as two nested `<div>` elements: the inner `<div>` is used for vertical axis animations, while the outer `<div>` handles horizontal axis animations for *the entire panel*.
+
+`<Content>` accepts any built-in props, which are applied to the **inner** `<div>`. Props for the outer `<div>` can be passed using the `outer` attribute. The inner `<div>` is responsible for styling the entire panel, while the outer `<div>` is primarily used for hanav's internal control of horizontal panel animations.
+
+- `outer`, An object containing props that will be passed to the outer `<div>` rendered by `<Content>`.
 
 ### Item
 
-`<Item>` is imported in the same way as `<Trigger>`. `<Item>` must be a direct child element of `<Trigger>` or `<Content>`. In `<Trigger>`, `<Item>` serves as a trigger, while in `<Content>`, `<Item>` serves as a content panel. `<Item>` does not accept any parameters.
+```javascript
+import { Item } from "hanav";
+```
 
-When `<Item>` is used within `<Trigger>`, its children can either be a trigger or a regular element, with each trigger corresponding to a content panel. If the children are a component or a specific element like `<a>`, `<Item>` is treated as a regular element. If the children are render props, `<Item>` is treated as a trigger, as shown below:
+`<Item>` must be a direct child of either `<Trigger>` or `<Content>`. Within `<Trigger>`, `<Item>` acts as a trigger, and within `<Content>`, it serves as a content panel. `<Item>` does not accept any parameters.
+
+Triggers and content panels are paired, so the number of `<Item>` components within `<Trigger>` and `<Content>` should be equal.
+
+The content of `<Item>` within `<Trigger>` can be a component or element, or a render prop:
 
 ```javascript
+// component/element
+<Item><button>Trigger 1</button></Item>
+// render prop
 <Item>{props => <button {...props}>Trigger 1</button>}</Item>
 ```
 
-The props in the example above must be passed to the trigger element, which includes necessary information such as events, ARIA labels, and others.
+Using a render prop approach may be more helpful for understanding the code, but it is not as concise as directly passing in a component. The render prop provides essential information, including events and ARIA labels.
 
-When `<Item>` is used within `<Content>`, its children is a content panel, and the children must be render props, as shown below:
+When `<Item>` is used within `<Content>`, its children form a content panel. The child element must be a render prop, structured like this:
 
 ```javascript
 <Item>
@@ -137,7 +135,54 @@ When `<Item>` is used within `<Content>`, its children is a content panel, and t
 </Item>
 ```
 
-The props in the example above must be passed to the content panel element, which also includes necessary information such as events, ARIA labels, etc. The render props' input parameters also provide a second parameter `head` and a third parameter `tail`. If the content panel contains focusable elements, `head` must be passed as a `ref` to the first focusable element, and `tail` as a `ref` to the last focusable element. These two `refs` facilitate keyboard <kbd>Tab</kbd> navigation. If the content panel only displays content without focusable elements, these two parameters can be ignored.
+The props from the example above must be passed to the content panel element. These props also include essential information like events and ARIA labels. The render prop’s parameters additionally provide a second argument, `head`, and a third argument, `tail`. If the content panel contains focusable elements, `head` must be passed as a `ref` to the first focusable element, and `tail` must be passed as a `ref` to the last focusable element. These `refs` facilitate keyboard <kbd>Tab</kbd> navigation. If the content panel only displays content without any focusable elements, these two parameters can be ignored.
+
+## Close animations and custom x/y-axis animations
+
+The close animation is important. When a user has enabled the "Reduce motion" setting in their operating system, the browser can detect this option. Based on this setting, website providers can display a version of hanav without animations:
+
+```javascript
+import { ReducedMotionContent } from "hanav";
+```
+
+The usage of `<ReducedMotionContent>` is the same as `<Content>`.
+
+The default animation effect for hanav's x/y axis is sliding, but developers can customize the x/y axis animations based on their specific use case.
+
+Customizing the x-axis animation:
+
+```javascript
+import { CustomXMotionContent } from "hanav";
+```
+
+Customizing the y-axis animation:
+
+```javascript
+import { CustomYMotionContent } from "hanav";
+```
+
+Customizing the x-axis and y-axis animations:
+
+```javascript
+import { CustomMotionContent } from "hanav";
+```
+
+The custom motion effect component accepts a few additional properties compared to `<Content>`, namely `xTrans`, `yTrans`, and `trans`. `<CustomMotionContent>` uses `xTrans` and `yTrans` to customize x/y axis animations, while `trans` can be used in `<CustomXMotionContent>` and `<CustomYMotionContent>` to customize animations.
+
+- `xTrans`: Customizes the x-axis transition animation when switching panels. Pass an object where the keys are CSS properties and the values are either a string or an array with 2 or 3 elements. A 2-element array represents the **start** and **end** states of the animation, while a 3-element array represents **before entering**, **normal**, and **after exiting** states. In addition to these array types, it also accepts a special `transition` property for setting the transition duration of the animation. The value can be `false` or a string. If not set, the default value will be applied, and if set to `false`, the default value will be ignored.
+  
+- `yTrans`: Customizes the y-axis transition animation for collapsing and expanding the entire panel. Pass an object where the keys are CSS properties and the values are a string or a 2-element array. The array values represent the **start** and **end** states of the animation. Similar to `xTrans`, `yTrans` also accepts the special `transition` property to set the transition duration, which can also be set to `false` or a string.
+  
+- `trans`: When used in `<CustomXMotionContent>`, it works the same way as `xTrans`, and when used in `<CustomYMotionContent>`, it works the same as `yTrans`.
+
+Here is an example of setting a custom x-axis transition animation using `xTrans` for a fading enter and exit animation:
+
+```json
+{
+  "opacity": [0, 1],
+  "transform": ["translate(0)", "translateX(-280px)", "translateX(280px)"]
+}
+```
 
 ## Keyboard Interactions
 
@@ -167,7 +212,7 @@ npm i
 npm run dev
 ```
 
-Here, I will show you the goals of this project, focusing on end-users, developers, and source code maintenance. Ultimately, we hope you can also contribute to improving this project:
+The following list outlines the broad directions of this project, focusing on three main aspects: end users, developers, and source code maintenance.
 
 - Accessibility
   - Proper ARIA labels, validated by Android TalkBack and iOS/MacOS VoiceOver
@@ -217,3 +262,5 @@ Feel free to issue, PR, and star the project. You can also contribute financiall
 </table>
 
 </details>
+
+<div align="right">🌷🪻🌹🌻🌷</div>

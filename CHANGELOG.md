@@ -7,6 +7,26 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2024-11-11
+
+### Changed
+
+- 重命名库名 navbar-153 为 hanav。
+
+### Added
+
+- 添加 x/y 轴自定义动画组件；
+- 分离关闭过渡动画组件为单独组件；
+- 添加 `<Content>` 系列组件的 `outer` 属性，移除 `inner` 属性；
+- 默认动画组件内置必须的行内样式；
+- 允许向 `<Trigger>` 下的 `<Item>` children 传入组件而不是 render prop。
+
+### Removed
+
+- 移除 `<Content>` 的 `inner` 属性；
+- 移除 `motion` 属性，单独分离为 `<ReducedMotionContent>` 组件；
+- 移除 `customTransProps`，使用 `trans`、`xTrans`、`yTrans` 替代。
+
 ## [1.3.1] - 2024-09-29
 
 ### Fixed

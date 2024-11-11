@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "navbar-153",
+  "name": "hanav",
   "version": "1.3.1",
   "description": "A React navigation menu component. Super Smooth! Super Fast! Super Accessible!",
   "main": "./dist/cjs/index.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wswmsword/navbar-s.git"
+    "url": "git+https://github.com/wswmsword/hanav.git"
   },
   "keywords": [
     "navigation-menu",
@@ -23,9 +23,9 @@
   "author": "wswmsword",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wswmsword/navbar-153/issues"
+    "url": "https://github.com/wswmsword/hanav/issues"
   },
-  "homepage": "https://wswmsword.github.io/examples/navbar-153/",
+  "homepage": "https://wswmsword.github.io/examples/hanav/",
   "devDependencies": {
     "@babel/core": "^7.24.5",
     "@babel/preset-env": "^7.24.5",

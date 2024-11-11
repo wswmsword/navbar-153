@@ -54,19 +54,12 @@
   background-color: rgba(0, 0, 0, 0.121);
 }
 
-.panelsWrapper {
-  position: absolute;
-  width: 100%;
-  left: 0;
-}
-
 .customYWrapper {
   transition: opacity .3s, transform .3s;
   transform-origin: top center;
 }
 
 .panelsWrapperInner {
-  color: white;
   background: rgb(32, 32, 32);
   border: 1px solid #383838;
   border-radius: 7px;

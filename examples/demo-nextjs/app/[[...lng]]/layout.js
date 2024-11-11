@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 }
 
 export const metadata = {
-  title: "navbar-153 demo",
+  title: "hanav demo",
   description: "Animated, accessible, customizable navigation menu component.",
 };
 
@@ -27,7 +27,7 @@ export default function RootLayout({ children, params: { lng = [fallbackLng] } }
         {lowerCaseLng === "en" ?
           <Link href="/zh-cn" className="lang_switch" lang="zh-CN">简体中文</Link> :
           <Link href="/en" className="lang_switch" lang="en">English</Link>}
-        <Header lng={lng} />
+        <Header lng={lng} lowerCaseLng={lowerCaseLng} />
         <CenterBox>
           {children}
           <Footer />

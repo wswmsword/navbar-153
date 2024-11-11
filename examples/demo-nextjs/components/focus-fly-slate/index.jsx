@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 
 export default function FocusFlySlate({ propsFromN, head, tail, dynamicWidth, t }) {
   const contentItemStyle = {
-    width: dynamicWidth ? 340 : "100%",
+    width: dynamicWidth ? 480 : "100%",
     flexShrink: 0,
   };
   return <ul
