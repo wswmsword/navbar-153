@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useMemo } from "react";
 import { ContextForItem, ContextForContent, ContextForTrigger } from "./context";
 
-export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, onlyKeyFocus = true, close = false, motion = true, ...navProps }) {
+export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = false, onlyKeyFocus = true, close = false, ...navProps }) {
 
   const [openedMenuIdx, setIdx] = useState(-1); // 当前菜单序号
   /** 上一个菜单序号 */
@@ -93,7 +93,6 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     gap,
     dynamicWidth,
     onlyKeyFocus,
-    motion,
     contentWrapperRef,
     prevMenuIdxRef,
     collapsePrevMenuIdx2Ref,
@@ -101,7 +100,7 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
     btnsRef,
     panelsRef,
     headFocusItemInContent,
-  }), [openedMenuIdx, gap, dur, onlyKeyFocus, close, dynamicWidth, motion]);
+  }), [openedMenuIdx, gap, dur, onlyKeyFocus, close, dynamicWidth]);
 
   const itemContextVal = useMemo(() => ({
     openedMenuIdx,
