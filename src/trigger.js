@@ -11,16 +11,24 @@ export default function Trigger({ children, ...triggerWrapperProps }) {
       else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
     }
   };
-  let relatedIdx = -1;
-  const mapped = Children.map(children, child => {
-    const dn = (child.type || {}).displayName;
-    if (dn === "Item") {
-       ++ relatedIdx;
-       return cloneElement(child, { type: "T", orderI: relatedIdx });
-    }
-    return child;
-  });
+  const mapped = passTypeAndOrderI(children, -1);
   return <div {...triggerWrapperProps} ref={wrapperRef} onKeyDown={focusBackToSlateFromTrigger}>{mapped}</div>;
 }
 
 Trigger.displayName = "Trigger";
+
+/** 递归地为 `<Item>` 设置 `type` 和 `orderI` */
+function passTypeAndOrderI(children, relatedIdx) {
+  return Children.map(children, child => {
+    const dn = (child.type || {}).displayName;
+    if (dn === "Item") {
+      ++ relatedIdx;
+      return cloneElement(child, { type: "T", orderI: relatedIdx });
+    } else if (dn === "Group") {
+      return cloneElement(child, {
+        children: passTypeAndOrderI(child.props.children, relatedIdx),
+      });
+    }
+    return child;
+  });
+}
