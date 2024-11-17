@@ -1,5 +1,6 @@
-import React, { Children, cloneElement, useContext } from "react";
+import React, { useContext } from "react";
 import { ContextForTrigger } from "./context";
+import { passTypeAndOrderI } from "./utils";
 
 export default function Trigger({ children, ...triggerWrapperProps }) {
   const { wrapperRef, openedMenuIdx, headFocusItemInContent, panelsRef } = useContext(ContextForTrigger);
@@ -11,24 +12,8 @@ export default function Trigger({ children, ...triggerWrapperProps }) {
       else panelsRef.current[openedMenuIdx].focus({ preventScroll: true });
     }
   };
-  const mapped = passTypeAndOrderI(children, -1);
+  const mapped = passTypeAndOrderI(children);
   return <div {...triggerWrapperProps} ref={wrapperRef} onKeyDown={focusBackToSlateFromTrigger}>{mapped}</div>;
 }
 
 Trigger.displayName = "Trigger";
-
-/** 递归地为 `<Item>` 设置 `type` 和 `orderI` */
-function passTypeAndOrderI(children, relatedIdx) {
-  return Children.map(children, child => {
-    const dn = (child.type || {}).displayName;
-    if (dn === "Item") {
-      ++ relatedIdx;
-      return cloneElement(child, { type: "T", orderI: relatedIdx });
-    } else if (dn === "Group") {
-      return cloneElement(child, {
-        children: passTypeAndOrderI(child.props.children, relatedIdx),
-      });
-    }
-    return child;
-  });
-}
