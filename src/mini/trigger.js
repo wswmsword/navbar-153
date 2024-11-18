@@ -4,12 +4,11 @@ import { ContextForMiniTrigger } from "./context";
 
 export default function Trigger({ children, ...otherProps }) {
   const mapped = passTypeAndOrderI(children);
-  const { triggersCountRef } = useContext(ContextForMiniTrigger)
-
-  const count = useMemo(() => getItemsCount(children), []);
-  triggersCountRef.current = count;
+  const { openedMenuIdx } = useContext(ContextForMiniTrigger)
 
   const { style, ..._otherProps } = otherProps;
+
+  if (openedMenuIdx > -1) return null;
 
   return <div
     style={{

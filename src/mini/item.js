@@ -12,45 +12,32 @@ export default function Item({ children, type, orderI }) {
 
   if (isTrigger) {
 
-    const { setIdx, btnsRef, triggersCountRef } = context;
-
-    const tailI = triggersCountRef.current - 1;
-    const isTail = tailI === orderI;
-    const isHead = orderI === 0;
+    const { openOrCloseContentById, btnsRef } = context;
 
     const triggerProps = {
       onClick() {
-        if (opened) setIdx(-1);
-        else setIdx(orderI);
+        if (opened) openOrCloseContentById(-1);
+        else openOrCloseContentById(orderI);
       },
       ref: e => btnsRef.current[orderI] = e,
-      onKeyDown: (isTail || isHead) ? trapTab : null,
     };
 
     if (typeof children === "function")
       return children(triggerProps);
     return cloneElement(children, triggerProps);
 
-    /** 循环聚焦头尾 */
-    function trapTab(e) {
-
-      if (e.key === "Tab" || e.keyCode === 9) {
-
-        if (e.shiftKey && isHead) {
-          btnsRef.current[tailI].focus();
-          e.preventDefault();
-        }
-        if (!e.shiftKey && isTail) {
-          btnsRef.current[0].focus();
-          e.preventDefault();
-        }
-      }
-    }
-
-
   } else if (isContent) {
-    if (opened) return children;
-    else return null;
+
+    if (!opened) return null;
+
+    const { headFocusItemInContent, tailFocusItemInContent } = context;
+    const getHead = e => headFocusItemInContent.current[orderI] = e;
+    const getTail = e => tailFocusItemInContent.current[orderI] = e;
+    const contentProps = {};
+
+    if (typeof children === "function")
+      return children(contentProps, getHead, getTail);
+    return cloneElement(children, { head: getHead, tail: getTail, propsFromN: contentProps });
   }
 
   return <>{children}</>;

@@ -3,7 +3,7 @@ import { ContextForMiniToggle } from "./context";
 
 export default function Toggle() {
   
-  const { setE, expanded, setIdx, btnsRef } = useContext(ContextForMiniToggle);
+  const { setE, expanded, openOrCloseContentById, btnsRef } = useContext(ContextForMiniToggle);
   const toggleRef = useRef();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function Toggle() {
   return <button
     onClick={() => {
       setE(!expanded);
-      setIdx(-1);
+      openOrCloseContentById(-1);
     }}
     ref={toggleRef}>
     {expanded ? "Expanded" : "Collapsed"}
