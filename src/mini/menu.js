@@ -5,7 +5,8 @@ export default function Menu({ children, ...otherProps }) {
 
   const [h, setH] = useState(0);
   const { navRef, expanded, setE, btnsRef, openedMenuIdx,
-    tailFocusItemInContent, headFocusItemInContent } = useContext(ContextForMiniMenu);
+    tailFocusItemInContent, headFocusItemInContent,
+    toggleId, menuId } = useContext(ContextForMiniMenu);
   const [supportDvh, setDvh] = useState(false);
   const menuRef = useRef();
 
@@ -19,6 +20,8 @@ export default function Menu({ children, ...otherProps }) {
   if (!expanded) return null;
 
   return <div
+    id={menuId}
+    aria-labelledby={toggleId}
     tabIndex={-1}
     ref={menuRef}
     style={{
@@ -37,30 +40,38 @@ export default function Menu({ children, ...otherProps }) {
     if (e.key === "Escape" || e.keyCode === 27)
       setE(false);
     else if (e.key === "Tab" || e.keyCode === 9) {
+
+      const btnsCount = btnsRef.current.length;
+
       // 焦点矫正
       if (e.shiftKey && e.target === menuRef.current) {
         if (openedMenuIdx < 0) btnsRef.current.slice(-1)[0].focus();
         else tailFocusItemInContent.current[openedMenuIdx].focus();
         e.preventDefault();
       }
+      else if (!e.shiftKey && e.target === menuRef.current) {
+        if (openedMenuIdx > -1) {
+          headFocusItemInContent.current[openedMenuIdx].focus();
+          e.preventDefault();
+        }
+      }
 
       // 内容面板内的首尾聚焦
-      if (e.shiftKey && openedMenuIdx > -1 && e.target === headFocusItemInContent.current[openedMenuIdx]) {
+      else if (e.shiftKey && openedMenuIdx > -1 && e.target === headFocusItemInContent.current[openedMenuIdx]) {
         tailFocusItemInContent.current[openedMenuIdx].focus();
         e.preventDefault();
       }
-      if (!e.shiftKey && openedMenuIdx > -1 && e.target === tailFocusItemInContent.current[openedMenuIdx]) {
+      else if (!e.shiftKey && openedMenuIdx > -1 && e.target === tailFocusItemInContent.current[openedMenuIdx]) {
         headFocusItemInContent.current[openedMenuIdx].focus();
         e.preventDefault();
       }
 
-      const btnsCount = btnsRef.current.length;
       // 触发器的首尾聚焦
-      if (e.shiftKey && openedMenuIdx < 0 && e.target === btnsRef.current[0]) {
+      else if (e.shiftKey && openedMenuIdx < 0 && e.target === btnsRef.current[0]) {
         btnsRef.current[btnsCount - 1].focus();
         e.preventDefault();
       }
-      if (!e.shiftKey && openedMenuIdx < 0 && e.target === btnsRef.current[btnsCount - 1]) {
+      else if (!e.shiftKey && openedMenuIdx < 0 && e.target === btnsRef.current[btnsCount - 1]) {
         btnsRef.current[0].focus();
         e.preventDefault();
       }

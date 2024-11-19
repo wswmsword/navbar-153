@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ContextForMiniMenu, ContextForMiniItem, ContextForMiniContent, ContextForMiniToggle, ContextForMiniTrigger } from "./context";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
+import { ContextForMiniMenu, ContextForMiniItem, ContextForMiniContent, ContextForMiniToggle } from "./context";
 
 export default function NavBar({ children, ...navProps }) {
 
@@ -13,6 +13,10 @@ export default function NavBar({ children, ...navProps }) {
   const headFocusItemInContent = useRef([]);
   /** 每个内容面板的尾元素 */
   const tailFocusItemInContent = useRef([]);
+  const toggleId = useId();
+  const menuId = useId();
+  const triggerIdsRef = useRef([]);
+  const contentIdsRef = useRef([]);
 
 
   useEffect(() => {
@@ -36,6 +40,8 @@ export default function NavBar({ children, ...navProps }) {
     openedMenuIdx,
     tailFocusItemInContent,
     headFocusItemInContent,
+    toggleId,
+    menuId
   }), [expanded, openedMenuIdx]);
 
   const itemContextVal = useMemo(() => ({
@@ -44,6 +50,8 @@ export default function NavBar({ children, ...navProps }) {
     btnsRef,
     headFocusItemInContent,
     tailFocusItemInContent,
+    triggerIdsRef,
+    contentIdsRef,
   }), [openedMenuIdx]);
 
   const contentContextVal = useMemo(() => ({
@@ -55,32 +63,28 @@ export default function NavBar({ children, ...navProps }) {
     expanded,
     openOrCloseContentById,
     btnsRef,
+    toggleId,
+    menuId
   }), [expanded]);
-
-  const triggerContextVal = useMemo(() => ({
-    openedMenuIdx,
-  }), [openedMenuIdx]);
 
   return <ContextForMiniMenu.Provider value={menuContextVal}>
     <ContextForMiniItem.Provider value={itemContextVal}>
       <ContextForMiniContent.Provider value={contentContextVal}>
         <ContextForMiniToggle.Provider value={toggleContextVal}>
-          <ContextForMiniTrigger.Provider value={triggerContextVal}>
-            <nav
-              aria-label="Main"
-              ref={navRef}
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                zIndex: 2,
-                ...style,
-              }}
-              {..._navProps}>
-              {children}
-            </nav>
-          </ContextForMiniTrigger.Provider>
+          <nav
+            aria-label="Main"
+            ref={navRef}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              zIndex: 2,
+              ...style,
+            }}
+            {..._navProps}>
+            {children}
+          </nav>
         </ContextForMiniToggle.Provider>
       </ContextForMiniContent.Provider>
     </ContextForMiniItem.Provider>
