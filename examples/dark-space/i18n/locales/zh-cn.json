@@ -14,6 +14,7 @@
   "s_nb_doc_t4l": "https://github.com/wswmsword/hanav?tab=readme-ov-file#%E5%BC%80%E5%8F%91%E4%B8%8E%E7%BB%B4%E6%8A%A4%E6%96%B9%E5%90%91",
 
   "motion": "过渡动画",
+  "mini": "迷你模式",
 
   "s_mforever_desc": "<0>postcss-mobile-forever</0> 是一款 PostCSS 插件，是一种移动端适配方法。postcss-mobile-forever 可以配合 <2>scale-view</2> 使用，前者用于编译阶段，后者用于运行阶段。",
   "s_mf_doc_t1": "演示",

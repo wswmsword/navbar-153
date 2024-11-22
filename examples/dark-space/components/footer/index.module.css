@@ -13,8 +13,28 @@
   text-decoration: underline;
 }
 
+.hana {
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.hana a {
+  text-decoration: none;
+  transition: transform .5s;
+}
+
+.hana a:hover {
+  transform: translateY(5px);
+  transition: transform .05s;
+}
+
 @media (max-width: 520px) {
   .footer {
     margin-bottom: 54px;
+  }
+
+  .hana {
+    justify-content: flex-start;
   }
 }

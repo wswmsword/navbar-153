@@ -14,6 +14,7 @@
   "s_nb_doc_t4l": "https://github.com/wswmsword/hanav/blob/main/README_EN.md#development-and-maintenance-direction",
 
   "motion": "motion",
+  "mini": "mini-mode",
 
   "s_mforever_desc": "<0>postcss-mobile-forever</0> is a PostCSS plugin designed for mobile adaptation. It can be used together with <2>scale-view</2>, with the former being used during the compilation phase and the latter during the runtime phase.",
   "s_mf_doc_t1": "Demo",

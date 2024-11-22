@@ -1,20 +1,24 @@
+import { useTranslation } from "@/i18n";
 import styles from "./index.module.css";
+import { Trans } from "react-i18next/TransWithoutContext";
 
-export default function Docs() {
+export default async function Docs({ lng }) {
+  const { t } = await useTranslation(lng);
+  const desc = t("desc");
   return <>
-    <h1 className={styles.txt}>navbar-153</h1>
-    <pre className={styles.install}>npm install navbar-153</pre>
-    <p className={styles.txt}>navbar-153 是一个 React 导航栏组件，包含一组触发器和一组对应的菜单面板，用户可以通过触发器展开、切换、收起菜单面板。导航栏通常出现在网站的顶部，提供最希望用户访问的链接和其它控件。</p>
+    <h1 className={styles.txt}>hanav</h1>
+    <pre className={styles.install}>npm install hanav</pre>
+    <p className={styles.txt}>{desc}</p>
     <div className={styles.feats}>
-      <FeatSlate emoji="🍯" title="流畅的过渡动画" desc="符合直觉的入场、退场和切换动画，退场动画结束后，消失的面板将被移除 DOM" />
-      <FeatSlate emoji="🎹" title="键盘导航" desc={<>按下 <kbd>Tab</kbd> 和 <kbd>Esc</kbd>，让焦点流动，用户可以任意选择鼠标或键盘访问</>} />
-      <FeatSlate emoji="♿️" title="屏幕阅读器导航" desc="有规范的 ARIA 属性，具备可访问性，可以通过 TalkBack 或 VoiceOver 辅助设备访问" />
-      <FeatSlate emoji="🎨" title="高度自定义" desc="被渲染的 DOM 和组件一一对应，为每个元素设置样式，还能自定义切换过渡动画" />
+      <FeatSlate emoji="🍯" title={t("smooth_t")} desc={t("smooth_d")} />
+      <FeatSlate emoji="🎹" title={t("key_t")} desc={<Trans i18nKey="key_d" t={t}>0<kbd>1</kbd>2<kbd>3</kbd>4</Trans>} />
+      <FeatSlate emoji="♿️" title={t("a11y_t")} desc={t("a11y_d")} />
+      <FeatSlate emoji="🎨" title={t("style_t")} desc={t("style_d")} />
     </div>
-    <p className={styles.txt}>navbar-153 的使用方法很简单，提供了直观简单的 API，有良好的开发体验，具体的使用方法请查看 <a href="https://github.com/wswmsword/navbar-153">navbar-153 的 GitHub 仓库主页</a>。</p>
-    <p className={styles.txt}>星海闪烁，请握紧导航栏。</p>
-    <div role="presentation" className={`${styles.presentation} ${styles.textShadow}`}>NAVBAR-153</div>
-    <div role="presentation" className={styles.presentation2}>NAVBAR-153</div>
+    <p className={styles.txt}><Trans i18nKey="usage" t={t}>0<a href="https://github.com/wswmsword/hanav">1</a>2</Trans></p>
+    <p className={styles.txt}>{t("stars")}</p>
+    <div aria-hidden="true" className={`${styles.presentation} ${styles.textShadow}`}>HANAV</div>
+    <div aria-hidden="true" className={styles.presentation2}>HANAV</div>
   </>;
 }
 
