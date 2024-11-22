@@ -28,6 +28,7 @@ export default function Menu({ children, ...otherProps }) {
       height: `calc(100${supportDvh ? "d" : ""}vh - ${h}px)`,
       position: "absolute",
       left: 0,
+      top: "100%",
       width: "100%",
       ...style,
     }}

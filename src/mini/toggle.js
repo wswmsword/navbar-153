@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { ContextForMiniToggle } from "./context";
 
-export default function Toggle({ children }) {
+export default function Toggle({ children, ...otherProps }) {
   
   const { setE, expanded, openOrCloseContentById, btnsRef, toggleId, menuId } = useContext(ContextForMiniToggle);
   const toggleRef = useRef();
@@ -20,7 +20,8 @@ export default function Toggle({ children }) {
       setE(!expanded);
       openOrCloseContentById(-1);
     }}
-    ref={toggleRef}>
+    ref={toggleRef}
+    {...otherProps}>
     {children == null ? expanded ? "Expanded" : "Collapsed" : children(expanded)}
   </button>;
 }
