@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { MiniNavBar, MiniTrigger, MiniItem, MiniContent, MiniMenu, MiniToggle } from "hanav";
+import { MiniNavBar, MiniTrigger, MiniItem, MiniContent, MiniMenu, MiniToggle, MiniBack } from "hanav";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate"
@@ -24,10 +24,14 @@ export default function MiniNav({ mini, lowerCaseLng, t }) {
         <MiniItem><button>Focus-Fly</button></MiniItem>
       </MiniTrigger>
       <MiniContent className={styles.miniContent}>
-        <MiniItem><NavbarSlate t={t} /></MiniItem>
-        <MiniItem><MobileForeverSlate t={t} /></MiniItem>
-        <MiniItem><FocusFlySlate t={t} /></MiniItem>
+        <MiniItem><NavbarSlate t={t} miniBack={miniBack("Hanav")} /></MiniItem>
+        <MiniItem><MobileForeverSlate t={t} miniBack={miniBack("Mobile-Forever")} /></MiniItem>
+        <MiniItem><FocusFlySlate t={t} miniBack={miniBack("Focus-Fly")} /></MiniItem>
       </MiniContent>
     </MiniMenu>
-  </MiniNavBar>
+  </MiniNavBar>;
+
+  function miniBack(txt) {
+    return head => <MiniBack ref={head} className={styles.miniBack}><span className={styles.backIcon} />{txt}</MiniBack>
+  }
 }

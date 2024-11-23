@@ -272,6 +272,34 @@
   display: flex !important;
 }
 
+.miniBack {
+  text-align: left;
+  padding: 12px 24px;
+  padding-left: 0;
+  font-size: 23px;
+  font-weight: 600;
+  background-color: transparent;
+  color: #E8E8ED;
+  border: none;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+
+.miniBack:hover {
+  color: white;
+}
+
+.backIcon{
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  transform: rotate(-45deg);
+  margin-bottom: 3px;
+  margin-right: 7px;
+}
 
 @media (max-width: 520px) {
 

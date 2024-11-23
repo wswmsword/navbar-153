@@ -1,7 +1,8 @@
 import { Trans } from "react-i18next";
 import styles from "./index.module.css";
+import { MiniBack } from "hanav";
 
-export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth, t }) {
+export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth, t, miniBack }) {
   const contentItemStyle = {
     width: dynamicWidth ? 400 : "100%",
     flexShrink: 0,
@@ -10,6 +11,7 @@ export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth, t })
     className={styles.wrapper}
     {...propsFromN}
     style={{ ...propsFromN.style, ...contentItemStyle }}>
+    {miniBack && miniBack(head)}
     <p className={styles.navDesc}>{t("slate_navbar_desc")}</p>
     <div className={styles.feats}>
       <FeatSlate e="🍯" t={t("smooth_t")} d={t("s_nb_smooth_d")} />
@@ -18,7 +20,7 @@ export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth, t })
       <FeatSlate e="🎨" t={t("style_t")} d={t("s_nb_style_d")} />
     </div>
     <ul className={styles.links}>
-      <li><a ref={head} href={t("s_nb_doc_t1_link")}>{t("s_nb_doc_t1")}</a></li>
+      <li><a href={t("s_nb_doc_t1_link")}>{t("s_nb_doc_t1")}</a></li>
       <li><a href={t("s_nb_doc_t2l")}>{t("s_nb_doc_t2")}</a></li>
       <li><a href={t("s_nb_doc_t3l")}>{t("s_nb_doc_t3")}</a></li>
       <li><a ref={tail} href={t("s_nb_doc_t4l")}>{t("s_nb_doc_t4")}</a></li>
