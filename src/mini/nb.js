@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
-import { ContextForMiniMenu, ContextForMiniItem, ContextForMiniContent, ContextForMiniToggle } from "./context";
+import { ContextForMiniMenu, ContextForMiniItem, ContextForMiniContent, ContextForMiniToggle, ContextForMiniBack } from "./context";
 
 export default function NavBar({ children, ...navProps }) {
 
@@ -71,20 +71,22 @@ export default function NavBar({ children, ...navProps }) {
     <ContextForMiniItem.Provider value={itemContextVal}>
       <ContextForMiniContent.Provider value={contentContextVal}>
         <ContextForMiniToggle.Provider value={toggleContextVal}>
-          <nav
-            aria-label="Main"
-            ref={navRef}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              zIndex: 2,
-              ...style,
-            }}
-            {..._navProps}>
-            {children}
-          </nav>
+          <ContextForMiniBack.Provider value={openOrCloseContentById}>
+            <nav
+              aria-label="Main"
+              ref={navRef}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                zIndex: 2,
+                ...style,
+              }}
+              {..._navProps}>
+              {children}
+            </nav>
+          </ContextForMiniBack.Provider>
         </ContextForMiniToggle.Provider>
       </ContextForMiniContent.Provider>
     </ContextForMiniItem.Provider>

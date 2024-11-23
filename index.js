@@ -15,3 +15,4 @@ export { default as MiniTrigger } from "./src/mini/trigger";
 export { default as MiniContent } from "./src/mini/content";
 export { default as MiniItem } from "./src/mini/item";
 export { default as MiniToggle } from "./src/mini/toggle";
+export { default as MiniBack } from "./src/mini/back";
