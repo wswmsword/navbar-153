@@ -9,11 +9,13 @@ hanav is a React navigation menu component that includes a set of triggers and a
 Features include:
 
 - 🍯 Smooth transition animation
-- 🎹 Keyboard navigation.
-- ♿️ Assistive devices navigation.
-- 🎨 Highly customizable.
+- 🎹 Keyboard navigation
+- ♿️ Assistive devices navigation
+- 🎨 Highly customizable
+- 📱 Mobile-friendly design
+- 🚀 Excellent developer experience
 
-You can open [the demo link](https://wswmsword.github.io/examples/hanav/en) to see how it works.
+You can open [the demo link](https://wswmsword.github.io/examples/hanav/en) to see how hanav performs on different screen sizes.
 
 <details>
 <summary>In Chrome, you can enable the 'Show a quick highlight on the focused object' accessibility feature to visually track the focus movement of components.</summary>
@@ -32,7 +34,7 @@ With npm：
 npm install hanav
 ```
 
-Below is the general layout of using components after installation. For a complete example, you can open [the `dark-space` folder in the repository](./examples/dark-space) (Next.js project) to view.
+Below is the general layout of using components after installation. For a complete example, you can open [the `dark-space` folder in the repository](./examples/dark-space/components/header/nav.jsx) (Next.js project) to view.
 
 ```javascript
 import { NavBar, Trigger, Item, Content } from "hanav";
@@ -60,9 +62,13 @@ function MyNavBar() {
 export default MyNavBar;
 ```
 
+Generally, the examples above are more suitable for desktops or wider screens. To see how hanav works on mobile devices, you can refer to the "[Mobile View Mini Series](#mobile-view-mini-series)" section below or check the complete example in the repository's [`dark-space` folder](./examples/dark-space/components/header/mini-nav.jsx).
+
 ## API
 
 The NavBar component is primarily composed of four parts: `<NavBar>`, `<Trigger>`, `<Content>`, and `<Item>`. Additionally, `<Content>` includes some variants to accommodate requirements for **closing** or **customizing** transition animations.
+
+For mobile views, hanav offers the mini series, including `<MiniNavBar>`, `<MiniTrigger>`, `<MiniContent>`, `<MiniItem>`, `<MiniMenu>`, `<MiniToggle>`, and `<MiniBack>`.
 
 ### NavBar
 
@@ -137,6 +143,14 @@ When `<Item>` is used within `<Content>`, its children form a content panel. The
 
 The props from the example above must be passed to the content panel element. These props also include essential information like events and ARIA labels. The render prop’s parameters additionally provide a second argument, `head`, and a third argument, `tail`. If the content panel contains focusable elements, `head` must be passed as a `ref` to the first focusable element, and `tail` must be passed as a `ref` to the last focusable element. These `refs` facilitate keyboard <kbd>Tab</kbd> navigation. If the content panel only displays content without any focusable elements, these two parameters can be ignored.
 
+### Group
+
+```javascript
+import { Group } from "hanav";
+```
+
+`<Group>` is only used within `<Trigger>` or the `<MiniTrigger>` introduced later. It allows multiple triggers to be grouped together for easier styling.
+
 ## Close animations and custom x/y-axis animations
 
 The close animation is important. When a user has enabled the "Reduce motion" setting in their operating system, the browser can detect this option. Based on this setting, website providers can display a version of hanav without animations:
@@ -183,6 +197,48 @@ Here is an example of setting a custom x-axis transition animation using `xTrans
   "transform": ["translate(0)", "translateX(-280px)", "translateX(280px)"]
 }
 ```
+
+### Mobile View Mini Series
+
+The mobile series components include `<MiniNavBar>`, `<MiniTrigger>`, `<MiniContent>`, `<MiniItem>`, `<MiniMenu>`, `<MiniToggle>`, and `<MiniBack>`.
+
+Mini components require no parameters, making them easier to use. Any passed properties are directly forwarded to the rendered DOM elements. Below is an outline of how to use the mini components. For a complete example, please refer to the repository's [`dark-space` folder](./examples/dark-space/components/header/mini-nav.jsx):
+
+```javascript
+import { MiniNavBar, MiniTrigger, MiniItem, MiniContent, MiniMenu, MiniToggle, MiniBack } from "hanav";
+
+export default function MyLittleNav() {
+  return <MiniNavBar>
+    <a>Repo</a>
+    <MiniToggle />
+    <MiniMenu>
+      <MiniTrigger>
+        <MiniItem><button>hanav</button></MiniItem>
+        <MiniItem><button>postcss-mobile-forever</button></MiniItem>
+        <a>about</a>
+      </MiniTrigger>
+      <MiniContent>
+        <MiniItem>{(p, head, tail) => <div {...p}>
+          <MiniBack ref={head} />
+          <a>Home Page</a>
+          <a ref={tail} href="https://github.com/wswmsword/hanav/blob/main/images/wechat-pay.png">Donate</a>
+        </div>}</MiniItem>
+        <MiniItem>{(p, head, tail) => <div {...p}>
+          <a ref={head}>Home Page</a>
+          <MiniBack>Back To Main Menu</MiniBack>
+          <a ref={tail}>Bye Bye</a>
+        </div>}</MiniItem>
+      </MiniContent>
+    </MiniMenu>
+  </MiniNavBar>;
+}
+```
+
+The usage of mini components is the same as non-mini components, with additional attention required for the newly introduced `<MiniToggle>` and `<MiniBack>`.
+
+`<MiniToggle>` is typically used to display a hamburger button, controlling the expansion and collapse of the menu. Its children can be a render prop, with the menu's open state passed as an argument.  
+
+`<MiniTrigger>` represents a menu list. Clicking on an item navigates to the details (corresponding to the `<MiniItem>` under `<MiniContent>`), while `<MiniBack>` serves as a button to return from the details view to the menu list (`<MiniTrigger>`).  
 
 ## Keyboard Interactions
 

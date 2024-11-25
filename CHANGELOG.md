@@ -7,6 +7,16 @@
 
 ## [Unreleased]
 
+- `<Head>` 和 `<Tail>` 焦点控制；
+- 动画切换优化。
+
+## [2.1.0] - 2024-11-25
+
+### Added
+
+- 添加 mini 系列用于响应式窄屏，`<MiniNavBar>`、`<MiniTrigger>`、`<MiniContent>`、`<MiniItem>`、`<MiniMenu>`、`<MiniToggle>`、`<MiniBack>`；
+- 添加 `<Group>` 便于设置一组触发器的样式。
+
 ## [2.0.0] - 2024-11-11
 
 ### Changed

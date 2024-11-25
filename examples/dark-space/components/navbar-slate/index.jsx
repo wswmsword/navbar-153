@@ -18,6 +18,8 @@ export default function NavbarSlate({ propsFromN, head, tail, dynamicWidth, t, m
       <FeatSlate e="🎹" t={t("key_t")} d={<Trans i18nKey="s_nb_key_d" t={t}>0<kbd>1</kbd>two<kbd>3</kbd>4</Trans>} />
       <FeatSlate e="♿️" t={t("a11y_t")} d={t("s_nb_a11y_d")} />
       <FeatSlate e="🎨" t={t("style_t")} d={t("s_nb_style_d")} />
+      <FeatSlate e="📱" t={t("mobile_t")} d={t("mobile_d")} />
+      <FeatSlate e="🚀" t={t("dx_t")} d={t("s_nb_dx_d")} />
     </div>
     <ul className={styles.links}>
       <li><a href={t("s_nb_doc_t1_link")}>{t("s_nb_doc_t1")}</a></li>

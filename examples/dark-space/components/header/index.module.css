@@ -130,11 +130,13 @@
 
 .lang_switch {
   display: block;
-  color: #406391;
+  color: #E8E8ED;
   text-decoration: none;
+  font-size: 14px;
 }
 
 .lang_switch:hover {
+  color: white;
   text-decoration: underline;
 }
 

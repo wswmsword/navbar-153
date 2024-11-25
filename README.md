@@ -9,11 +9,13 @@ hanav 是一个 React 导航栏组件，包含一组触发器和一组对应的�
 - 🍯 流畅的过渡动画；
 - 🎹 键盘导航；
 - ♿️ 屏幕阅读器导航；
-- 🎨 高度自定义。
+- 🎨 高度自定义；
+- 📱 兼容移动端设计；
+- 🚀 开发体验良好。
 
 > hanav is a React navigation menu component that includes a set of triggers and a corresponding set of menu panels. For more information, please refer to [the English README](./README_EN.md) or [demo](https://wswmsword.github.io/examples/hanav/en).
 
-您可以打开[演示链接](https://wswmsword.github.io/examples/hanav)，查看使用效果。
+您可以打开[演示链接](https://wswmsword.github.io/examples/hanav)，查看 hanav 在不同屏幕下的使用效果。
 
 <details>
 <summary>在 Chrome 中，可以打开“短暂地突出显示焦点对象”无障碍功能，来可视化查看组件的焦点走向。</summary>
@@ -32,7 +34,7 @@ hanav 是一个 React 导航栏组件，包含一组触发器和一组对应的�
 npm install hanav
 ```
 
-下面是安装之后，使用组件的大致形态，完整的范例可以打开[仓库的 `dark-space` 文件夹](./examples/dark-space)（Next.js 项目）查看：
+下面是安装之后，使用组件的大致形态，完整的范例可以打开[仓库的 `dark-space` 文件夹](./examples/dark-space/components/header/nav.jsx)（Next.js 项目）查看：
 
 ```javascript
 import { NavBar, Trigger, Item, Content } from "hanav";
@@ -60,9 +62,13 @@ function MyNavBar() {
 export default MyNavBar;
 ```
 
+一般，上面的范例更适合桌面端之类的宽屏，移动端使用 hanav 的大致形态可以查看后面的“[移动端视图 mini 系列](#移动端视图-mini-系列)”一节，也可以打开仓库的 [`dark-space` 文件夹](./examples/dark-space/components/header/mini-nav.jsx)查看完整例子。
+
 ## API
 
 导航栏组件主要由 4 部分组成，分别是 `<NavBar>`、`<Trigger>`、`<Content>` 和 `<Item>`，此外，`<Content>` 还包括一些变体用于满足**关闭**或**定制**过渡动画的需求。
+
+对于移动端视图，hanav 提供了 mini 系列，包括 `<MiniNavBar>`、`<MiniTrigger>`、`<MiniContent>`、`<MiniItem>`、`<MiniMenu>`、`<MiniToggle>`、`<MiniBack>`。
 
 ### NavBar
 
@@ -137,7 +143,15 @@ render prop 的方式也许对于代码的理解更有帮助，但是不如直�
 
 上面例子中的 props 必须要传递给内容面板元素，这些 props 同样包含了事件、ARIA 标签等必须的信息，render prop 的入参还提供了第二个参数 `head` 和第三个参数 `tail`，如果内容面板中包含可聚焦的元素，必须要分别把 `head` 作为 `ref` 传递给第一个可聚焦元素，把 `tail` 作为 `ref` 传递给最后一个可聚焦元素，这两个 `ref` 会完成键盘 <kbd>Tab</kbd> 导航的工作，如果内容面板中只展示，没有聚焦元素，可以忽略这两个参数。
 
-## 关闭动画与自定义 x/y 轴动画
+### Group
+
+```javascript
+import { Group } from "hanav";
+```
+
+`<Group>` 只用于 `<Trigger>` 或后面将介绍的 `<MiniTrigger>` 中，它可以将多个触发器设为一组，方便添加样式。
+
+### 关闭动画与自定义 x/y 轴动画
 
 关闭动画很重要，当用户设置了操作系统的“减弱动态效果”后，浏览器可以检测到这个选项，网站的提供者可以根据这个选项，展示无动画效果版本的 hanav：
 
@@ -182,6 +196,47 @@ import { CustomMotionContent } from "hanav";
 }
 ```
 
+### 移动端视图 mini 系列
+
+移动端系列组件包括 `<MiniNavBar>`、`<MiniTrigger>`、`<MiniContent>`、`<MiniItem>`、`<MiniMenu>`、`<MiniToggle>`、`<MiniBack>`。
+
+mini 组件不需要传递任何参数，所以更容易使用。传入的属性，会直接透传到渲染的 dom 元素上。下面是使用 mini 组件的大致形态，完整范例请查看仓库的 [`dark-space` 文件夹](./examples/dark-space/components/header/mini-nav.jsx)：
+
+```javascript
+import { MiniNavBar, MiniTrigger, MiniItem, MiniContent, MiniMenu, MiniToggle, MiniBack } from "hanav";
+
+export default function MyLittleNav() {
+  return <MiniNavBar>
+    <a>Repo</a>
+    <MiniToggle />
+    <MiniMenu>
+      <MiniTrigger>
+        <MiniItem><button>hanav</button></MiniItem>
+        <MiniItem><button>postcss-mobile-forever</button></MiniItem>
+        <a>about</a>
+      </MiniTrigger>
+      <MiniContent>
+        <MiniItem>{(p, head, tail) => <div {...p}>
+          <MiniBack ref={head} />
+          <a>Home Page</a>
+          <a ref={tail} href="https://github.com/wswmsword/hanav/blob/main/images/wechat-pay.png">Donate</a>
+        </div>}</MiniItem>
+        <MiniItem>{(p, head, tail) => <div {...p}>
+          <a ref={head}>Home Page</a>
+          <MiniBack>Back To Main Menu</MiniBack>
+          <a ref={tail}>Bye Bye</a>
+        </div>}</MiniItem>
+      </MiniContent>
+    </MiniMenu>
+  </MiniNavBar>;
+}
+```
+
+mini 组件的使用方式和非 mini 组件一致，只需要注意新增的 `<MiniToggle>` 和 `<MiniBack>`。
+
+`<MiniToggle>` 一般用来展示汉堡按钮，控制菜单的展开与收起，它的 children 可以是一个 render prop，入参是菜单是否打开的状态。
+
+`<MiniTrigger>` 是一个菜单列表，点击其中一项，会进入详情（对应的 `<MiniContent>` 下的 `<MiniItem>`），而 `<MiniBack>` 就是一个从详情返回至菜单列表（`<MiniTrigger>`）的按钮。
 
 ## 键盘交互
 

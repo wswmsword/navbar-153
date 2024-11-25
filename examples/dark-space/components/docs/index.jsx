@@ -14,6 +14,8 @@ export default async function Docs({ lng }) {
       <FeatSlate emoji="🎹" title={t("key_t")} desc={<Trans i18nKey="key_d" t={t}>0<kbd>1</kbd>2<kbd>3</kbd>4</Trans>} />
       <FeatSlate emoji="♿️" title={t("a11y_t")} desc={t("a11y_d")} />
       <FeatSlate emoji="🎨" title={t("style_t")} desc={t("style_d")} />
+      <FeatSlate emoji="📱" title={t("mobile_t")} desc={t("mobile_d")} />
+      <FeatSlate emoji="🚀" title={t("dx_t")} desc={t("dx_d")} />
     </div>
     <p className={styles.txt}><Trans i18nKey="usage" t={t}>0<a href="https://github.com/wswmsword/hanav">1</a>2</Trans></p>
     <p className={styles.txt}>{t("stars")}</p>
