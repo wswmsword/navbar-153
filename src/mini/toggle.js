@@ -21,6 +21,6 @@ export default function Toggle({ children, ...otherProps }) {
     }}
     ref={toggleRef}
     {...otherProps}>
-    {children == null ? expanded ? "Expanded" : "Collapsed" : children(expanded)}
+    {children == null ? expanded ? "Expanded" : "Collapsed" : typeof children === "function" ? children(expanded) : children}
   </button>;
 }
