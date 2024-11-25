@@ -5,8 +5,7 @@ export default function Menu({ children, ...otherProps }) {
 
   const [h, setH] = useState(0);
   const { navRef, expanded, setE, btnsRef, openedMenuIdx,
-    tailFocusItemInContent, headFocusItemInContent,
-    toggleId, menuId } = useContext(ContextForMiniMenu);
+    tailFocusItemInContent, headFocusItemInContent, menuId } = useContext(ContextForMiniMenu);
   const [supportDvh, setDvh] = useState(false);
   const menuRef = useRef();
 
@@ -21,7 +20,9 @@ export default function Menu({ children, ...otherProps }) {
 
   return <div
     id={menuId}
-    aria-labelledby={toggleId}
+    role="dialog"
+    aria-modal
+    aria-label="Menu"
     tabIndex={-1}
     ref={menuRef}
     style={{

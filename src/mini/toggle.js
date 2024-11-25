@@ -3,7 +3,7 @@ import { ContextForMiniToggle } from "./context";
 
 export default function Toggle({ children, ...otherProps }) {
   
-  const { setE, expanded, openOrCloseContentById, btnsRef, toggleId, menuId } = useContext(ContextForMiniToggle);
+  const { setE, expanded, openOrCloseContentById, btnsRef, menuId } = useContext(ContextForMiniToggle);
   const toggleRef = useRef();
 
   useEffect(() => {
@@ -13,7 +13,6 @@ export default function Toggle({ children, ...otherProps }) {
   }, [expanded]);
 
   return <button
-    id={toggleId}
     aria-label={expanded ? "Close" : "Menu"}
     aria-controls={menuId}
     onClick={() => {

@@ -13,7 +13,6 @@ export default function NavBar({ children, ...navProps }) {
   const headFocusItemInContent = useRef([]);
   /** 每个内容面板的尾元素 */
   const tailFocusItemInContent = useRef([]);
-  const toggleId = useId();
   const menuId = useId();
   const triggerIdsRef = useRef([]);
   const contentIdsRef = useRef([]);
@@ -40,7 +39,6 @@ export default function NavBar({ children, ...navProps }) {
     openedMenuIdx,
     tailFocusItemInContent,
     headFocusItemInContent,
-    toggleId,
     menuId
   }), [expanded, openedMenuIdx]);
 
@@ -63,7 +61,6 @@ export default function NavBar({ children, ...navProps }) {
     expanded,
     openOrCloseContentById,
     btnsRef,
-    toggleId,
     menuId
   }), [expanded]);
 
