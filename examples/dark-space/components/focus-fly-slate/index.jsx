@@ -12,6 +12,7 @@ export default function FocusFlySlate({ propsFromN, head, tail, dynamicWidth, t,
     style={{ ...propsFromN.style, ...contentItemStyle }}>
     <li>
       <DemoSlate
+        ref={miniBack == null ? head : null}
         href="https://wswmsword.github.io/examples/focus-fly/#h-hot"
         t={t("s_ffly_t1")} d={t("s_ffly_d1")} />
     </li>

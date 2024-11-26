@@ -11,7 +11,7 @@ export default function MobileForeverSlate({ propsFromN, head, tail, dynamicWidt
     {...propsFromN}
     style={{ ...propsFromN.style, ...contentItemStyle }}>
     {miniBack && miniBack(head)}
-    <p className={styles.desc}><Trans i18nKey="s_mforever_desc" t={t}><a href="https://github.com/wswmsword/postcss-mobile-forever">zero</a>1<a href="https://github.com/wswmsword/scale-view">2</a>3</Trans></p>
+    <p className={styles.desc}><Trans i18nKey="s_mforever_desc" t={t}><a ref={miniBack == null ? head : null} href="https://github.com/wswmsword/postcss-mobile-forever">zero</a>1<a href="https://github.com/wswmsword/scale-view">2</a>3</Trans></p>
     <ul className={styles.links}>
       <li><a href="https://wswmsword.github.io/examples/mobile-forever/vanilla/">{t("s_mf_doc_t1")}</a></li>
       <li><a href="https://github.com/wswmsword/postcss-mobile-forever?tab=readme-ov-file#%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%A8%A1%E7%89%88%E5%92%8C%E8%8C%83%E4%BE%8B">{t("s_mf_doc_t2")}</a></li>
