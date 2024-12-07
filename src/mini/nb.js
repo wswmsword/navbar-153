@@ -71,6 +71,7 @@ export default function NavBar({ children, ...navProps }) {
           <ContextForMiniBack.Provider value={openOrCloseContentById}>
             <nav
               aria-label="Main"
+              tabIndex={-1} // 用于 macOS 旁白“转子”
               ref={navRef}
               style={{
                 position: "fixed",

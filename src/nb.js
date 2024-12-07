@@ -124,7 +124,10 @@ export default function NavBar({ children, dur = 0.5, gap = 0, dynamicWidth = fa
   return <ContextForItem.Provider value={itemContextVal}>
     <ContextForContent.Provider value={contentContextVal}>
       <ContextForTrigger.Provider value={triggerContextVal}>
-        <nav aria-label="Main" {...navProps}>
+        <nav
+          aria-label="Main"
+          tabIndex={-1} // 用于 macOS 旁白“转子”
+          {...navProps}>
           {children}
         </nav>
       </ContextForTrigger.Provider>
