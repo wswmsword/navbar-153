@@ -4,7 +4,7 @@
 
 English | [中文](./README.md)
 
-hanav is a React navigation menu component that includes a set of triggers and a corresponding set of menu panels. Users can expand, switch, and collapse the menu panels through the triggers. The navigation menu typically appears at the top of a website, providing the most desired links and other controls for users.
+hanav is a React navigation menu component library that includes a set of triggers and a corresponding set of menu panels. Users can expand, switch, and collapse the menu panels through the triggers. The navigation menu typically appears at the top of a website, providing the most desired links and other controls for users.
 
 Features include:
 
@@ -15,7 +15,7 @@ Features include:
 - 📱 Mobile-friendly design
 - 🚀 Excellent developer experience
 
-You can open [the demo link](https://wswmsword.github.io/examples/hanav/en) to see how hanav performs on different screen sizes.
+You can open [the demo link](https://wswmsword.github.io/examples/hanav/en) to see how hanav performs on different screen sizes.[![Edit hanav-demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/rn6r6d)
 
 <details>
 <summary>In Chrome, you can enable the 'Show a quick highlight on the focused object' accessibility feature to visually track the focus movement of components.</summary>

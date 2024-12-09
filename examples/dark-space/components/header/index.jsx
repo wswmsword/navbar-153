@@ -72,6 +72,9 @@ export default function Header({ lng, lowerCaseLng }) {
         <label className={styles.formItem} title={t("tooltip")}><input disabled={mini} type="checkbox" checked={motion} onChange={() => setMotion(v => !v)} /> {t("motion")}</label>
         <span className={styles.tooltip} role="presentation"><Trans i18nKey="tooltip2" t={t}>0<a className={styles.tLink} href="https://stackoverflow.com/a/59709067">1</a>2</Trans></span>
       </div>
+      <a href="https://codesandbox.io/p/sandbox/rn6r6d">
+        <img alt="Edit hanav-demo" src="https://codesandbox.io/static/img/play-codesandbox.svg" />
+      </a>
     </CenterBox>
   </>;
 }
