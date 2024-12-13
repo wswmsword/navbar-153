@@ -107,7 +107,7 @@ export default function ContentWrapper({ children, outer = {}, style, style2, in
           ...style,
         }}
         {...wrapperInnerProps}>
-        {children({ transitionBeforeStart, transRunning })}
+        {typeof children === "function" ? children({ transRunning }) : children}
       </div>
     </div>;
   }

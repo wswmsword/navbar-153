@@ -6,8 +6,6 @@ export default function MotionContent({ children, xTrans, yTrans, trans, ...cont
 
   return <MotionContentWrapper
     {...contentWrapperProps}>
-    {({ transitionBeforeStart }) =>
-      <Items
-        transitionBeforeStart={transitionBeforeStart}>{children}</Items>}
+      <Items>{children}</Items>
   </MotionContentWrapper>;
 }

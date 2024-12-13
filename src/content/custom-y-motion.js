@@ -5,8 +5,6 @@ import CustomMotionContentWrapper from "./wrapper/custom-motion";
 export default function CustomYMotionContent({ children, yTrans, trans, xTrans, ...contentWrapperProps }) {
 
   return <CustomMotionContentWrapper trans={yTrans || trans} {...contentWrapperProps}>
-    {({ transitionBeforeStart }) =>
-      <Items
-        transitionBeforeStart={transitionBeforeStart}>{children}</Items>}
+      <Items>{children}</Items>
   </CustomMotionContentWrapper>;
 }
