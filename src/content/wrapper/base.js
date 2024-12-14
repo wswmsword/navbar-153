@@ -21,55 +21,55 @@ export default function ContentWrapper({ children, outer = {}, style, style2, in
     dynamicWidth,
   } = useContext(ContextForContent);
 
-  const [destroyContent, setDestroy] = useState(true);
-  const loaded = openedMenuIdx > -1;
+  const [calcLayout, setLayout] = useState(false); // 获取尺寸
+  const [show, setS] = useState(false); // 展示动画，横贯面板展开之前和收起之后
+  /** 是否装载 dom */
+  const loaded = openedMenuIdx > -1 || (openedMenuIdx < 0 && show);
   /** 面板们的宽度 */
   const panelsClientWidthRef = useRef([]);
   /** 面板的元素们的高度，完成过渡动画 */
   const panelsHeightRef = useRef([]);
   /** 面板元素们的宽度，完成过渡动画 */
   const panelsWidthRef = useRef([]);
-  const [transitionBeforeStart, setBeforeStart] = useState(true); // 收起的过渡动画结束了吗
   /** 动画正在进行吗，正在进行则不允许 tab 聚焦 */
   const transRunning = useRef(false);
 
   useLayoutEffect(() => {
-    transRunning.current = true;
-    if (openedMenuIdx > -1) {
-      setDestroy(false);
+    if (openedMenuIdx > -1 && calcLayout === false) {
+      setLayout(true);
       // 缓存的元素们的尺寸
       panelsClientWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
       panelsHeightRef.current = panelsRef.current.map(e => e?.clientHeight || 0);
       panelsWidthRef.current = panelsRef.current.map(e => e?.clientWidth || 0);
     }
-  }, [openedMenuIdx]);
+  }, [openedMenuIdx, calcLayout]);
 
   useEffect(() => {
-    if (transitionBeforeStart && !destroyContent) {
-      setTimeout(() => {
-        setBeforeStart(false);
-      }, 11); // 90fps
+    if (calcLayout) {
+      transRunning.current = true;
+      setS(true);
     }
-  }, [destroyContent, transitionBeforeStart]);
+  }, [calcLayout]);
 
   // 焦点的入口和出口控制
-  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, !transitionBeforeStart);
+  useEntryExitFocus(openedMenuIdx, onlyKeyFocus, prevMenuIdxRef, isKeyActive, btnsRef, panelsRef, headFocusItemInContent, show);
 
   const transitionEnd = useCallback(e => {
     const contentWrapper = contentWrapperRef.current;
     if (e.target !== contentWrapper && e.target !== contentWrapper.parentNode) return; // 过滤冒泡的 transitionend 事件
     transRunning.current = false;
     if (openedMenuIdx < 0) {
-      setBeforeStart(true);
-      setDestroy(true);
+      setS(false);
+      setLayout(false);
       prevMenuIdxRef.current = -1;
     }
   }, [openedMenuIdx]);
 
-  if (loaded || (!loaded && !destroyContent)) {
+  // loaded > 获取尺寸 > 初始状态 > tick > 动画状态
+  if (loaded) {
     /** 是否为收起菜单操作 */
     const isCollapse = openedMenuIdx < 0 && prevMenuIdxRef.current > -1;
-    const collapseOrTEnded = (transitionBeforeStart || isCollapse);
+    const collapseOrTEnded = (!show || isCollapse);
     const xTransform = moveX(collapseOrTEnded, close, openedMenuIdx, prevMenuIdxRef, btnsRef, panelsClientWidthRef, gap);
 
     const { style: outerStyle, ...otherOuterProps } = outer;
@@ -89,7 +89,7 @@ export default function ContentWrapper({ children, outer = {}, style, style2, in
         left: 0,
         width,
         height: isCollapse ? panelsHeightRef.current[prevMenuIdxRef.current] : panelsHeightRef.current[openedMenuIdx],
-        transition: transitionBeforeStart ? null : `transform ${dur}s, height ${dur}s, width ${dur}s`,
+        transition: show ? `transform ${dur}s, height ${dur}s, width ${dur}s` : null,
         transform: xTransform,
         ...outerStyle,
       }}

@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, useContext, useLayoutEffect, useState, useRef } from "react";
+import React, { Children, cloneElement, useContext, useState, useRef, useEffect } from "react";
 import { ContextForContent } from "../context";
 
 /** 自定义 X 轴切换动画的 Items */
@@ -14,7 +14,7 @@ export default function CustomMotionItems({ children, trans, transRunning }) {
   const [, setCustomTrans] = useState(); // 触发后，重新渲染，用于面板切换过渡动画
   const startCustomTransRef = useRef(false); // 为 true 时，开始进行结束状态动画，开始后设为 false
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (openedMenuIdx > -1) {
       if (prevMenuIdxRef.current > -1 || collapsePrevMenuIdx2Ref.current > -1) {
         setCustomTrans({});
