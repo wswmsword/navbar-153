@@ -17,8 +17,10 @@ export default function CustomMotionItems({ children, trans, transRunning }) {
   useEffect(() => {
     if (openedMenuIdx > -1) {
       if (prevMenuIdxRef.current > -1 || collapsePrevMenuIdx2Ref.current > -1) {
-        setCustomTrans({});
-        startCustomTransRef.current = true;
+        setTimeout(() => { // 等待下个事件循环；setTimeout 第二参数足够大用以抹平不同浏览器行为不同
+          setCustomTrans({});
+          startCustomTransRef.current = true;
+        }, 11);
       }
     }
   }, [openedMenuIdx]);
