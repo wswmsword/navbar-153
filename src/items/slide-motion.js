@@ -3,7 +3,7 @@ import { ContextForContent } from "../context";
 
 /** 默认 X 轴切换动画的 Items
  * 
- * dom 装载 > 获取 dom left 值 > 设置动画初始状态 > tick（事件循环） > 设置动画 transition
+ * dom 装载 > 获取 dom left 值 > 初始状态 > tick（事件循环） > 动画状态
  */
 export default function Items({ children }) {
   const {
@@ -19,11 +19,8 @@ export default function Items({ children }) {
   const [motion, setM] = useState(false);
 
   useLayoutEffect(() => {
-    if (openedMenuIdx > -1) {
-      // 缓存的元素们的尺寸
-      panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
-    }
-  }, [openedMenuIdx]);
+    panelsOffsetLeftRef.current = panelsRef.current.map(e => e?.offsetLeft || 0);
+  }, [])
 
   useLayoutEffect(() => {
     forceRender({}); // 强制渲染初始状态
@@ -31,7 +28,7 @@ export default function Items({ children }) {
 
   useEffect(() => {
     if (bookRender != null)
-      setM(true);
+      setTimeout(() => setM(true), 0); // 等待事件循环再设置动画状态，确保动画状态之前的初始状态已经经过浏览器渲染
   }, [bookRender]);
 
   return Children.map(
