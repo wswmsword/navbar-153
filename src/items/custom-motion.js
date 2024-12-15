@@ -26,8 +26,7 @@ export default function CustomMotionItems({ children, trans, transRunning }) {
   }, [openedMenuIdx]);
 
   /** 缓存动画属性，避免由于外部渲染，同时 genItemStyle 依赖的 startCustomTransRef 不变，导致生成错误样式 */
-  const itemsStyle = useMemo(() => [...Array(Children.count(children)).keys().map(genItemStyle)], [openedMenuIdx, f]);
-
+  const itemsStyle = useMemo(() => Array.from({ length: Children.count(children) }, (_, i) => i).map(genItemStyle), [openedMenuIdx, f]);
   return Children.map(
     children,
     (child, i) => cloneElement(child, { type: "C", orderI: i, contentItemStyle: itemsStyle[i], transRunning }));
