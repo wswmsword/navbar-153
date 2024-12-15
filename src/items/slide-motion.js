@@ -28,7 +28,7 @@ export default function Items({ children }) {
 
   useEffect(() => {
     if (bookRender != null)
-      setTimeout(() => setM(true), 11); // 等待事件循环再设置动画状态，确保动画状态之前的初始状态已经经过浏览器渲染
+      requestAnimationFrame(() => setM(true)) // 等待事件循环再设置动画状态，确保动画状态之前的初始状态已经经过浏览器渲染
   }, [bookRender]);
 
   return Children.map(
