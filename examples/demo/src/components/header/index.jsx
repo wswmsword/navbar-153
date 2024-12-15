@@ -1,21 +1,21 @@
 import styles from "./index.module.css";
-import { NavBar, Trigger, Item, Content, ReducedMotionContent } from "hanav";
+import { NavBar, Trigger, Item, CustomXMotionContent, ReducedMotionContent } from "hanav";
 import NavbarSlate from "../navbar-slate";
 import MobileForeverSlate from "../mobile-forever-slate";
 import FocusFlySlate from "../focus-fly-slate";
 import CenterBox from "../center-box";
 import { useState } from "react";
 import { ContextF } from "../../main";
-import { useContext, useMemo, memo } from "react";
+import { useContext, useMemo } from "react";
 
-export default memo(function Header() {
+export default function Header() {
   const setG = useContext(ContextF);
   const [motion, setMotion] = useState(true);
   const [dynamicWidth, setD] = useState(false);
   const [close, setClose] = useState(false);
   const [onlyKeyFocus, setOnly] = useState(true);
 
-  const FinalC = motion ? Content : ReducedMotionContent;
+  const FinalC = motion ? CustomXMotionContent : ReducedMotionContent;
   const xTrans = useMemo(() => motion ? {
     xTrans: { opacity: [0, 1], transform: ["translate(0)", "translateX(-280px)", "translateX(280px)"] }
   } : null, [motion]);
@@ -53,4 +53,4 @@ export default memo(function Header() {
       <label className={styles.formItem}><input type="checkbox" checked={onlyKeyFocus} onChange={() => setOnly(v => !v)} /> onlyKeyFocus</label>
     </CenterBox>
   </>;
-});
+};

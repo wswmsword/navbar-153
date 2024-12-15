@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, useContext, useState, useRef, useEffect } from "react";
+import React, { Children, cloneElement, useContext, useState, useRef, useEffect, useMemo } from "react";
 import { ContextForContent } from "../context";
 
 /** 自定义 X 轴切换动画的 Items */
@@ -11,23 +11,26 @@ export default function CustomMotionItems({ children, trans, transRunning }) {
     collapsePrevMenuIdx2Ref,
   } = useContext(ContextForContent);
 
-  const [, setCustomTrans] = useState(); // 触发后，重新渲染，用于面板切换过渡动画
+  const [f, forceRender] = useState(); // 触发后，重新渲染，用于面板切换过渡动画
   const startCustomTransRef = useRef(false); // 为 true 时，开始进行结束状态动画，开始后设为 false
 
   useEffect(() => {
     if (openedMenuIdx > -1) {
       if (prevMenuIdxRef.current > -1 || collapsePrevMenuIdx2Ref.current > -1) {
         setTimeout(() => { // 等待下个事件循环，确保浏览器渲染初始状态
-          setCustomTrans({});
+          forceRender({});
           startCustomTransRef.current = true;
         }, 11); // 设为 11 而非 0，大致用于抹平不同浏览器差异
       }
     }
   }, [openedMenuIdx]);
 
+  /** 缓存动画属性，避免由于外部渲染，同时 genItemStyle 依赖的 startCustomTransRef 不变，导致生成错误样式 */
+  const itemsStyle = useMemo(() => [...Array(Children.count(children)).keys().map(genItemStyle)], [openedMenuIdx, f]);
+
   return Children.map(
     children,
-    (child, i) => cloneElement(child, { type: "C", orderI: i, contentItemStyle: genItemStyle(i), transRunning }));
+    (child, i) => cloneElement(child, { type: "C", orderI: i, contentItemStyle: itemsStyle[i], transRunning }));
 
   function genItemStyle(orderI) {
     let transStyles = {};
