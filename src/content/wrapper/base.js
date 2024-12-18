@@ -93,7 +93,6 @@ export default function ContentWrapper({ children, outer = {}, style, style2, in
         transform: xTransform,
         ...outerStyle,
       }}
-      onTransitionEnd={transitionEnd}
       {...otherOuterProps}>
       <div
         ref={contentWrapperRef}
@@ -106,6 +105,7 @@ export default function ContentWrapper({ children, outer = {}, style, style2, in
           overflow: "hidden",
           ...style,
         }}
+        onTransitionEnd={transitionEnd}
         {...wrapperInnerProps}>
         {typeof children === "function" ? children({ transRunning }) : children}
       </div>
