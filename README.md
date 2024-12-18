@@ -4,6 +4,8 @@
 
 中文 | [English](./README_EN.md)
 
+> hanav is a React navigation menu component library that includes a set of triggers and a corresponding set of menu panels. For more information, please refer to [the English README](./README_EN.md) or [demo](https://wswmsword.github.io/examples/hanav/en).
+
 hanav 是一个 React 导航栏组件库，包含一组触发器和一组对应的菜单面板，用户可以通过触发器展开、切换、收起菜单面板。导航栏通常出现在网站的顶部，提供最希望用户访问的链接和其它控件。hanav 有下面这些特性：
 
 - 🍯 流畅的过渡动画；
@@ -12,8 +14,6 @@ hanav 是一个 React 导航栏组件库，包含一组触发器和一组对应�
 - 🎨 高度自定义；
 - 📱 兼容移动端设计；
 - 🚀 开发体验良好。
-
-> hanav is a React navigation menu component that includes a set of triggers and a corresponding set of menu panels. For more information, please refer to [the English README](./README_EN.md) or [demo](https://wswmsword.github.io/examples/hanav/en).
 
 您可以打开[演示链接](https://wswmsword.github.io/examples/hanav)，查看 hanav 在不同屏幕下的使用效果。[![Edit hanav-demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/rn6r6d)
 
